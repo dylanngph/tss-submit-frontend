@@ -10,6 +10,14 @@ a {
   display: flex;
 }
 
+.ms-auto {
+  margin-left: auto;
+}
+
+.ms-24 {
+  margin-left: 24px !important;
+}
+
 .align-items-center {
   align-items: center;
 }
@@ -24,10 +32,6 @@ a {
 
 .text-center {
   text-align: center;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 19px;
 }
 
 .wrapper-icon-title {
@@ -46,6 +50,22 @@ a {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.icon-call-to-action-relative {
+  box-shadow: 0px 4px 15px rgb(0 0 0 / 5%);
+  border-radius: 41px;
+  background: #FFFFFF;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.icon-call-to-action.relative {
+  position: relative;
 }
 
 .call-to-action{
@@ -70,6 +90,13 @@ a {
   text-transform: inherit !important;
 }
 
+.MuiTypography-root.small-title {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  color: #11142D;
+}
+
 .login-form {
   max-width: 390px;
   width: 100%;
@@ -86,6 +113,10 @@ a {
 
 .mb-36 {
   margin-bottom: 36px !important;
+}
+
+.ms-16 {
+  margin-left: 16px !important;
 }
 
 .wrapper-icon {

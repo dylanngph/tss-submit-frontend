@@ -31,7 +31,7 @@ function RegisterAccount(props) {
         }}>
             <form className="login-form" onSubmit={handleSubmit}>
                 <div className="wrapper-icon-title mb-36">
-                    <Link className="icon-call-to-action" to='/' underline="none">
+                    <Link className="icon-call-to-action" to='/login' underline="none">
                         <img props src="/assets/icons/back.svg" alt='arrow' />
                     </Link>
                     <h2 className="main-title mb-2 text-center">Tạo tài khoản mới</h2>

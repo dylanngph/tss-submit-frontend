@@ -7,6 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
+import CreateAplication from '../../custom/CreateAplication';
 
 const Leftbar = () => {
     let listItemsTop = [
@@ -48,8 +49,9 @@ const Leftbar = () => {
             width: "100%",
             boxShadow: "0px 4px 15px rgb(0 0 0 / 5%)",
             minHeight: "100vh",
-            height: "auto"}}>
-            <Toolbar sx={{paddingTop: "25px"}}>
+            height: "auto"
+        }}>
+            <Toolbar sx={{ paddingTop: "25px" }}>
                 <img src='/assets/images/TSS-logo.svg' alt='TSS' />
             </Toolbar>
             <List sx={{
@@ -58,7 +60,8 @@ const Leftbar = () => {
                 minHeight: "calc(100vh - 190px)",
                 display: "flex",
                 flexDirection: "column",
-                marginBottom: "50px"}}>
+                marginBottom: "50px"
+            }}>
                 {listItemsTop.map((item, index) => (
                     <Link to={item.link}>
                         <ListItem button key={item.content}>
@@ -69,12 +72,13 @@ const Leftbar = () => {
                                 fontSize: "14px",
                                 lineHeight: "17px",
                                 color: "#58667E",
-                                marginLeft: "14px"}}
+                                marginLeft: "14px"
+                            }}
                                 primary={item.content} />
                         </ListItem>
                     </Link>
                 ))}
-                <Divider sx={{margin: "14px 0 !important"}} />
+                <Divider sx={{ margin: "14px 0 !important" }} />
                 {lisItemsBottom.map((item, index) => (
                     <Link to={item.link}>
                         <ListItem button key={item.content}>
@@ -85,13 +89,15 @@ const Leftbar = () => {
                                 fontSize: "14px",
                                 lineHeight: "17px",
                                 color: "#58667E",
-                                marginLeft: "14px"}}
+                                marginLeft: "14px"
+                            }}
                                 primary={item.content} />
                         </ListItem>
                     </Link>
                 ))}
-
-                <Button className="button" variant="contained">Tạo hồ sơ</Button>
+                <Box sx={{ marginTop: "auto" }}>
+                    <CreateAplication />
+                </Box>
             </List>
         </Box>
     )

@@ -1,48 +1,48 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, FormControlLabel, Modal, Typography, Radio, RadioGroup, Divider } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { Box, Button, FormControl, FormLabel, FormControlLabel, Modal, Typography, Radio, RadioGroup, Divider, FormGroup, FormHelperText } from '@mui/material';
+import CountrySelect from '../Button/CountrySelect';
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-function CreateAplication(props) {
-    const [activeStep, setActiveStep] = useState(0);
-    const [skipped, setSkipped] = useState(new Set());
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
-
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
+const CreateAplication = (props) => {
+    const defaultValues = {
+        appType: 1,
+        country: ''
     };
 
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            // You probably want to guard against something like this,
-            // it should never occur unless someone's actively trying to break something.
-            throw new Error("You can't skip a step that isn't optional.");
+    let data = [
+        {
+            label: "Doanh nghiệp",
+            icon: "/assets/icons/company.svg",
+            iconActive: "/assets/icons/active/company.svg",
+        },
+        {
+            label: "Cá nhân",
+            icon: "/assets/icons/personnal.svg",
+            iconActive: "/assets/icons/active/personnal.svg",
+        },
+        {
+            label: "Quỹ đầu tư",
+            icon: "/assets/icons/people.svg",
+            iconActive: "/assets/icons/active/people.svg",
         }
+    ]
 
+    const [activeStep, setActiveStep] = useState(0);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const [formValues, setFormValues] = useState(defaultValues)
+
+    const handleClose = () => {
+        setActiveStep(0)
+        setOpen(false)
+    };
+
+    const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
     };
 
     const isStepOptional = (step) => {
         return step === 1;
-    };
-
-    const isStepSkipped = (step) => {
-        return skipped.has(step);
     };
 
     const handleReset = () => {
@@ -52,6 +52,13 @@ function CreateAplication(props) {
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
+
+    const handleSelectType = (type) => {
+        setFormValues({
+            ...formValues,
+            ['appType']: type,
+        });
+    }
 
     const style = {
         position: 'absolute',
@@ -65,11 +72,61 @@ function CreateAplication(props) {
         p: 4,
         width: "100%",
         maxWidth: "846px",
+        boxShadow: "0px 4px 17px rgba(0, 0, 0, 0.05)",
+        borderRadius: "12px",
+        border: "1px solid #ffffff",
     };
+
+    const appItem = {
+        background: "#EFF2F5",
+        border: "1.5px solid #EFF2F5",
+        boxSizing: "border-box",
+        borderRadius: "12px",
+        display: "flex",
+        padding: "12px 16px",
+        alignItems: "center",
+    }
+
+    const appItemActive = {
+        background: "#FFFFFF",
+        border: "1.5px solid #446DFF",
+        boxSizing: "border-box",
+        borderRadius: "12px",
+        display: "flex",
+        padding: "12px 16px",
+        alignItems: "center",
+    }
+
+    const iconAppItem = {
+        background: "#EFF2F5",
+        width: "56px",
+        height: "56px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: "50%",
+    }
+
+    const smallTitle = {
+        color: "#A6B0C3",
+        fontStyle: "normal",
+        fontWeight: "600",
+        fontSize: "18px",
+        lineHeight: "22px",
+    }
+
+    const smallTitleActive = {
+        color: "#446DFF",
+        fontStyle: "normal",
+        fontWeight: "600",
+        fontSize: "18px",
+        lineHeight: "22px",
+    }
 
     return (
         <div>
-            <Button onClick={handleOpen}>Open modal</Button>
+            <Button className="button" onClick={handleOpen}>Tạo hồ sơ</Button>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -77,46 +134,46 @@ function CreateAplication(props) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <React.Fragment>
-                        <Typography>Chọn hình thức đăng ký</Typography>
-                        <Divider sx={{margin: "14px 0 !important"}} />
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Gender</FormLabel>
-                            <RadioGroup
-                                aria-label="gender"
-                                defaultValue="female"
-                                name="radio-buttons-group"
-                            >
-                                <FormControlLabel value="1" control={<Radio />} label="Doanh nghiệp" />
-                                <FormControlLabel value="2" control={<Radio />} label="Cá nhân" />
-                                <FormControlLabel value="3" control={<Radio />} label="Quỹ đầu tư" />
-                            </RadioGroup>
-                        </FormControl>
-
-
-
-
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Button
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                                sx={{ mr: 1 }}
-                            >
-                                Back
-                            </Button>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            {isStepOptional(activeStep) && (
-                                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                                    Skip
-                                </Button>
-                            )}
-
-                            <Button onClick={handleNext}>
-                                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                            </Button>
-                        </Box>
-                    </React.Fragment>
+                    {activeStep == 0 ? 
+                        <React.Fragment>
+                            <Box className="wrapper-icon-title" sx={{display: 'flex', flexDirection: 'row'}}>
+                                <div onClick={handleClose} className="icon-call-to-action-relative">
+                                    <img src="/assets/icons/close.svg" alt="close" />
+                                </div>
+                                <Typography className="small-title ms-16">Chọn hình thức đăng ký</Typography>
+                            </Box>
+                            <Divider sx={{margin: "23px 0 37px !important"}} />
+                            <Box sx={{maxWidth:"430px", margin: "auto",}}>
+                                {data.map((item, index) => (
+                                    <Box className="mb-16" onClick={() => handleSelectType(index + 1)} sx={formValues.appType === (index + 1) ? appItemActive : appItem}>
+                                        <Box sx={iconAppItem}>
+                                            <img src={formValues.appType === (index + 1) ? item.iconActive : item.icon}
+                                                alt="company" />
+                                        </Box>
+                                        <Typography sx={formValues.appType === (index + 1) ? smallTitleActive : smallTitle} className="ms-24">
+                                            {item.label}
+                                        </Typography>
+                                        {formValues.appType === (index + 1) ? <img className="ms-auto" src="/assets/icons/check-done.svg" alt="check done" /> : null }
+                                    </Box>
+                                ))}
+                                <Button className="button" onClick={handleNext}>Tiếp tục</Button>
+                            </Box>
+                        </React.Fragment>
+                    : 
+                        <React.Fragment>
+                            <Box className="wrapper-icon-title" sx={{display: 'flex', flexDirection: 'row'}}>
+                                <div onClick={handleBack} className="icon-call-to-action-relative">
+                                    <img src="/assets/icons/back.svg" alt="close" />
+                                </div>
+                                <Typography className="small-title ms-16">Lựa chọn quốc gia</Typography>
+                            </Box>
+                            <Divider sx={{margin: "14px 0 !important"}} />
+                            <Box sx={{maxWidth:"430px", margin: "auto",}}>
+                                <CountrySelect className="mb-16" />
+                                <Button className="button" onClick={handleNext}>Bắt đầu</Button>
+                            </Box>
+                        </React.Fragment>
+                    }
                 </Box>
             </Modal>
         </div>

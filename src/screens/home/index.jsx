@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import CreateAplication from '../../components/custom/CreateAplication';
 
 function HomeScreen(props) {
     return (
@@ -26,7 +25,6 @@ function HomeScreen(props) {
                     <p className="main-cotain">TSS có tất cả các tính năng nổi bật của một hệ thống chuỗi khối điển hình, tính minh bạch và bảo mật. Thông tin do người dùng gửi vào hệ thống TSS sẽ được bảo vệ an toàn, toàn diện trước sự tấn công của tin tặc và có khả năng khôi phục hoàn toàn trong trường hợp xảy ra sự cố phá hủy. Thông tin người dùng sẽ được quản lý một cách chuyên nghiệp và dễ sử dụng. TSS áp dụng công nghệ blockchain vào quản lý kinh doanh bằng cách gửi thông tin dự án đến với TSS để dự án của bạn có thể hoạt động dựa trên nền tảng của chúng tôi.</p>
                 </Box>
             </Box>
-            <CreateAplication />
         </Box>
     )   
 }
