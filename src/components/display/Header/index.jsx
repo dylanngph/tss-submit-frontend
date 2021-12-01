@@ -60,7 +60,8 @@ const Leftbar = () => {
                 minHeight: "calc(100vh - 190px)",
                 display: "flex",
                 flexDirection: "column",
-                marginBottom: "50px"
+                marginBottom: "50px",
+                height: "calc(100% - 190px)"
             }}>
                 {listItemsTop.map((item, index) => (
                     <Link to={item.link}>
