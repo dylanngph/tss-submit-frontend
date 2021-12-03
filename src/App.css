@@ -1,39 +1,241 @@
-.App {
+p, h2 {
+  margin: 0
+}
+
+a {
+  text-decoration: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.ms-auto {
+  margin-left: auto;
+}
+
+.ms-24 {
+  margin-left: 24px !important;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.justify-items-center {
+  justify-items: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.wrapper-icon-title {
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-float infinite 3s ease-in-out;
-  }
-}
-
-.App-header {
-  min-height: 100vh;
+.icon-call-to-action {
+  box-shadow: 0px 4px 15px rgb(0 0 0 / 5%);
+  border-radius: 41px;
+  background: #FFFFFF;
+  width: 24px;
+  height: 24px;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.App-link {
-  color: rgb(112, 76, 182);
+.icon-call-to-action-relative {
+  box-shadow: 0px 4px 15px rgb(0 0 0 / 5%);
+  border-radius: 41px;
+  background: #FFFFFF;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-@keyframes App-logo-float {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
+.icon-call-to-action.relative {
+  position: relative;
+}
+
+.call-to-action{
+  color: #446DFF !important;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.button {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 19px !important;
+  color: #FFFFFF !important;
+  width: 100% !important;
+  padding: 12px !important;
+  background: #446DFF !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+  margin-top: auto !important;
+  text-transform: inherit !important;
+}
+
+.MuiTypography-root.small-title {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  color: #11142D;
+}
+
+.login-form {
+  max-width: 390px;
+  width: 100%;
+  margin: auto;
+}
+
+.application .login-form {
+  max-width: 429px;
+  margin: inherit;
+}
+
+.color-span {
+  color: #A6B0C3;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  display: none;
+}
+
+.mb-16 {
+  margin-bottom: 16px !important;
+}
+
+.mb-36 {
+  margin-bottom: 36px !important;
+}
+
+.ms-16 {
+  margin-left: 16px !important;
+}
+
+.wrapper-icon {
+  width: 100px;
+    height: 100px;
+    background: #EFF2F5;
+    border-radius: 50%;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+label.MuiFormLabel-root {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  color: #58667E;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.MuiOutlinedInput-root input,
+textarea,
+.MuiOutlinedInput-root .MuiSelect-select {
+  padding: 15px;
+  background: #EFF2F5;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #58667E;
+  border: 1px solid #EFF2F5;
+}
+
+textarea:focus-visible {
+  border: none;
+}
+
+.MuiOutlinedInput-root input::placeholder {
+  color: #A6B0C3;
+}
+
+.main-title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 29px;
+  color: #11142D;
+}
+
+.main-cotain {
+  color: #58667E;
+  line-height: 150%;
+}
+
+.mb-2 {
+  margin-bottom: 24px;
+}
+
+.datePicker .MuiFormControl-root {
+  background: #EFF2F5;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #58667E;
+  border: 1px solid #EFF2F5;
+}
+
+.MuiTabs-indicator {
+  background: #446DFF;
+  border-radius: 4px 4px 0px 0px;
+  height: 4px !important;
+}
+
+.line-verticle {
+  position: absolute;
+  display: inline-block;
+  height: 44px;
+  background: #A6B0C3;
+  width: 2px;
+  left: 159px;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.MuiButtonBase-root.tab-title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #000000;
+}
+
+.MuiButtonBase-root.MuiChip-root {
+  background: #E0E5EB;
+  border-radius: 4px;
+}
+
+.MuiChip-root .MuiChip-label {
+  color: #58667E;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
 }
