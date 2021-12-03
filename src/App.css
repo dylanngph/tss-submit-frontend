@@ -219,7 +219,8 @@ textarea:focus-visible {
   transform: translateY(-50%);
 }
 
-.MuiButtonBase-root.tab-title {
+.MuiButtonBase-root.tab-title,
+.MuiTypography-root.tab-title {
   font-weight: 600;
   font-size: 16px;
   line-height: 19px;

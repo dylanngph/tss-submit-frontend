@@ -4,10 +4,15 @@ import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, T
 const Information = (props) => {
     return (
         <Box>
-            <Typography>Tổ chức</Typography>
+            <Typography sx={{ textAlign: "left !important", }} className="tab-title">Tổ chức</Typography>
             <Box>
-                <Box>
-                    <form className="login-form">
+                <Box sx={{
+                    padding: "24px 36px 4px",
+                    background: "#EFF2F5",
+                    borderRadius: "12px",
+
+                }}>
+                    <form>
                         <FormControl className="form-control mb-16">
                             <FormLabel>Tên tổ chức</FormLabel>
                             <Box>
