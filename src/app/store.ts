@@ -1,8 +1,8 @@
 import { configureStore, combineReducers, ThunkAction, Action } from "@reduxjs/toolkit";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import createSagaMiddleware from "redux-saga";
-import { history } from "utils/general/history";
 import rootSaga from "sagas";
+import { history } from "utils/general";
 import rootReducer from "./../redux/index";
 
 const rootStore = combineReducers({
