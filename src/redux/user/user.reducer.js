@@ -10,7 +10,6 @@ const initialState = {
 function userStore(state = initialState, action) {
   switch (action.type) {
     case constants.GET_USER_INFO:
-        console.log("Test GET_USER_INFO: ", 100)
       return {
         ...state,
         isLoadingGetUserInfo: true,
@@ -44,7 +43,7 @@ function userStore(state = initialState, action) {
         isLoadingPutUserInfo: false,
         responsePutUserInfo: action?.payload,
       };
-      case loadingConstants.ERROR_401:
+    case loadingConstants.ERROR_401:
     default:
       return state;
   }
