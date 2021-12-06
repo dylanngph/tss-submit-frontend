@@ -23,7 +23,8 @@ const Leftbar = () => {
         },
         {
             'icon': '/assets/icons/nft.svg',
-            'content': 'Con dấu NFT'
+            'content': 'Con dấu NFT',
+            'link': '/stamp-nft'
         }
     ]
 
