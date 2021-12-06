@@ -13,6 +13,7 @@ import RegisterSuccess from "./screens/account/components/Register/RegisterSucce
 import SecurityQuestion from "./screens/account/components/Register/SecurityQuestion";
 import HomeScreen from "./screens/home";
 import Application from "./screens/application";
+import User from "./screens/user";
 import { ThemeProvider, createMuiTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 
@@ -43,6 +44,7 @@ function App() {
             <Route path="/reset-password-success" component={ResetPasswordSuccess} />
             <Route path="/manage" component={ProjectManage} />
             <Route path="/application" component={Application} />
+            <Route path="/user" component={User} />
             <Route component={NotFound} />
           </Switch>
         </Box>

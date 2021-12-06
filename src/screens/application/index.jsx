@@ -36,6 +36,40 @@ function TabPanel(props) {
 function Application(props) {
     const [value, setValue] = React.useState(0);
 
+    const incorporation = {
+        title: "Tổ chức",
+        data: [
+            {
+                title: "Tên tổ chức",
+                value: "JadeLabs",
+            },
+            {
+                title: "Tên giao dịch",
+                value: "138 Robinson Road #02-50 Singapore",
+            },
+            {
+                title: "Trụ sở",
+                value: "138 Robinson Road #02-50 Singapore",
+            },
+            {
+                title: "Lĩnh vực kinh doanh",
+                value: "Information Technology",
+            },
+            {
+                title: "Mã số doanh nghiệp / số giấy phép thành lập",
+                value: "jadelab-biz-reg.pdf",
+            },
+            {
+                title: "Ngày cấp",
+                value: "22/12/2022",
+            },
+            {
+                title: "Tải lên giấy phép đăng ký kinh doanh",
+                value: "TEXCODE123456",
+            },
+        ]
+    }
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -61,7 +95,12 @@ function Application(props) {
                     <LegalRepresentative value={value} index={3} />
                 </Box>
             </Box>
-            <Information />
+            <Box>
+                <Information tilte={incorporation.title} data={incorporation.data} />
+                <Information tilte={incorporation.title} data={incorporation.data} />
+                <Information tilte={incorporation.title} data={incorporation.data} />
+                <Information tilte={incorporation.title} data={incorporation.data} />
+            </Box>
         </Box>
     )
 }

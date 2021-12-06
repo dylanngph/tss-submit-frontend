@@ -5,6 +5,7 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Link } from 'react-router-dom'
+import DevelopmentTeam from 'components/custom/DevelopmentTeam'
 
 function Project(props) {
     const { children, value, index, ...other } = props;
@@ -150,7 +151,7 @@ function Project(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đội ngũ phát triển</FormLabel>
-                        <button>Đội ngũ phát triển</button>
+                        <DevelopmentTeam />
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đối tác phát triển (Không bắt buộc)</FormLabel>

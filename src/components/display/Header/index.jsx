@@ -30,7 +30,8 @@ const Leftbar = () => {
     let lisItemsBottom = [
         {
             'icon': '/assets/icons/user.svg',
-            'content': 'User Name'
+            'content': 'User Name',
+            'link': '/user'
         },
         {
             'icon': '/assets/icons/login.svg',
