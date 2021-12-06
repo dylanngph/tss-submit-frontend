@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, FormControlLabel, Modal, Typography, Radio, RadioGroup, Divider, FormGroup, FormHelperText } from '@mui/material';
+import { Box, Button, Modal, Typography, Divider } from '@mui/material';
 import CountrySelect from '../Button/CountrySelect';
+import { Link } from 'react-router-dom'
 
 
 const CreateAplication = (props) => {
@@ -170,7 +171,8 @@ const CreateAplication = (props) => {
                             <Divider sx={{margin: "14px 0 !important"}} />
                             <Box sx={{maxWidth:"430px", margin: "auto",}}>
                                 <CountrySelect className="mb-16" />
-                                <Button className="button" onClick={handleNext}>Bắt đầu</Button>
+                                {/* <Button className="button" onClick={handleNext}>Bắt đầu</Button> */}
+                                <Link className="button" to="/application" onClick={handleClose}>Bắt đầu</Link>
                             </Box>
                         </React.Fragment>
                     }

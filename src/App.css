@@ -103,6 +103,15 @@ a {
   margin: auto;
 }
 
+.application .login-form {
+  max-width: 429px;
+  margin: inherit;
+}
+
+.color-span {
+  color: #A6B0C3;
+}
+
 .MuiOutlinedInput-notchedOutline {
   display: none;
 }
@@ -143,6 +152,7 @@ label.MuiFormLabel-root {
 }
 
 .MuiOutlinedInput-root input,
+textarea,
 .MuiOutlinedInput-root .MuiSelect-select {
   padding: 15px;
   background: #EFF2F5;
@@ -153,6 +163,10 @@ label.MuiFormLabel-root {
   line-height: 19px;
   color: #58667E;
   border: 1px solid #EFF2F5;
+}
+
+textarea:focus-visible {
+  border: none;
 }
 
 .MuiOutlinedInput-root input::placeholder {
@@ -174,4 +188,55 @@ label.MuiFormLabel-root {
 
 .mb-2 {
   margin-bottom: 24px;
+}
+
+.datePicker .MuiFormControl-root {
+  background: #EFF2F5;
+  border-radius: 8px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #58667E;
+  border: 1px solid #EFF2F5;
+}
+
+.MuiTabs-indicator {
+  background: #446DFF;
+  border-radius: 4px 4px 0px 0px;
+  height: 4px !important;
+}
+
+.line-verticle {
+  position: absolute;
+  display: inline-block;
+  height: 44px;
+  background: #A6B0C3;
+  width: 2px;
+  left: 159px;
+  z-index: 10;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.MuiButtonBase-root.tab-title,
+.MuiTypography-root.tab-title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  color: #000000;
+}
+
+.MuiButtonBase-root.MuiChip-root {
+  background: #E0E5EB;
+  border-radius: 4px;
+}
+
+.MuiChip-root .MuiChip-label {
+  color: #58667E;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
 }

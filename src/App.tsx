@@ -13,6 +13,7 @@ import RegisterSuccess from "./screens/account/components/Register/RegisterSucce
 import SecurityQuestion from "./screens/account/components/Register/SecurityQuestion";
 import HomeScreen from "./screens/home";
 import NFTScreen from "./screens/stampNFT";
+import Application from "./screens/application";
 import { ThemeProvider, createMuiTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 
@@ -31,6 +32,7 @@ function App() {
         <Header />
         <Box sx={{
             width: 'calc(100% - 244px)',
+            background: "#fcfcfd"
           }}>
           <Switch>
             <Route path="/" component={HomeScreen} exact />
@@ -42,6 +44,7 @@ function App() {
             <Route path="/reset-password-success" component={ResetPasswordSuccess} />
             <Route path="/manage" component={ProjectManage} />
             <Route path="/stamp-nft" component={NFTScreen} />
+            <Route path="/application" component={Application} />
             <Route component={NotFound} />
           </Switch>
         </Box>
