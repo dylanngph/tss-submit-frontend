@@ -2,7 +2,7 @@ import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
@@ -41,7 +41,8 @@ const Leftbar = () => {
         },
         {
             'icon': '/assets/icons/logout.svg',
-            'content': 'Đăng xuất'
+            'content': 'Đăng xuất',
+            'link': '/'
         },
     ]
 
@@ -66,7 +67,7 @@ const Leftbar = () => {
                 height: "calc(100% - 190px)"
             }}>
                 {listItemsTop.map((item, index) => (
-                    <Link to={item.link}>
+                    <NavLink to={item.link}>
                         <ListItem button key={item.content}>
                             <img src={item.icon} alt={item.content} />
                             <ListItemText sx={{
@@ -79,11 +80,11 @@ const Leftbar = () => {
                             }}
                                 primary={item.content} />
                         </ListItem>
-                    </Link>
+                    </NavLink>
                 ))}
                 <Divider sx={{ margin: "14px 0 !important" }} />
                 {lisItemsBottom.map((item, index) => (
-                    <Link to={item.link}>
+                    <NavLink to={item.link}>
                         <ListItem button key={item.content}>
                             <img src={item.icon} alt={item.content} />
                             <ListItemText sx={{
@@ -96,7 +97,7 @@ const Leftbar = () => {
                             }}
                                 primary={item.content} />
                         </ListItem>
-                    </Link>
+                    </NavLink>
                 ))}
                 <Box sx={{ marginTop: "auto" }}>
                     <CreateAplication />

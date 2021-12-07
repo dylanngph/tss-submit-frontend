@@ -6,6 +6,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Link } from 'react-router-dom'
 import DevelopmentTeam from 'components/custom/DevelopmentTeam'
+import DevelopmentPartner from 'components/custom/DevelopmentPartner'
 
 function Project(props) {
     const { children, value, index, ...other } = props;
@@ -155,7 +156,7 @@ function Project(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đối tác phát triển (Không bắt buộc)</FormLabel>
-                        <button>Đối tác phát triển (Không bắt buộc)</button>
+                        <DevelopmentPartner />
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Website dự án</FormLabel>

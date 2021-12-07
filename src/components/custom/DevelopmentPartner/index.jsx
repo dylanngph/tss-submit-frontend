@@ -22,7 +22,7 @@ const style = {
 
 const avarta = {
     background: "#EFF2F5",
-    borderRadius: "36.5px",
+    borderRadius: "8px",
     width: "73px",
     height: "73px",
     padding: 0,
@@ -91,18 +91,18 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                     <label htmlFor="icon-button-file">
                         <Input accept="images/*" id="icon-button-file" type="file" />
                         <IconButton sx={avarta} aria-label="upload picture" component="span">
-                            <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
+                            <img src="/assets/icons/people.svg" alt="people" />
                         </IconButton>
                     </label>
                 </Grid>
                 <Grid item xs={4.5}>
                     <FormControl className="form-control mb-16">
-                        <FormLabel>Tên thành viên</FormLabel>
+                        <FormLabel>Tên đối tác</FormLabel>
                         <OutlinedInput
                             id="name"
                             name="name"
                             type="text"
-                            placeholder="Tên thành viên"
+                            placeholder="Tên đối tác"
                             value={item.name}
                             onChange={handleInputChange}
                         />
@@ -110,12 +110,12 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                 </Grid>
                 <Grid item xs={4.5}>
                     <FormControl className="form-control mb-16">
-                        <FormLabel>Chức danh</FormLabel>
+                        <FormLabel>Website</FormLabel>
                         <OutlinedInput
                             id="position"
                             name="position"
                             type="text"
-                            placeholder="Chức danh"
+                            placeholder="http://"
                             value={item.position}
                             onChange={handleInputChange}
                         />
@@ -131,7 +131,7 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
     );
 }
 
-const DevelopmentTeam = (props) => {
+const DevelopmentPartner = (props) => {
     const [items, setItems] = useState([
         { id: uuid(), avarta: '', name: '', position: '' },
         { id: uuid(), avarta: '', name: '', position: '' },
@@ -186,7 +186,7 @@ const DevelopmentTeam = (props) => {
 
     return (
         <div>
-            <Box sx={chose} onClick={handleOpen}>Đội ngũ phát triển</Box>
+            <Box sx={chose} onClick={handleOpen}>Đối tác phát triển</Box>
 
             <Modal
                 open={open}
@@ -195,7 +195,7 @@ const DevelopmentTeam = (props) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography sx={label}>Đội ngũ phát triển</Typography>
+                    <Typography sx={label}>Đối tác phát triển</Typography>
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
@@ -218,4 +218,4 @@ const DevelopmentTeam = (props) => {
     )
 }
 
-export default DevelopmentTeam;
+export default DevelopmentPartner;
