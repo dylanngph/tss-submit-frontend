@@ -1,15 +1,26 @@
 import React from 'react';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import { Box, Drawer, AppBar, Typography, IconButton } from '@mui/material';
 import CreateAplication from '../../custom/CreateAplication';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import MenuIcon from '@mui/icons-material/Menu';
+import CssBaseline from '@mui/material/CssBaseline';
 
-const Leftbar = () => {
+const Leftbar = (props) => {
+    const drawerWidth = 244;
+    const { window } = props;
+    const container = window !== undefined ? () => window().document.body : undefined;
+
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
     let listItemsTop = [
         {
             'icon': '/assets/icons/about.svg',
@@ -19,7 +30,7 @@ const Leftbar = () => {
         {
             'icon': '/assets/icons/dashboard.svg',
             'content': 'Quản lý hồ sơ',
-            'link': '/'
+            'link': '/manage'
         },
         {
             'icon': '/assets/icons/nft.svg',
@@ -46,28 +57,21 @@ const Leftbar = () => {
         },
     ]
 
-    return (
-        <Box sx={{
-            maxWidth: "244px",
-            width: "100%",
-            boxShadow: "0px 4px 15px rgb(0 0 0 / 5%)",
-            minHeight: "100vh",
-            height: "auto"
+    const drawer = (
+        <List sx={{
+            padding: "0 15px",
+            minHeight: "calc(100vh - 50px)",
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: "50px",
+            height: "calc(100% - 50px)"
         }}>
-            <Toolbar sx={{ paddingTop: "25px" }}>
+            <Toolbar>
                 <img src='/assets/images/TSS-logo.svg' alt='TSS' />
             </Toolbar>
-            <List sx={{
-                padding: "0 15px",
-                marginTop: "50px",
-                minHeight: "calc(100vh - 190px)",
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "50px",
-                height: "calc(100% - 190px)"
-            }}>
+            <Box mt={5}>
                 {listItemsTop.map((item, index) => (
-                    <NavLink to={item.link}>
+                    <NavLink to={item.link} className="abc">
                         <ListItem button key={item.content}>
                             <img src={item.icon} alt={item.content} />
                             <ListItemText sx={{
@@ -76,7 +80,7 @@ const Leftbar = () => {
                                 fontSize: "14px",
                                 lineHeight: "17px",
                                 color: "#58667E",
-                                marginLeft: "14px"
+                                marginLeft: "14px",
                             }}
                                 primary={item.content} />
                         </ListItem>
@@ -99,10 +103,69 @@ const Leftbar = () => {
                         </ListItem>
                     </NavLink>
                 ))}
-                <Box sx={{ marginTop: "auto" }}>
-                    <CreateAplication />
-                </Box>
-            </List>
+            </Box>
+            <Box sx={{ marginTop: "auto" }}>
+                <CreateAplication />
+            </Box>
+        </List>
+    );
+
+    return (
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline sx={{display: "none"}} />
+            <AppBar
+                position="fixed"
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
+                    display: "none"
+                }}>
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap component="div">
+                        { props.header }
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <Box
+                component="nav"
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                aria-label="mailbox folders"
+            >
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                        keepMounted: true,
+                    }}
+                    sx={{
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                >
+                    {drawer}
+                </Drawer>
+                <Drawer
+                    variant="permanent"
+                    sx={{
+                        display: { xs: 'none', sm: 'block' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                    open
+                >
+                    {drawer}
+                </Drawer>
+            </Box>
         </Box>
     )
 }

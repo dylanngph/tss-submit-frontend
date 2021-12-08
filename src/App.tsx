@@ -15,26 +15,37 @@ import HomeScreen from "./screens/home";
 import NFTScreen from "./screens/stampNFT";
 import Application from "./screens/application";
 import User from "./screens/user";
-import { ThemeProvider, createMuiTheme } from '@mui/material/styles';
+import { ThemeProvider, createMuiTheme, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
+import Toolbar from '@mui/material/Toolbar';
 
 function App() {
-
+  const theme = createTheme();
   const THEME = createMuiTheme({
     typography: {
       "fontFamily": `"Inter", sans-serif`,
       "fontSize": 14,
+
+      h2: {
+        fontSize: "24px",
+        fontWeight: "bold",
+        lineHeight: "29px",
+
+        [theme.breakpoints.down('md')]: {
+          fontSize: "18px",
+          lineHeight: "22px",
+        },
+      }
     },
+    
   });
 
   return (
     <ThemeProvider theme={THEME}>
       <Grid container direction="row">
         <Header />
-        <Box sx={{
-            width: 'calc(100% - 244px)',
-            background: "#fcfcfd"
-          }}>
+        <Box sx={{ flexGrow: 1, background: "#fcfcfd", width: { sm: `calc(100% - 244px)` }, minHeight: "calc(100vh - 64px)", height: "auto" }}>
+          <Toolbar />
           <Switch>
             <Route path="/" component={HomeScreen} exact />
             <Route path="/login" component={LoginScreen} />
