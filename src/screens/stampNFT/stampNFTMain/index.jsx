@@ -45,11 +45,13 @@ function NFTMainScreen({ match }) {
                     fontSize: '16px',
                     paddingBottom: '50px'
                 }}>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pulvinar vestibulum id a pellentesque lacus lacus, pulvinar pretium velit. Pulvinar aliquam, feugiat vitae, mauris ut et ac velit malesuada. Orci sodales quam mattis proin arcu nunc sit. Fames sit mauris fringilla nunc vitae cursus tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pulvinar vestibulum id a pellentesque lacus lacus, pulvinar pretium velit. Pulvinar aliquam, feugiat vitae, mauris ut et ac velit malesuada. Orci sodales quam mattis proin arcu nunc sit. Fames sit mauris fringilla nunc vitae cursus tellus.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pulvinar vestibulum id a pellentesque lacus lacus, pulvinar pretium velit. Pulvinar aliquam, feugiat vitae, mauris ut et ac velit malesuada. Orci sodales quam mattis proin arcu nunc sit. Fames sit mauris fringilla nunc vitae cursus tellus.Lorem ipsum dolor</p>
+                    <p>TSS có tất cả các tính năng nổi bật của một hệ thống chuỗi khối điển hình, tính minh bạch và bảo mật. Thông tin do người dùng gửi vào hệ thống TSS sẽ được bảo vệ an toàn, toàn diện trước sự tấn công của tin tặc và có khả năng khôi phục hoàn toàn trong trường hợp xảy ra sự cố phá hủy. Thông tin người dùng sẽ được quản lý một cách chuyên nghiệp và dễ sử dụng.</p>
+                    <br />
+                    <p>TSS áp dụng công nghệ blockchain vào quản lý kinh doanh bằng cách gửi thông tin dự án đến với TSS để dự án của bạn có thể hoạt động dựa trên nền tảng của chúng tôi.</p>
                 </Box>
                 <Grid container spacing={2}>
                     {ListStampNFT.map((item, index) => (
-                        <Grid item xs={12} sm={4}>
+                        <Grid key={index} item xs={12} lg={4}>
                             <BoxNFT>
                                 <img src={item.img_path} alt={item.name} />
                                 <h4>{item.name}</h4>

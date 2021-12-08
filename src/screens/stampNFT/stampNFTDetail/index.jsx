@@ -20,15 +20,8 @@ function NFTDetailScreen({ match }) {
                 <Typography color="text.primary">Passport of Blockchain</Typography>
             </BreadcrumbsWrapper>
             <NFTCard>
-                <Grid container justifyContent="space-between">
-                    <Grid item>
-                        <h2>NFT Passport of Blockchain</h2>
-                        <div className="wrapper-analytic">
-                            <span>Phân tích số liệu</span>
-                            <span>Đánh giá</span>
-                        </div>
-                    </Grid>
-                    <Grid item>
+                <Grid container alignItems="center">
+                    <Grid item mr={2} mb={2}>
                         <Box sx={{
                             width: '78px',
                             height: '78px',
@@ -36,32 +29,20 @@ function NFTDetailScreen({ match }) {
                             <img className="fluid" src="/assets/images/stampNFT/NFT1.png" alt="logo-tss.png"/>
                         </Box>
                     </Grid>
+                    <Grid item>
+                        <h2>NFT Passport of Blockchain</h2>
+                    </Grid>
                 </Grid>
                 <Grid container>
-                    <Box sx={{
-                        background: '#EFF2F5',
-                        borderRadius: '10px',
-                        padding: '5px 10px',
-                        margin: '15px 15px 15px 0'
-                        }}>
+                    <BoxImage>
                         <img src="/assets/images/stampNFT/logo-tss.png" alt="logo-tss.png"/>
-                    </Box>
-                    <Box sx={{
-                        background: '#EFF2F5',
-                        borderRadius: '10px',
-                        padding: '5px 10px',
-                        margin: '15px 15px 15px 0'
-                        }}>
+                    </BoxImage>
+                    <BoxImage>
                         <img src="/assets/images/stampNFT/logo-bas.png" alt="logo-bas.png"/>
-                    </Box>
-                    <Box sx={{
-                        background: '#EFF2F5',
-                        borderRadius: '10px',
-                        padding: '5px 10px',
-                        margin: '15px 15px 15px 0'
-                        }}>
+                    </BoxImage>
+                    <BoxImage>
                         <img src="/assets/images/stampNFT/logo-vcb.png" alt="logo-vcb.png"/>
-                    </Box>
+                    </BoxImage>
                     <BoxMoreInfo>
                         <span>Ngày cấp</span>
                         <span>06/05/2022</span>
@@ -74,26 +55,34 @@ function NFTDetailScreen({ match }) {
                         <span className="block-copy">Contract ID</span>
                         <span>0xE1D7CB...647278</span>
                     </BoxMoreInfo>
+                    <BoxMoreInfo>
+                        <span className="block-copy">TX Hash</span>
+                        <span>0xE1D7CB...647278</span>
+                    </BoxMoreInfo>
                 </Grid>
                 <Grid container mt={0} spacing={2}>
-                    <Grid item container lg={4} xs={12}>
+                    <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Pháp lý</h5>
                             <span className="green">Rủi ro thấp</span>
                         </BoxMoreAnalytic>
                     </Grid>
-                    <Grid item container lg={4} xs={12}>
+                    <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Công nghệ</h5>
                             <span className="yellow">Có khả năng ứng dụng</span>
                         </BoxMoreAnalytic>
                     </Grid>
-                    <Grid item container lg={4} xs={12}>
+                    <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Giá trị xã hội </h5>
-                            <span className="green">Có tiềm năng đóng góp cho xã hội</span>
+                            <span className="yellow">Có tiềm năng đóng góp cho xã hội</span>
+                        </BoxMoreAnalytic>
+                    </Grid>
+                    <Grid item container lg={6} xs={12}>
+                        <BoxMoreAnalytic>
                             <h5>Uy tín cộng đồng</h5>
-                            <span className="yellow">Có một số thông tin tiêu cực</span>
+                            <span className="red">Có một số thông tin tiêu cực</span>
                         </BoxMoreAnalytic>
                     </Grid>
                 </Grid>
@@ -130,22 +119,28 @@ const NFTCard = styled.div`
     border-radius: 12px;
     height: 100%;
     margin: 24px;
-    .wrapper-analytic {
-        margin-top: 20px;
-        span {
-            font-family: 'Inter-Regular';
-            background: #EFF2F5;
-            border-radius: 4px;
-            font-size: 14px;
-            padding: 4px 8px;
-            display: inline-block;
-            margin-right: 12px;
-        }
-    }
     img.fluid {
         width: 100%;
         height: 100%;
         object-fit: contain;
+    }
+`;
+
+const BoxImage = styled(Box)`
+    background-color: #EFF2F5;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 15px 15px 15px 0;
+    display: flex;
+    max-width: 80px;
+    height: 40px;
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+    @media screen and (max-width: 600px) {
+        margin: 5px 10px 5px 0;
     }
 `;
 
@@ -156,6 +151,9 @@ const BoxMoreInfo = styled(Box)`
     flex-direction: column;
     justify-content: space-between;
     margin: 15px 0;
+    @media screen and (max-width: 600px) {
+        margin: 10px 0;
+    }
     .block-copy {
         position: relative;
         cursor: copy;
@@ -221,6 +219,9 @@ const BoxMoreAnalytic = styled.div`
         }
         &.yellow:after{
             background: #EED344;
+        }
+        &.red:after{
+            background: #EA3943;
         }
     }
 `;
