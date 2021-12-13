@@ -294,3 +294,8 @@ textarea:focus-visible {
 .css-1t29gy6-MuiToolbar-root {
   display: none !important;
 }
+
+.password-field {
+  border-radius: 8px;
+  background: #EFF2F5;
+}

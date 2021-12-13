@@ -3,14 +3,14 @@ import List from '@mui/material/List';
 import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
-import { Box, Drawer, AppBar, Typography, IconButton } from '@mui/material';
+import { Box, Drawer, AppBar, Typography, IconButton, Button } from '@mui/material';
 import CreateAplication from '../../custom/CreateAplication';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import CssBaseline from '@mui/material/CssBaseline';
 
-const Leftbar = (props) => {
+const Header = ({ auth, handleLogout, error, props }) => {
     const drawerWidth = 244;
     const { window } = props;
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -21,41 +21,31 @@ const Leftbar = (props) => {
         setMobileOpen(!mobileOpen);
     };
 
-    let listItemsTop = [
-        {
-            'icon': '/assets/icons/about.svg',
-            'content': 'Về TSS',
-            'link': '/'
-        },
-        {
-            'icon': '/assets/icons/dashboard.svg',
-            'content': 'Quản lý hồ sơ',
-            'link': '/manage'
-        },
-        {
-            'icon': '/assets/icons/nft.svg',
-            'content': 'Con dấu NFT',
-            'link': '/stamp-nft'
-        }
-    ]
+    const itemStyle = {
+        fontStyle: "normal",
+        fontWeight: "500",
+        fontSize: "14px",
+        lineHeight: "17px",
+        color: "#58667E",
+        marginLeft: "14px"
+    }
 
-    let lisItemsBottom = [
-        {
-            'icon': '/assets/icons/user.svg',
-            'content': 'User Name',
-            'link': '/user'
-        },
-        {
-            'icon': '/assets/icons/login.svg',
-            'content': 'Đăng nhập',
-            'link': '/login'
-        },
-        {
-            'icon': '/assets/icons/logout.svg',
-            'content': 'Đăng xuất',
-            'link': '/'
-        },
-    ]
+    const logoutStyle = {
+        margin: "0 !important",
+        width: "100%",
+        textTransform: "inherit",
+        justifyContent: "flex-start",
+        padding: "8px 16px",
+        fontStyle: "normal !important",
+        fontWeight: "500 !important",
+        fontSize: "1rem !important",
+        lineHeight: "17px !important",
+        color: "#58667E !important",
+
+        "img": {
+            marginRight: "14px"
+        }
+    }
 
     const drawer = (
         <List sx={{
@@ -70,43 +60,67 @@ const Leftbar = (props) => {
                 <img src='/assets/images/TSS-logo.svg' alt='TSS' />
             </Toolbar>
             <Box mt={5}>
-                {listItemsTop.map((item, index) => (
-                    <NavLink exact to={item.link}>
-                        <ListItem button key={item.content}>
-                            <img src={item.icon} alt={item.content} />
-                            <ListItemText sx={{
-                                fontStyle: "normal",
-                                fontWeight: "500",
-                                fontSize: "14px",
-                                lineHeight: "17px",
-                                color: "#58667E",
-                                marginLeft: "14px",
-                            }}
-                                primary={item.content} />
-                        </ListItem>
-                    </NavLink>
-                ))}
+                <NavLink exact to='/'>
+                    <ListItem button key='Về TSS'>
+                        <img src='/assets/icons/about.svg' alt='Về TSS' />
+                        <ListItemText sx={itemStyle}
+                            primary='Về TSS' />
+                    </ListItem>
+                </NavLink>
+                {auth
+                    ?
+                    <>
+                        <NavLink exact to='/manage'>
+                            <ListItem button key='Quản lý hồ sơ'>
+                                <img src='/assets/icons/dashboard.svg' alt='Quản lý hồ sơ' />
+                                <ListItemText sx={itemStyle}
+                                    primary='Quản lý hồ sơ' />
+                            </ListItem>
+                        </NavLink>
+                        <NavLink exact to='/stamp-nft'>
+                            <ListItem button key='Con dấu NFT'>
+                                <img src='/assets/icons/nft.svg' alt='Con dấu NFT' />
+                                <ListItemText sx={itemStyle}
+                                    primary='Con dấu NFT' />
+                            </ListItem>
+                        </NavLink>
+                    </>
+                    :
+                    null
+                }
                 <Divider sx={{ margin: "14px 0 !important" }} />
-                {lisItemsBottom.map((item, index) => (
-                    <NavLink exact to={item.link}>
-                        <ListItem button key={item.content}>
-                            <img src={item.icon} alt={item.content} />
-                            <ListItemText sx={{
-                                fontStyle: "normal",
-                                fontWeight: "500",
-                                fontSize: "14px",
-                                lineHeight: "17px",
-                                color: "#58667E",
-                                marginLeft: "14px"
-                            }}
-                                primary={item.content} />
+                {auth
+                    ?
+                    <>
+                        <NavLink exact to="/user">
+                            <ListItem button key='User Name'>
+                                <img src='/assets/icons/user.svg' alt='User Name' />
+                                <ListItemText sx={itemStyle}
+                                    primary='User Name' />
+                            </ListItem>
+                        </NavLink>
+                        <Button sx={logoutStyle} onClick={handleLogout}>
+                            <img src="/assets/icons/logout.svg" alt="logout" />Đăng xuất
+                        </Button>
+                    </>
+                    :
+                    <NavLink exact to="/login">
+                        <ListItem button key='Đăng nhập'>
+                            <img src='/assets/icons/login.svg' alt='Đăng nhập' />
+                            <ListItemText sx={itemStyle}
+                                primary='Đăng nhập' />
                         </ListItem>
                     </NavLink>
-                ))}
+                }
             </Box>
-            <Box sx={{ marginTop: "auto" }}>
-                <CreateAplication />
-            </Box>
+            {auth
+                ?
+                <Box sx={{ marginTop: "auto" }}>
+                    <CreateAplication />
+                </Box>
+                :
+                null
+            }
         </List>
     );
 
@@ -169,4 +183,4 @@ const Leftbar = (props) => {
     )
 }
 
-export default Leftbar
+export default Header

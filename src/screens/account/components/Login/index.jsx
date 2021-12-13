@@ -1,27 +1,34 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, TextField, InputAdornment, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
-function LoginAccount(props) {
-    const defaultValues = {
-        user: "",
-        password: "",
-    };
+function LoginAccount({handleLogin , error}) {
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [values, setValues] = useState({
+        email: '',
+        password: '',
+        showPassword: false,
+      })
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-    };
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
+        }
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
+
+    const handleClickShowPassword = () => {
+        setValues({
+          ...values,
+          showPassword: !values.showPassword,
+        })
+      }
+    const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+    }
 
     return (
         <Box sx={{
@@ -35,23 +42,37 @@ function LoginAccount(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Tên đăng nhập hoặc email</FormLabel>
                     <OutlinedInput
-                        id="user"
-                        name="user"
+                        id="email"
+                        name="email"
                         type="email"
                         placeholder="Username hoặc email"
-                        value={formValues.user}
-                        onChange={handleInputChange}
+                        value={values.email}
+                        onChange={handleChange('email')}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Mật khẩu</FormLabel>
-                    <OutlinedInput
-                        id="password"
-                        name="password"
-                        type="password"
+                    <TextField
+                        className="password-field"
+                        fullWidth
+                        type={values.showPassword ? 'text' : 'password'}
+                        value={values.password}
+                        onChange={handleChange('password')}
                         placeholder="••••••••••••"
-                        value={formValues.password}
-                        onChange={handleInputChange}
+                        variant="outlined"
+                        InputProps={{
+                            endAdornment: 
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                        edge="end"
+                                        style={{color: '#A6B0C3'}}
+                                    >
+                                        {values.showPassword ?  <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                          }}
                     />
                 </FormControl>
                 <div className="mb-16">
@@ -59,7 +80,7 @@ function LoginAccount(props) {
                         <Link to="/forgotpass" className="call-to-action" underline="none">Quên mật khẩu</Link>
                     </p>
                 </div>
-                <Button variant="contained" className="button mb-16" type="submit">
+                <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit">
                     Đăng nhập
                 </Button>
                 <p className="text-center">

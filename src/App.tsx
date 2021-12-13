@@ -1,5 +1,5 @@
 import './App.css';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import ProjectManage from "screens/manage/components/Project";
 import Header from "./components/display/Header";
@@ -18,6 +18,13 @@ import User from "./screens/user";
 import { ThemeProvider, createMuiTheme, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
+import { adminData } from 'screens/user/config';
+import Cookies from 'js-cookie'
+
+interface LoginProps {
+  email: string,
+  password: string
+}
 
 function App() {
   const theme = createTheme();
@@ -39,27 +46,74 @@ function App() {
     },
   });
 
+  const [auth, setAuth] = useState(false)
+  const [error, setError] = useState(false)
+  const [user, setUser] = useState({ email: "" })
+
+  const readCookies = () => {
+    const userCookies = Cookies.get("user")
+    if (userCookies) {
+      setAuth(true)
+    }
+  }
+
+  useEffect(() => {
+    readCookies()
+  }, [])
+
+  const handleLogin = (values: LoginProps) => {
+    for (let i = 0; i < adminData.length; i++) {
+      if (values.email === adminData[i].email) {
+        if (values.password === adminData[i].password) {
+          setUser({
+            email: values.email
+          })
+          setError(false)
+          setAuth(true)
+          Cookies.set("user", "loginTrue")
+          return
+        }
+      }
+    }
+    setError(true)
+    return auth
+  }
+
+  const handleLogout = () => {
+    setUser({ email: "" })
+    setAuth(false)
+    Cookies.remove("user")
+  }
+
+  console.log('auth===>', auth);
+
   return (
     <ThemeProvider theme={THEME}>
       <Grid container direction="row">
-        <Header />
+        <Header auth={auth} handleLogout={handleLogout} error={error} props="true" />
         <Box sx={{ flexGrow: 1, background: "#fcfcfd", width: { sm: `calc(100% - 244px)` }, minHeight: "calc(100vh - 64px)", height: "auto" }}>
           <Toolbar />
           <Switch>
-            <Route path="/" component={HomeScreen} exact />
-            <Route path="/login" component={LoginScreen} />
-            <Route path="/register" component={RegisterScreen} />
-            <Route path="/register-success" component={RegisterSuccess} />
-            <Route path="/security-question" component={SecurityQuestion} />
-            <Route path="/forgotpass" component={ForgotPassScreen} />
-            <Route path="/reset-password-success" component={ResetPasswordSuccess} />
-            <Route path="/manage" component={ProjectManage} />
-            <Route path="/stamp-nft" component={NFTScreen} />
-            <Route path="/application" component={Application} />
-            <Route path="/user" component={User} />
-            <Route component={NotFound} />
+          <Route path="/" component={HomeScreen} exact />
+            {auth ?
+              <>
+                
+                <Route path="/register" component={RegisterScreen} />
+                <Route path="/register-success" component={RegisterSuccess} />
+                <Route path="/security-question" component={SecurityQuestion} />
+                <Route path="/forgotpass" component={ForgotPassScreen} />
+                <Route path="/reset-password-success" component={ResetPasswordSuccess} />
+                <Route path="/manage" component={ProjectManage} />
+                <Route path="/stamp-nft" component={NFTScreen} />
+                <Route path="/application" component={Application} />
+                <Route path="/user" component={User} />
+              </>
+              :
+              <LoginScreen handleLogin={handleLogin} error={error}/>
+            }
           </Switch>
         </Box>
+
       </Grid>
     </ThemeProvider>
   );
