@@ -13,26 +13,6 @@ function a11yProps(index) {
     };
 }
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
 function Application(props) {
     const [value, setValue] = React.useState(0);
 
@@ -95,12 +75,12 @@ function Application(props) {
                     <LegalRepresentative value={value} index={3} />
                 </Box>
             </Box>
-            <Box>
+            {/* <Box>
                 <Information tilte={incorporation.title} data={incorporation.data} />
                 <Information tilte={incorporation.title} data={incorporation.data} />
                 <Information tilte={incorporation.title} data={incorporation.data} />
                 <Information tilte={incorporation.title} data={incorporation.data} />
-            </Box>
+            </Box> */}
         </Box>
     )
 }

@@ -172,7 +172,7 @@ const CreateAplication = (props) => {
                             <Box sx={{maxWidth:"430px", margin: "auto",}}>
                                 <CountrySelect className="mb-16" />
                                 {/* <Button className="button" onClick={handleNext}>Bắt đầu</Button> */}
-                                <Link className="button" to="/application" onClick={handleClose}>Bắt đầu</Link>
+                                <Link className="button w-100" to="/application" onClick={handleClose}>Bắt đầu</Link>
                             </Box>
                         </React.Fragment>
                     }

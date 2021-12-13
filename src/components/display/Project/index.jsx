@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, Typography } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -24,42 +24,42 @@ function Project(props) {
 
     let socials = [
         {
-            value: "facebook",
+            value: "Facebook",
             name: "Facebook",
             icon: "/assets/icons/socials/facebook.svg"
         },
         {
-            value: "telegram",
+            value: "Telegram",
             name: "Telegram",
             icon: "/assets/icons/socials/telegram.svg"
         },
         {
-            value: "zalo",
+            value: "Zalo",
             name: "Zalo",
             icon: "/assets/icons/socials/zalo.svg"
         },
         {
-            value: "tiktok",
+            value: "Tiktok",
             name: "Tiktok",
             icon: "/assets/icons/socials/tiktok.svg"
         },
         {
-            value: "discord",
+            value: "Discord",
             name: "Discord",
             icon: "/assets/icons/socials/discord.svg"
         },
         {
-            value: "medium",
+            value: "Medium",
             name: "Medium",
             icon: "/assets/icons/socials/medium.svg"
         },
         {
-            value: "twitter",
+            value: "Twitter",
             name: "Twitter",
             icon: "/assets/icons/socials/twitter.svg"
         },
         {
-            value: "instagram",
+            value: "Instagram",
             name: "Instagram",
             icon: "/assets/icons/socials/instagram.svg"
         },
@@ -75,6 +75,7 @@ function Project(props) {
         taxCode: "",
         acceptDate: React.useState(new Date('2014-08-18T21:11:54')),
         businessLicense: "",
+        websites: ['']
     };
 
     const [formValues, setFormValues] = useState(defaultValues)
@@ -87,12 +88,27 @@ function Project(props) {
         });
     };
 
+    const handleArrayChange = (e) => {
+        console.log(e.target)
+    }
+
     const handleDatePickerChange = (newValue) => {
         setFormValues({
             ...formValues,
             ["acceptDate"]: newValue,
         });
     };
+
+    const addWebsite = () => {
+        console.log('acb==>', formValues);
+        const nextHiddenItem = ''
+        if (nextHiddenItem) {
+            setFormValues((items) => [
+                ...formValues.websites,
+                nextHiddenItem,
+              ]);
+        }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -134,7 +150,7 @@ function Project(props) {
                         <TextareaAutosize
                             minRows={8}
                             placeholder="Mô tả dự án ngắn gọn."
-                            style={{ width: 400 }}
+                            style={{ width: "100%" }}
                             value={formValues.description}
                             onChange={handleInputChange}
                         />
@@ -160,26 +176,44 @@ function Project(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Website dự án</FormLabel>
-                        <button>Website dự án</button>
+                        {formValues.websites.map((item, index) => (
+                            <OutlinedInput
+                            id={ `website-${index}` }
+                            name={ `website-${index}` }
+                            type="text"
+                            placeholder="Website"
+                            value={item}
+                            onChange={handleArrayChange}
+                        />
+                        ))}
+                        <Box mt={2} sx={{ display: "flex" }}>
+                            <img src="/assets/icons/Vector.svg" alt="Vector" />
+                            <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
+                                        onClick={addWebsite}>
+                                Thêm
+                            </Typography>
+                        </Box>
+
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mạng xã hội</FormLabel>
-                        <FormGroup sx={{display: "flex", flexDirection: "row", position: "relative"}}>
-                            <Select sx={{width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5"}}
+                        <FormGroup sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
+                            <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5" }}
                                 value={personName}
                                 onChange={handleChange}
                                 input={<OutlinedInput label="Tag" />}
                                 renderValue={(selected) => selected.join(', ')}
+                                className="social-items"
                             >
                                 {socials.map((item, index) => (
-                                    <MenuItem key={item.name} value={item.value}>
+                                    <MenuItem className="social-item" key={item.name} value={item.value}>
                                         <img src={item.icon} alt={item.name} />
                                         {item.name}
                                     </MenuItem>
                                 ))}
                             </Select>
                             <span className="line-verticle"></span>
-                            <OutlinedInput sx={{width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5"}}
+                            <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
                                 id="projectName"
                                 name="projectName"
                                 type="text"

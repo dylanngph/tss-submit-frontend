@@ -5,10 +5,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
 
-function NFTDetailScreen({ match }) {
-    const {
-    params: { NFTName },
-    } = match;
+function NFTDetailScreen() {
     return (
         <div>
             <BreadcrumbsWrapper aria-label="breadcrumb">

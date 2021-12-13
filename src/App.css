@@ -254,3 +254,43 @@ textarea:focus-visible {
   border-radius: 50%;
   margin-bottom: 24px;
 }
+
+.active .MuiButtonBase-root {
+  background: #F0F6FF;
+  border-radius: 8px;
+}
+
+.active .MuiListItemText-root {
+  color: #446DFF;
+}
+
+.MuiOutlinedInput-root .MuiAutocomplete-input {
+  padding: 0 !important;
+}
+
+.MuiAutocomplete-hasPopupIcon .MuiOutlinedInput-root {
+  padding: 16px !important;
+}
+
+.button.w-100 {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block;
+  text-align: center;
+}
+
+.MuiMenuItem-root.social-item,
+.social-items .MuiSelect-select {
+  color: #58667E;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+}
+
+.social-item img {
+  margin-right: 16px;
+}
+
+.css-1t29gy6-MuiToolbar-root {
+  display: none !important;
+}

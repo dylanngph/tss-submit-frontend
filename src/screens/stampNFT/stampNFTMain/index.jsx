@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
 
-function NFTMainScreen({ match }) {
+function NFTMainScreen() {
     const ListStampNFT = [
         {
             img_path: '/assets/images/stampNFT/NFT1.png',

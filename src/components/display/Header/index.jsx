@@ -66,12 +66,12 @@ const Leftbar = (props) => {
             marginBottom: "50px",
             height: "calc(100% - 50px)"
         }}>
-            <Toolbar>
+            <Toolbar sx={{ display: "flex !important" }}>
                 <img src='/assets/images/TSS-logo.svg' alt='TSS' />
             </Toolbar>
             <Box mt={5}>
                 {listItemsTop.map((item, index) => (
-                    <NavLink to={item.link} className="abc">
+                    <NavLink exact to={item.link}>
                         <ListItem button key={item.content}>
                             <img src={item.icon} alt={item.content} />
                             <ListItemText sx={{
@@ -88,7 +88,7 @@ const Leftbar = (props) => {
                 ))}
                 <Divider sx={{ margin: "14px 0 !important" }} />
                 {lisItemsBottom.map((item, index) => (
-                    <NavLink to={item.link}>
+                    <NavLink exact to={item.link}>
                         <ListItem button key={item.content}>
                             <img src={item.icon} alt={item.content} />
                             <ListItemText sx={{
@@ -112,13 +112,12 @@ const Leftbar = (props) => {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline sx={{display: "none"}} />
-            <AppBar
+            {/* <CssBaseline /> */}
+            {/* <AppBar
                 position="fixed"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    display: "none"
                 }}>
                 <Toolbar>
                     <IconButton
@@ -134,7 +133,7 @@ const Leftbar = (props) => {
                         { props.header }
                     </Typography>
                 </Toolbar>
-            </AppBar>
+            </AppBar> */}
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

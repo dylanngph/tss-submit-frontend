@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, TextField, Autocomplete, Checkbox } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import TokenAllocationRate from 'components/custom/TokenAllocationRate'
 
 function Tokenomics(props) {
     const { children, value, index, ...other } = props;
@@ -183,7 +184,7 @@ function Tokenomics(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Phân bổ token</FormLabel>
-                        <button>Phân bổ token</button>
+                        <TokenAllocationRate />
                     </FormControl>
                     <Button variant="contained" className="button mb-16" type="submit">
                         Tiếp tục
