@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import ProjectManage from "screens/manage/components/Project";
 import Header from "./components/display/Header";
 import NotFound from "./components/display/NotFound";
@@ -83,9 +83,8 @@ function App() {
     setUser({ email: "" })
     setAuth(false)
     Cookies.remove("user")
+    return <Redirect to='/'  />
   }
-
-  console.log('auth===>', auth);
 
   return (
     <ThemeProvider theme={THEME}>
@@ -94,22 +93,24 @@ function App() {
         <Box sx={{ flexGrow: 1, background: "#fcfcfd", width: { sm: `calc(100% - 244px)` }, minHeight: "calc(100vh - 64px)", height: "auto" }}>
           <Toolbar />
           <Switch>
-          <Route path="/" component={HomeScreen} exact />
+            <Route path="/" component={HomeScreen} exact />
             {auth ?
               <>
-                
-                <Route path="/register" component={RegisterScreen} />
-                <Route path="/register-success" component={RegisterSuccess} />
-                <Route path="/security-question" component={SecurityQuestion} />
-                <Route path="/forgotpass" component={ForgotPassScreen} />
-                <Route path="/reset-password-success" component={ResetPasswordSuccess} />
                 <Route path="/manage" component={ProjectManage} />
                 <Route path="/stamp-nft" component={NFTScreen} />
                 <Route path="/application" component={Application} />
                 <Route path="/user" component={User} />
               </>
               :
-              <LoginScreen handleLogin={handleLogin} error={error}/>
+              <>
+                
+                <Route exact path="/login" render={(props) => <LoginScreen handleLogin={handleLogin} error={error} /> } />
+                <Route path="/register" component={RegisterScreen} />
+                <Route path="/register-success" component={RegisterSuccess} />
+                <Route path="/security-question" component={SecurityQuestion} />
+                <Route path="/forgotpass" component={ForgotPassScreen} />
+                <Route path="/reset-password-success" component={ResetPasswordSuccess} />
+              </>
             }
           </Switch>
         </Box>
