@@ -91,9 +91,12 @@ function RegisterAccount(props) {
                         onChange={handleInputChange}
                     />
                 </FormControl>
-                <Button variant="contained" className="button mb-16" type="submit">
+                {/* <Button variant="contained" className="button mb-16" type="submit">
                     Tiếp tục
-                </Button>
+                </Button> */}
+                <p className="text-center">
+                    <Link to="/security-question" className="button mb-16 buttom-example" underline="none">Tiếp tục</Link>
+                </p>
                 <p className="text-center">
                     <Link to="/login" className="call-to-action" underline="none">Đã có tài khoản</Link>
                 </p>

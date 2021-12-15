@@ -299,3 +299,7 @@ textarea:focus-visible {
   border-radius: 8px;
   background: #EFF2F5;
 }
+
+.buttom-example {
+  display: block;
+}

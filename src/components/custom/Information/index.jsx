@@ -8,6 +8,10 @@ const Information = (props) => {
         justifyContent: "space-between",
         alignItems: "center",
         borderBottom: "1px solid #A6B0C3",
+
+        '&:last-child': {
+            borderBottom: "none",
+        }
     }
 
     const labelInforItem = {
