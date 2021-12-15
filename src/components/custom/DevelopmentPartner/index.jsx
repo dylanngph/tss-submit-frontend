@@ -103,8 +103,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="name"
                             type="text"
                             placeholder="Tên đối tác"
-                            value={item.name}
-                            onChange={handleInputChange}
+                            // value={item.name}
+                            // onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -116,8 +116,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="position"
                             type="text"
                             placeholder="http://"
-                            value={item.position}
-                            onChange={handleInputChange}
+                            // value={item.position}
+                            // onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>

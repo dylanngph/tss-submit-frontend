@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { styled } from '@mui/material/styles';
-import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, Input, IconButton, FormControl, FormLabel, OutlinedInput } from '@mui/material';
+import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, Input, IconButton, FormControl, TextareaAutosize, OutlinedInput } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -21,7 +21,7 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     width: "100%",
-    maxWidth: "846px",
+    maxWidth: "1080px",
     boxShadow: "0px 4px 17px rgba(0, 0, 0, 0.05)",
     borderRadius: "12px",
     border: "1px solid #ffffff",
@@ -86,9 +86,9 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
 
     const deleteButton = {
         position: "absolute",
-        bottom: "30px",
+        top: "50%",
         left: "50%",
-        transform: "translateX(-50%)",
+        transform: "translate(-50%, -50%)",
         cursor: "pointer",
     }
 
@@ -96,7 +96,7 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
 
         <TableRow>
             <TableCell component="th" scope="row">
-                <Typography sx={numberStyle}>{index}</Typography>
+                <Typography sx={numberStyle}>{index + 1}</Typography>
             </TableCell>
             <TableCell component="th" scope="row">
                 <FormControl className="form-control">
@@ -105,8 +105,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="category"
                         type="text"
                         placeholder="Tên hạng mục"
-                        value={item.category}
-                        onChange={handleInputChange}
+                        // value={item.category}
+                        // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
@@ -117,8 +117,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="ratio"
                         type="text"
                         placeholder="100%"
-                        value={item.ratio}
-                        onChange={handleInputChange}
+                        // value={item.ratio}
+                        // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
@@ -129,8 +129,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="price"
                         type="text"
                         placeholder="$10.000"
-                        value={item.price}
-                        onChange={handleInputChange}
+                        // value={item.price}
+                        // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
@@ -141,21 +141,21 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="quantily"
                         type="text"
                         placeholder="56.160.000"
-                        value={item.quantily}
-                        onChange={handleInputChange}
+                        // value={item.quantily}
+                        // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
             <TableCell align="right">
                 <FormControl className="form-control">
-                    <OutlinedInput
-                        id="vesting"
-                        name="vesting"
-                        type="text"
-                        placeholder="5% unlock at TGE, 90-days cliff, 6% monthly"
-                        value={item.vesting}
-                        onChange={handleInputChange}
-                    />
+                    <TextareaAutosize
+                            minRows={4}
+                            maxRows={4}
+                            placeholder="5% unlock at TGE, 90-days cliff, 6% monthly"
+                            style={{ width: "auto" }}
+                        // value={formValues.vesting}
+                        // onChange={handleInputChange}
+                        />
                 </FormControl>
             </TableCell>
             <TableCell sx={{ position: "relative" }} align="right">
@@ -250,8 +250,8 @@ const TokenAllocationRate = (props) => {
                 <Box sx={style}>
                     <Typography sx={label}>Đội ngũ phát triển</Typography>
                     <Divider />
-                    <TableContainer component={Paper} sx={{ padding: "15px 35px", }}>
-                        <Table sx={{ minWidth: 650, borderRadius: "10px", overflow: "hidden" }} aria-label="simple table">
+                    <TableContainer component={Paper} sx={{ padding: "15px 35px", width: "auto" }}>
+                        <Table sx={{ borderRadius: "10px", overflow: "hidden" }} aria-label="simple table">
                             <TableHead sx={styleHead}>
                                 <TableRow>
                                     <TableCell>#</TableCell>
