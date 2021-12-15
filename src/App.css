@@ -226,6 +226,7 @@ textarea:focus-visible {
   line-height: 19px;
   text-align: center;
   color: #000000;
+  text-transform: inherit;
 }
 
 .MuiButtonBase-root.MuiChip-root {

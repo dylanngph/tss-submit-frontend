@@ -68,6 +68,7 @@ function Project(props) {
     const defaultValues = {
         projectName: "",
         logo: "",
+        whitepaper: "",
         description: "",
         whitepaper: "",
         businessAreas: 1,
@@ -75,7 +76,13 @@ function Project(props) {
         taxCode: "",
         acceptDate: React.useState(new Date('2014-08-18T21:11:54')),
         businessLicense: "",
-        websites: ['']
+        websites: [''],
+        socialMedias: [
+            {
+                type: '',
+                link: '',
+            }
+        ]
     };
 
     const [formValues, setFormValues] = useState(defaultValues)
@@ -100,13 +107,27 @@ function Project(props) {
     };
 
     const addWebsite = () => {
-        console.log('acb==>', formValues);
-        const nextHiddenItem = ''
+        const nextHiddenItem = formValues.websites;
+        nextHiddenItem.push('');
         if (nextHiddenItem) {
-            setFormValues((items) => [
-                ...formValues.websites,
-                nextHiddenItem,
-              ]);
+            setFormValues({
+                ...formValues,
+                ["websites"]: nextHiddenItem,
+            });
+        }
+    }
+
+    const addSocial = () => {
+        const nextHiddenItem = formValues.socialMedias;
+        nextHiddenItem.push({
+            type: '',
+            link: '',
+        });
+        if (nextHiddenItem) {
+            setFormValues({
+                ...formValues,
+                ["socialMedias"]: nextHiddenItem,
+            });
         }
     }
 
@@ -149,10 +170,11 @@ function Project(props) {
                         <FormLabel>Mô tả , giới thiệu dự án</FormLabel>
                         <TextareaAutosize
                             minRows={8}
+                            maxRows={8}
                             placeholder="Mô tả dự án ngắn gọn."
                             style={{ width: "100%" }}
-                            value={formValues.description}
-                            onChange={handleInputChange}
+                        // value={formValues.description}
+                        // onChange={handleInputChange}
                         />
                     </FormControl>
                     <FormControl className="form-control mb-16">
@@ -162,7 +184,7 @@ function Project(props) {
                             name="whitepaper"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
-                            value={formValues.logo}
+                            value={formValues.whitepaper}
                             onChange={handleInputChange}
                         />
                     </FormControl>
@@ -178,18 +200,19 @@ function Project(props) {
                         <FormLabel>Website dự án</FormLabel>
                         {formValues.websites.map((item, index) => (
                             <OutlinedInput
-                            id={ `website-${index}` }
-                            name={ `website-${index}` }
-                            type="text"
-                            placeholder="Website"
-                            value={item}
-                            onChange={handleArrayChange}
-                        />
+                                className="mb-16"
+                                id={`website-${index}`}
+                                name={`website-${index}`}
+                                type="text"
+                                placeholder="Website"
+                            // value={item}
+                            // onChange={handleArrayChange}
+                            />
                         ))}
                         <Box mt={2} sx={{ display: "flex" }}>
                             <img src="/assets/icons/Vector.svg" alt="Vector" />
                             <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
-                                        onClick={addWebsite}>
+                                onClick={addWebsite}>
                                 Thêm
                             </Typography>
                         </Box>
@@ -198,28 +221,39 @@ function Project(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mạng xã hội</FormLabel>
                         <FormGroup sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
-                            <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5" }}
-                                value={personName}
-                                onChange={handleChange}
-                                input={<OutlinedInput label="Tag" />}
-                                renderValue={(selected) => selected.join(', ')}
-                                className="social-items"
-                            >
-                                {socials.map((item, index) => (
-                                    <MenuItem className="social-item" key={item.name} value={item.value}>
-                                        <img src={item.icon} alt={item.name} />
-                                        {item.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                            <span className="line-verticle"></span>
-                            <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
-                                id="projectName"
-                                name="projectName"
-                                type="text"
-                                value={formValues.socialLink}
-                                onChange={handleInputChange}
-                            />
+                        {formValues.socialMedias.map((item, index) => (
+                            <Box sx={{ display: "flex", position: "relative" }} mb={2}>
+                                <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5" }}
+                                    value={personName}
+                                    onChange={handleChange}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) => selected.join(', ')}
+                                    className="social-items"
+                                >
+                                    {socials.map((item, index) => (
+                                        <MenuItem className="social-item" key={item.name} value={item.value}>
+                                            <img src={item.icon} alt={item.name} />
+                                            {item.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                                <span className="line-verticle"></span>
+                                <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
+                                    id="projectName"
+                                    name="projectName"
+                                    type="text"
+                                    value={formValues.socialLink}
+                                    onChange={handleInputChange}
+                                />
+                            </Box>
+                        ))}
+                            <Box mt={2} sx={{ display: "flex" }}>
+                                <img src="/assets/icons/Vector.svg" alt="Vector" />
+                                <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
+                                    onClick={addSocial}>
+                                    Thêm
+                                </Typography>
+                            </Box>
                         </FormGroup>
                     </FormControl>
                     <Button variant="contained" className="button mb-16" type="submit">

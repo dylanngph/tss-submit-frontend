@@ -103,8 +103,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="name"
                             type="text"
                             placeholder="Tên thành viên"
-                            value={item.name}
-                            onChange={handleInputChange}
+                            // value={item.name}
+                            // onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -116,8 +116,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="position"
                             type="text"
                             placeholder="Chức danh"
-                            value={item.position}
-                            onChange={handleInputChange}
+                            // value={item.position}
+                            // onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -160,15 +160,16 @@ const DevelopmentTeam = (props) => {
     };
 
     const handleRemoveFruit = (id) => {
+        console.log('id==>', id);
         setItems((items) =>
                       items.filter((item) => item.id !== id)
-                    )
+                    );
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        // setFormValues({
-        //     ...formValues,
+        // const { name, value } = e.target;
+        // setItems({
+        //     ...items,
         //     [name]: value,
         // });
     };
