@@ -100,6 +100,11 @@ a {
   pointer-events: none!important;
 }
 
+.button.back-button {
+  background: #F0F6FF !important;
+  color: #446DFF !important;
+}
+
 .MuiTypography-root.small-title {
   font-weight: bold;
   font-size: 18px;
@@ -310,10 +315,6 @@ textarea:focus-visible {
   margin-right: 16px;
 }
 
-.css-1t29gy6-MuiToolbar-root {
-  display: none !important;
-}
-
 .password-field {
   border-radius: 8px;
   background: #EFF2F5;
@@ -321,4 +322,30 @@ textarea:focus-visible {
 
 .buttom-example {
   display: block;
+}
+
+.MuiStepConnector-vertical,
+.MuiStepIcon-text {
+  display: none !important;
+}
+
+.MuiStepLabel-vertical {
+  padding: 0 !important;
+}
+
+.MuiStepIcon-root {
+  width: 7px !important;
+}
+
+.Mui-active h6,
+.Mui-completed h6 {
+  color: #446DFF;
+}
+
+.project-review h6 {
+  color: #A6B0C3;
+}
+
+.project-review .MuiStepLabel-iconContainer {
+  display: none;
 }

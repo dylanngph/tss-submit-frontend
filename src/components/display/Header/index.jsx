@@ -3,7 +3,7 @@ import List from '@mui/material/List';
 import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
-import { Box, Drawer, AppBar, Typography, IconButton, Button } from '@mui/material';
+import { Box, Drawer, AppBar, Typography, IconButton, Button, Breadcrumbs } from '@mui/material';
 import CreateAplication from '../../custom/CreateAplication';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -40,7 +40,8 @@ const Header = ({ auth, handleLogout, error, props }) => {
         fontWeight: "500 !important",
         fontSize: "1rem !important",
         lineHeight: "17px !important",
-        color: "#58667E !important",
+        color: "#EA3943 !important",
+
 
         "img": {
             marginRight: "14px"
@@ -126,8 +127,8 @@ const Header = ({ auth, handleLogout, error, props }) => {
 
     return (
         <Box sx={{ display: 'flex' }}>
-            {/* <CssBaseline /> */}
-            {/* <AppBar
+            <CssBaseline />
+            <AppBar
                 position="fixed"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
@@ -143,11 +144,21 @@ const Header = ({ auth, handleLogout, error, props }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        { props.header }
-                    </Typography>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link underline="hover" color="inherit" href="/">
+                            MUI
+                        </Link>
+                        <Link
+                            underline="hover"
+                            color="inherit"
+                            href="/getting-started/installation/"
+                        >
+                            Core
+                        </Link>
+                        <Typography color="text.primary">Breadcrumbs</Typography>
+                    </Breadcrumbs>
                 </Toolbar>
-            </AppBar> */}
+            </AppBar>
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

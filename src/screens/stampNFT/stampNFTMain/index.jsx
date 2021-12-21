@@ -3,6 +3,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 function NFTMainScreen() {
     const ListStampNFT = [

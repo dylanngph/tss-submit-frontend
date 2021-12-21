@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, TextField } from '@mui/material';
+import { Box, Autocomplete, FormControl, FormLabel, OutlinedInput, Input, Button, TextField } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -298,12 +298,18 @@ function Incorporation(props) {
             ...formValues,
             ["acceptDate"]: newValue,
         });
-      };
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(formValues);
     };
+
+    const autocomplete = {
+        border: '1px solid #EFF2F5',
+        background: '#EFF2F5',
+        borderRadius: '8px',
+    }
 
     return (
         <Box role="tabpanel" className="application"
@@ -316,6 +322,7 @@ function Incorporation(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tên tổ chức</FormLabel>
                         <OutlinedInput
+                            required
                             id="incorporationName"
                             name="incorporationName"
                             type="text"
@@ -359,25 +366,27 @@ function Incorporation(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Lĩnh vực kinh doanh</FormLabel>
-                        <Select
-                            labelId="businessAreas"
-                            name="businessAreas"
-                            id="businessAreas"
-                            placeholder="Lĩnh vực kinh doanh"
-                            value={formValues.businessAreas}
+                        <Autocomplete
+                            sx={autocomplete}
+                            multiple
+                            id="tags-outlined"
+                            options={businessAreas}
+                            getOptionLabel={(businessAreas) => businessAreas.area}
                             onChange={handleInputChange}
-                        >
-                            {businessAreas.map((item, index) => (
-                                <MenuItem value={item.value}>{item.area}</MenuItem>
-                            ))}
-                        </Select>
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    placeholder="Lĩnh vực kinh doanh"
+                                />
+                            )}
+                        />
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mã số doanh nghiệp / số giấy phép thành lập</FormLabel>
                         <OutlinedInput
                             id="companyCode"
                             name="companyCode"
-                            type="text"
+                            type="number"
                             placeholder="Mã số doanh nghiệp"
                             value={formValues.companyCode}
                             onChange={handleInputChange}
@@ -388,7 +397,7 @@ function Incorporation(props) {
                         <OutlinedInput
                             id="taxCode"
                             name="taxCode"
-                            type="text"
+                            type="number"
                             placeholder="Mã số thuế"
                             value={formValues.taxCode}
                             onChange={handleInputChange}
@@ -412,13 +421,11 @@ function Incorporation(props) {
                             name="businessLicense"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
+                            inputProps={{accept:"application/pdf"}}
                             value={formValues.businessLicense}
                             onChange={handleInputChange}
                         />
                     </FormControl>
-                    <Button variant="contained" className="button mb-16" type="submit">
-                        Tiếp tục
-                    </Button>
                 </form>
             )}
         </Box>
