@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, FormHelperText } from '@mui/material';
 import { Link } from 'react-router-dom'
 
 function SecurityQuestion(props) {
@@ -37,7 +37,9 @@ function SecurityQuestion(props) {
         },
     ]
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [errorsState, setErrorsState] = useState(false);
+    const [stateBtnRegister, setStateBtnRegister] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -47,12 +49,107 @@ function SecurityQuestion(props) {
         });
     };
 
+    const handleInputFocus = (e) => {
+        const { name, value } = e.target;
+        switch (name) {
+            case 'answer1':
+                setErrorsState({
+                    ...errorsState,
+                    question1: formValues.question1 ? false : true,
+                });
+                break;
+            case 'answer2':
+                setErrorsState({
+                    ...errorsState,
+                    question2: formValues.question2 ? false : true,
+                });
+                break;
+            default:
+                break;
+        }
+        if (formValues.question1 === formValues.question2) {
+            setErrorsState({
+                ...errorsState,
+                [name]: true,
+            });
+        }
+        handleStateBtnRegister();
+    };
+
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        if (formValues.question1 === formValues.question2) {
+            setErrorsState({
+                ...errorsState,
+                [name]: true,
+            });
+            handleStateBtnRegister();
+            return;
+        }
+        setErrorsState({
+            ...errorsState,
+            [name]: value ? false : true,
+        });
+        handleStateBtnRegister();
+    };
+
     const handleSelectChange = (e) => {
         const { name, value } = e.target;
         setFormValues({
             ...formValues,
             [name]: value,
         });
+        setErrorsState({
+            ...errorsState,
+            [name]: value ? false : true,
+        });
+        checkDuplicate(name, value);
+        handleStateBtnRegister();
+    };
+
+    const handleStateBtnRegister = () => {
+        if (
+            formValues.question1 &&
+            formValues.question2 &&
+            (formValues.question1 !== formValues.question2) &&
+            formValues.answer1 &&
+            formValues.answer2
+        ) {
+            setStateBtnRegister(true);
+            return;
+        }
+        setStateBtnRegister(false);
+    };
+
+    const checkDuplicate = (name, value) => {
+        switch (name) {
+            case 'question1':
+                if (value === formValues.question2)
+                    setErrorsState({
+                        ...errorsState,
+                        [name]: true,
+                    });
+                else
+                    setErrorsState({
+                        ...errorsState,
+                        [name]: false,
+                    });
+                break;
+            case 'question2':
+                if (value === formValues.question1)
+                    setErrorsState({
+                        ...errorsState,
+                        [name]: true,
+                    });
+                else
+                    setErrorsState({
+                        ...errorsState,
+                        [name]: false,
+                    });
+                break;
+            default:
+                break;
+        }
     };
 
     const handleSubmit = (event) => {
@@ -83,11 +180,16 @@ function SecurityQuestion(props) {
                         placeholder="Câu trả lời 1"
                         value={formValues.question1}
                         onChange={handleSelectChange}
+                        error={errorsState.question1}
                     >
                         {questions.map((item, index) => (
                             <MenuItem value={item.value}>{item.question}</MenuItem>
                         ))}
                     </Select>
+                    {
+                        errorsState.question1 &&
+                        <FormHelperText className="error">Câu hỏi bảo mật không được bỏ trống hoặc trùng nhau</FormHelperText>
+                    }
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Câu trả lời 1</FormLabel>
@@ -98,6 +200,9 @@ function SecurityQuestion(props) {
                         placeholder="Câu trả lời 1"
                         value={formValues.answer1}
                         onChange={handleInputChange}
+                        onFocus={handleInputFocus}
+                        onBlur={handleInputBlur}
+                        error={errorsState.answer1}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -109,11 +214,16 @@ function SecurityQuestion(props) {
                         placeholder="Câu trả lời 2"
                         value={formValues.question2}
                         onChange={handleSelectChange}
+                        error={errorsState.question2}
                     >
                         {questions.map((item, index) => (
                             <MenuItem value={item.value}>{item.question}</MenuItem>
                         ))}
                     </Select>
+                    {
+                        errorsState.question2 &&
+                        <FormHelperText className="error">Câu hỏi bảo mật không được bỏ trống hoặc trùng nhau</FormHelperText>
+                    }
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Câu trả lời 1</FormLabel>
@@ -123,10 +233,13 @@ function SecurityQuestion(props) {
                         type="text"
                         placeholder="Câu trả lời 2"
                         value={formValues.answer2}
+                        onFocus={handleInputFocus}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        error={errorsState.answer2}
                     />
                 </FormControl>
-                <Button variant="contained" className="button mb-16" type="submit">
+                <Button variant="contained" className="button mb-16 button-my-custom" type="submit" disabled={!stateBtnRegister}>
                     Tạo tài khoản
                 </Button>
                 <p className="text-center">

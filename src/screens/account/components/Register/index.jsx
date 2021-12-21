@@ -7,14 +7,61 @@ function RegisterAccount(props) {
         user: "",
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [errorsState, setErrorsState] = useState(false);
+    const [stateBtnContinue, setStateBtnContinue] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        setErrorsState({
+            ...errorsState,
+            [name]: value ? false : true,
+        });
         setFormValues({
             ...formValues,
             [name]: value,
         });
+        handleStateButtonContinue();
+    };
+
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        setErrorsState({
+            ...errorsState,
+            [name]: value ? false : true,
+        });
+        handleStateButtonContinue();
+    };
+
+    const handleInputBlurEmail = (e) => {
+        const { name, value } = e.target;
+        const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        setErrorsState({
+            ...errorsState,
+            [name]: value.match(validRegex) ? false : true,
+        });
+        handleStateButtonContinue();
+    };
+
+    const handleInputBlurRetypePassword = (e) => {
+        const { name, value } = e.target;
+        setErrorsState({
+            ...errorsState,
+            [name]: value === formValues.password ? false : true,
+        });
+        handleStateButtonContinue();
+    };
+
+    const handleStateButtonContinue = (e) => {
+        if (formValues.user && formValues.name && formValues.tel && formValues.password && formValues.retypePassword) {
+            const vals = Object.keys(errorsState).map(key => errorsState[key]);
+            const isValid = (currentValue) => currentValue === false;
+            if (vals.every(isValid)) {
+                setStateBtnContinue(true);
+                return;
+            }
+        }
+        setStateBtnContinue(false);
     };
 
     const handleSubmit = (event) => {
@@ -45,6 +92,8 @@ function RegisterAccount(props) {
                         placeholder="Địa chỉ email của bạn"
                         value={formValues.user}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlurEmail}
+                        error={errorsState.user}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -56,6 +105,8 @@ function RegisterAccount(props) {
                         placeholder="Tên của bạn"
                         value={formValues.name}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        error={errorsState.name}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -65,8 +116,10 @@ function RegisterAccount(props) {
                         name="tel"
                         type="tel"
                         placeholder="Số điện thoại"
-                        value={formValues.phone}
+                        value={formValues.tel}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        error={errorsState.tel}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -78,6 +131,8 @@ function RegisterAccount(props) {
                         placeholder="Mật khẩu"
                         value={formValues.password}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        error={errorsState.password}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -89,13 +144,23 @@ function RegisterAccount(props) {
                         placeholder="Xác nhận mật khẩu"
                         value={formValues.retypePassword}
                         onChange={handleInputChange}
+                        onBlur={handleInputBlurRetypePassword}
+                        error={errorsState.retypePassword}
                     />
                 </FormControl>
                 {/* <Button variant="contained" className="button mb-16" type="submit">
                     Tiếp tục
                 </Button> */}
                 <p className="text-center">
-                    <Link to="/security-question" className="button mb-16 buttom-example" underline="none">Tiếp tục</Link>
+                    {
+                        stateBtnContinue &&
+                        <Link to="/security-question" className="button mb-16 buttom-example" underline="none">Tiếp tục</Link>
+                    }
+                    {
+                        !stateBtnContinue &&
+                        <Link to="/security-question" className="button mb-16 buttom-example button-disable" underline="none">Tiếp tục</Link>
+                    }
+
                 </p>
                 <p className="text-center">
                     <Link to="/login" className="call-to-action" underline="none">Đã có tài khoản</Link>

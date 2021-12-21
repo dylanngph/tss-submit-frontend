@@ -10,11 +10,13 @@ function LoginAccount({handleLogin , error}) {
         email: '',
         password: '',
         showPassword: false,
-      })
+    })
+    const [errorsState, setErrorsState] = useState(false);
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
-        }
+        setErrorsState(true);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -27,7 +29,7 @@ function LoginAccount({handleLogin , error}) {
         })
       }
     const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+        event.preventDefault();
     }
 
     return (
@@ -48,6 +50,7 @@ function LoginAccount({handleLogin , error}) {
                         placeholder="Username hoặc email"
                         value={values.email}
                         onChange={handleChange('email')}
+                        error={!values.email && errorsState}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -72,7 +75,8 @@ function LoginAccount({handleLogin , error}) {
                                         {values.showPassword ?  <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
-                          }}
+                        }}
+                        error={!values.password && errorsState}
                     />
                 </FormControl>
                 <div className="mb-16">
@@ -80,9 +84,18 @@ function LoginAccount({handleLogin , error}) {
                         <Link to="/forgotpass" className="call-to-action" underline="none">Quên mật khẩu</Link>
                     </p>
                 </div>
-                <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit">
-                    Đăng nhập
-                </Button>
+                {
+                    (!values.password || !values.email) &&
+                    <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit" disabled>
+                        Đăng nhập
+                    </Button>
+                }
+                {
+                    (values.password && values.email) &&
+                    <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit">
+                        Đăng nhập
+                    </Button>
+                }
                 <p className="text-center">
                     <Link to="/register" className="call-to-action" underline="none">Tạo tài khoản mới</Link>
                 </p>
