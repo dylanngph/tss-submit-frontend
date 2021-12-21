@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import {postAccountLogin} from 'redux/account/account.action'
 import "react-toastify/dist/ReactToastify.css";
 
 function HomeScreen(props) {
-    const accountStore = useAppSelector(state => state?.rootReducer?.accountReducers?.accountStore ?? 'default');     
+    const accountStore = useAppSelector(state => state?.rootReducer?.accountReducers?.accountStore ?? 'default');
     const userStore = useAppSelector(state => state?.rootReducer?.userReducers?.userStore ?? 'default');     
     const dispatch = useAppDispatch();
 

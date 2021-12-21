@@ -42,7 +42,21 @@ function App() {
           fontSize: "18px",
           lineHeight: "22px",
         },
-      }
+      },
+
+      h5: {
+        color: '#11142D',
+        lineHeight: '22px',
+        fontSize: '18px',
+        fontWeight: '600',
+      },
+
+      h6: {
+        color: '#A6B0C3',
+        fontWeight: '500',
+        fontSize: '14px',
+        lineHeight: '150%',
+      },
     },
   });
 

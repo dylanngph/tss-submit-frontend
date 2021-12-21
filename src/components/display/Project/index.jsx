@@ -161,8 +161,8 @@ function Project(props) {
                             id="logo"
                             name="logo"
                             type="file"
-                            placeholder="Tải lên (Tối đa 5mb)"
                             value={formValues.logo}
+                            inputProps={{accept:".png,.svg,.jpeg"}}
                             onChange={handleInputChange}
                         />
                     </FormControl>
@@ -183,7 +183,7 @@ function Project(props) {
                             id="whitepaper"
                             name="whitepaper"
                             type="file"
-                            placeholder="Tải lên (Tối đa 5mb)"
+                            inputProps={{accept:".png,.svg,.jpeg"}}
                             value={formValues.whitepaper}
                             onChange={handleInputChange}
                         />
@@ -256,9 +256,6 @@ function Project(props) {
                             </Box>
                         </FormGroup>
                     </FormControl>
-                    <Button variant="contained" className="button mb-16" type="submit">
-                        Tiếp tục
-                    </Button>
                 </form>
             )}
         </Box>
