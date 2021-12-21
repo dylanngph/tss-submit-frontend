@@ -7,14 +7,21 @@ function ForgotPassAccount(props) {
         user: "",
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [errorsEmail, setErrorsEmail] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        setErrorsEmail(!validateEmail(value));
         setFormValues({
             ...formValues,
             [name]: value,
         });
+    };
+
+    const validateEmail = (value) => {
+        const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        return value.match(validRegex);
     };
 
     const handleSubmit = (event) => {
@@ -45,11 +52,21 @@ function ForgotPassAccount(props) {
                         placeholder="your-email@gmail.com"
                         value={formValues.user}
                         onChange={handleInputChange}
+                        error={errorsEmail}
                     />
                 </FormControl>
-                <Button variant="contained" className="button" type="submit">
-                    Khôi phục tài khoản
-                </Button>
+                {
+                    (!errorsEmail && formValues.user) &&
+                    <Button variant="contained" className="button" type="submit">
+                        Khôi phục tài khoản
+                    </Button>
+                }
+                {
+                    (errorsEmail || !formValues.user) &&
+                    <Button variant="contained" className="button" type="submit" disabled>
+                        Khôi phục tài khoản
+                    </Button>
+                }
             </form>
         </Box>
     );

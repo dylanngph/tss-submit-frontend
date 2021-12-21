@@ -90,6 +90,16 @@ a {
   text-transform: inherit !important;
 }
 
+.button.button-disable {
+  background: #EFF2F5 !important;
+  pointer-events: none!important;
+}
+
+.button.button-my-custom:disabled {
+  background: #EFF2F5 !important;
+  pointer-events: none!important;
+}
+
 .button.back-button {
   background: #F0F6FF !important;
   color: #446DFF !important;
@@ -119,6 +129,14 @@ a {
 
 .MuiOutlinedInput-notchedOutline {
   display: none;
+}
+
+.Mui-error:not(.Mui-focused) .MuiOutlinedInput-notchedOutline {
+  display: block;
+}
+
+.MuiFormHelperText-root.error {
+  color: #d32f2f;
 }
 
 .mb-16 {
