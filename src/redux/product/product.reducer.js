@@ -15,5 +15,33 @@ const initialState = {
 };
 
 export default function loading(state = initialState, action) {
-  console.log('action.type==>', action.type);
+    switch (action.type) {
+        case constants.ACCOUNT_REGISTER:
+          return {
+            ...state,
+            isLoadingRegister: true,
+          };
+        case constants.ACCOUNT_REGISTER_SUCCESS:
+          return {
+            ...state,
+            isLoadingRegister: false,
+            responseRegister: action?.payload,
+          };
+    
+        case constants.ACCOUNT_REGISTER_FAIL:
+          return {
+            ...state,
+            isLoadingRegister: false,
+            responseRegister: action?.payload,
+          };
+    
+        case constants.ACCOUNT_LOGIN:
+          console.log("Dispatch no api: ", JSON.stringify(action?.payload));
+          return {
+            ...state,
+            isLoadingLogin: true,
+          };
+        default:
+          return state;
+      }
 }

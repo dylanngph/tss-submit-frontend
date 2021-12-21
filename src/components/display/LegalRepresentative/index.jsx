@@ -181,9 +181,6 @@ function LegalRepresentative(props) {
                             onChange={handleInputChange}
                         />
                     </FormControl>
-                    <Button variant="contained" className="button mb-16" type="submit">
-                        Tiếp tục
-                    </Button>
                 </form>
             )}
         </Box>
