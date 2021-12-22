@@ -1,8 +1,11 @@
-import React from 'react';
-import { Box, Typography, Tabs, Tab } from '@mui/material';
+import React, {useState, useEffect} from 'react';
+import { Box, Tabs, Tab } from '@mui/material';
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import Activity from '../../components/display/Activity';
 import Profile from '../../components/display/Profile'
 import History from '../../components/custom/History'
+import { useAppDispatch } from 'app/hooks';
+import Cookies from 'js-cookie'
 
 function a11yProps(index) {
     return {
@@ -13,16 +16,31 @@ function a11yProps(index) {
 
 function User(props) {
     const [value, setValue] = React.useState(0);
+    const [email, setEmail] = React.useState('');
+    const dispatch = useAppDispatch();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
+    const readCookies = () => {
+        const userCookies = Cookies.get("email");
+        setEmail({
+            ["email"]: userCookies,
+        });
+      }
+
+    useEffect(() => {
+        dispatch(postBreadcrumb([
+            {
+                'label': email,
+            },
+        ]))
+        readCookies();
+    }, [])
+
     return (
         <Box>
-            <Typography sx={{ padding: "24px", background: "#ffffff" }} className="small-title">
-                email2311@gmail.com
-            </Typography>
             <Box sx={{ padding: "24px" }}>
                 <Box>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

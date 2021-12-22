@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import { useAppDispatch } from 'app/hooks';
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import { Box, Typography, Tabs, Tab, Stepper, Step, StepLabel, Button } from '@mui/material';
 import Incorporation from '../../components/display/Incorporation';
 import Project from '../../components/display/Project';
@@ -15,7 +17,19 @@ function a11yProps(index) {
 
 function Application(props) {
     const [value, setValue] = React.useState(0);
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = React.useState(0);   
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(postBreadcrumb([
+            {
+                'label': 'Đăng ký dự án',
+            },
+            {
+                'label': 'Doanh nghiệp',
+            }
+        ]))
+    }, [])
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -96,9 +110,6 @@ function Application(props) {
 
     return (
         <Box sx={{ position: 'relative' }}>
-            <Typography sx={{ padding: "24px", background: "#ffffff" }} className="small-title">
-                <span className="color-span">Đăng ký dự án /</span> Doanh nghiệp
-            </Typography>
             <Box mb={5} sx={{ padding: "24px" }}>
                 <Box>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

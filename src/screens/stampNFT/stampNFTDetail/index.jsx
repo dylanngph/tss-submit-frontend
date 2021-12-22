@@ -1,21 +1,26 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
+import React, {useState, useEffect} from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { Link } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 function NFTDetailScreen() {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(postBreadcrumb([
+            {
+                'label': 'Con dấu NFT',
+            },
+            {
+                'label': 'Passport of Blockchain',
+            },
+        ]))
+    }, [])
+
     return (
         <div>
-            <BreadcrumbsWrapper aria-label="breadcrumb">
-                <Link
-                    to="/stamp-nft"
-                >
-                    CON DẤU NFT
-                </Link>
-                <Typography color="text.primary">Passport of Blockchain</Typography>
-            </BreadcrumbsWrapper>
             <NFTCard>
                 <Grid container alignItems="center">
                     <Grid item mr={2} mb={2}>
