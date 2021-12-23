@@ -84,6 +84,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
         cursor: "pointer",
     }
 
+    // console.log('>> item: ', item);
+
     return (
         <ListItem>
             <Grid sx={gridStyle} container spacing={2}>
@@ -103,8 +105,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="name"
                             type="text"
                             placeholder="Tên thành viên"
-                            // value={item.name}
-                            // onChange={handleInputChange}
+                            value={item.name}
+                            onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -116,8 +118,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="position"
                             type="text"
                             placeholder="Chức danh"
-                            // value={item.position}
-                            // onChange={handleInputChange}
+                            value={item.position}
+                            onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -184,6 +186,8 @@ const DevelopmentTeam = (props) => {
             Thêm  thành viên
         </Box>
     );
+
+    // console.log('>> items: ', items);
 
     return (
         <div>

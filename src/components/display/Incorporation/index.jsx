@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Box, Autocomplete, FormControl, FormLabel, OutlinedInput, Input, Button, TextField } from '@mui/material';
+import { Box, Autocomplete, FormControl, FormLabel, OutlinedInput, TextField, FormHelperText } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Link } from 'react-router-dom'
 
 function Incorporation(props) {
     const { children, value, index, ...other } = props;
+    
+
     let businessAreas = [
         {
             value: 1,
@@ -276,14 +277,15 @@ function Incorporation(props) {
         incorporationAddress: "",
         transactionName: "",
         transactionAddress: "",
-        businessAreas: 1,
+        businessAreas: [],
         companyCode: "",
         taxCode: "",
-        acceptDate: React.useState(new Date('2014-08-18T21:11:54')),
+        acceptDate: null,
         businessLicense: "",
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -291,6 +293,65 @@ function Incorporation(props) {
             ...formValues,
             [name]: value,
         });
+        validate(e);
+        // if (e.target.hasAttribute('required')) {
+        //     if (value) props.setStateNextButton(true)
+        //     else props.setStateNextButton(false);
+        // }
+    };
+
+    const handleAutocompleteChange = (event, newValue) => {
+        setFormValues({
+            ...formValues,
+            ['businessAreas']: newValue,
+        });
+        setValidator({
+            ...validator,
+            ['businessAreas']: newValue.length > 0 ? false : true,
+        });
+        checkDataActiveButton();
+        if (!newValue.length) props.setStateNextButton(false)
+    };
+
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        setValidator({
+            ...validator,
+            [name]: value ? false : true,
+        });
+        checkDataActiveButton();
+    };
+
+    const handleInputAutocompleteBlur = () => {
+        setValidator({
+            ...validator,
+            ['businessAreas']: formValues.businessAreas.length ? false : true,
+        });
+        checkDataActiveButton();
+    };
+
+    const validate = (e) => {
+        const { name, value } = e.target;
+        if (!e.target.hasAttribute('required')) return;
+        setValidator({
+            ...validator,
+            [name]: value ? false : true,
+        });
+        checkDataActiveButton();
+    };
+
+    const checkDataActiveButton = () => {
+        if (formValues.incorporationName &&
+            formValues.incorporationAddress &&
+            formValues.businessAreas.length &&
+            formValues.companyCode &&
+            formValues.businessLicense &&
+            formValues.acceptDate
+            ) {
+                props.setStateNextButton(true)
+            }
+        else
+            props.setStateNextButton(false)
     };
 
     const handleDatePickerChange = (newValue) => {
@@ -298,6 +359,7 @@ function Incorporation(props) {
             ...formValues,
             ["acceptDate"]: newValue,
         });
+        checkDataActiveButton();
     };
 
     const handleSubmit = (event) => {
@@ -329,18 +391,31 @@ function Incorporation(props) {
                             placeholder="Tên tổ chức"
                             value={formValues.incorporationName}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.incorporationName}
                         />
+                        {
+                            validator.incorporationName &&
+                            <FormHelperText error>Tên tổ chức không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Địa chỉ trụ sở</FormLabel>
                         <OutlinedInput
+                            required
                             id="incorporationAddress"
                             name="incorporationAddress"
                             type="text"
                             placeholder="Địa chỉ"
                             value={formValues.incorporationAddress}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.incorporationAddress}
                         />
+                        {
+                            validator.incorporationAddress &&
+                            <FormHelperText error>Địa chỉ trụ sở không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tên giao dịch (Không bắt buộc)</FormLabel>
@@ -372,25 +447,38 @@ function Incorporation(props) {
                             id="tags-outlined"
                             options={businessAreas}
                             getOptionLabel={(businessAreas) => businessAreas.area}
-                            onChange={handleInputChange}
+                            onChange={handleAutocompleteChange}
+                            onBlur={handleInputAutocompleteBlur}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
+                                    error={validator.businessAreas}
                                     placeholder="Lĩnh vực kinh doanh"
                                 />
                             )}
                         />
+                        {
+                            validator.businessAreas &&
+                            <FormHelperText error>Lĩnh vực kinh doanh không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mã số doanh nghiệp / số giấy phép thành lập</FormLabel>
                         <OutlinedInput
+                            required
                             id="companyCode"
                             name="companyCode"
                             type="number"
                             placeholder="Mã số doanh nghiệp"
                             value={formValues.companyCode}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.companyCode}
                         />
+                        {
+                            validator.companyCode &&
+                            <FormHelperText error>Mã số doanh nghiệp không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mã số thuế (Không bắt buộc)</FormLabel>
@@ -407,7 +495,7 @@ function Incorporation(props) {
                         <FormLabel>Ngày cấp phép</FormLabel>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
-                                inputFormat="dd/MM//yyyy"
+                                inputFormat="dd/MM/yyyy"
                                 value={formValues.acceptDate}
                                 onChange={handleDatePickerChange}
                                 renderInput={(params) => <TextField {...params} />}
@@ -417,6 +505,7 @@ function Incorporation(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Giấy phép đăng ký kinh doanh</FormLabel>
                         <OutlinedInput
+                            required
                             id="businessLicense"
                             name="businessLicense"
                             type="file"
@@ -424,7 +513,13 @@ function Incorporation(props) {
                             inputProps={{accept:"application/pdf"}}
                             value={formValues.businessLicense}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.businessLicense}
                         />
+                        {
+                            validator.businessLicense &&
+                            <FormHelperText error>Giấy phép đăng ký kinh doanh chưa được chọn</FormHelperText>
+                        }
                     </FormControl>
                 </form>
             )}

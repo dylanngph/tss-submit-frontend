@@ -1,25 +1,31 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, Typography } from '@mui/material';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { Link } from 'react-router-dom'
-import DevelopmentTeam from 'components/custom/DevelopmentTeam'
-import DevelopmentPartner from 'components/custom/DevelopmentPartner'
+import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, Typography, FormHelperText } from '@mui/material';
+import Select from '@mui/material/Select';
+import DevelopmentTeam from 'components/custom/DevelopmentTeam';
+import DevelopmentPartner from 'components/custom/DevelopmentPartner';
 
 function Project(props) {
     const { children, value, index, ...other } = props;
     const [personName, setPersonName] = useState([]);
 
-    const handleChange = (event) => {
+    const handleChangeSelectSocial = (event) => {
         const {
-            target: { value },
+            target: { value, name },
         } = event;
         setPersonName(
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        console.log('> value: ', value);
+        console.log('> name: ', name);
+        const index = name.split("-").pop();
+        let tpm_websitessocial = formValues.socialMedias;
+        tpm_websitessocial[index].type = typeof value === 'string' ? value.split(',') : value;
+        // tpm_websitessocial[index] = {type: '', link: value};
+        setFormValues({
+            ...formValues,
+            ["socialMedias"]: tpm_websitessocial,
+        });
     };
 
     let socials = [
@@ -70,7 +76,6 @@ function Project(props) {
         logo: "",
         whitepaper: "",
         description: "",
-        whitepaper: "",
         businessAreas: 1,
         companyCode: "",
         taxCode: "",
@@ -85,18 +90,72 @@ function Project(props) {
         ]
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        console.log('> handleInputChange ', name);
+        if (name.indexOf('website-') !== -1) {
+            const index = name.split("-").pop();
+            let tpm_websites = formValues.websites;
+            tpm_websites[index] = value;
+            setFormValues({
+                ...formValues,
+                ["websites"]: tpm_websites,
+            });
+        } else {
+            setFormValues({
+                ...formValues,
+                [name]: value,
+            });
+        }
+        validate(e);
+    };
+
+    const handleInputChangeSocial = (e) => {
+        const { name, value } = e.target;
+        const index = name.split("-").pop();
+        let tpm_websitessocial = formValues.socialMedias;
+        tpm_websitessocial[index].link = value;
+        setFormValues({
+            ...formValues,
+            ["socialMedias"]: tpm_websitessocial,
+        });
+    };
+
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        if (name.indexOf('website-') !== -1) {
+            setValidator({
+                ...validator,
+                [name]: value && validURL(value)  ? false : true,
+            });
+        } else {
+            setValidator({
+                ...validator,
+                [name]: value ? false : true,
+            });
+        }
+        // checkDataActiveButton();
+    };
+
+    const validate = (e) => {
+        const { name, value } = e.target;
+        if (!e.target.hasAttribute('required')) return;
+        setValidator({
+            ...validator,
+            [name]: value ? false : true,
+        });
+        console.log('>> validator ', validator);
+    };
+
+    const handleArrayChange = (e) => {
         const { name, value } = e.target;
         setFormValues({
             ...formValues,
             [name]: value,
         });
-    };
-
-    const handleArrayChange = (e) => {
-        console.log(e.target)
     }
 
     const handleDatePickerChange = (newValue) => {
@@ -136,6 +195,16 @@ function Project(props) {
         console.log(formValues);
     };
 
+    const validURL = (str) => {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+        return !!pattern.test(str);
+    }
+
     return (
         <Box role="tabpanel" className="application"
             hidden={value !== index}
@@ -147,35 +216,53 @@ function Project(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tên dự án</FormLabel>
                         <OutlinedInput
+                            required
                             id="projectName"
                             name="projectName"
                             type="text"
                             placeholder="Tên dự án"
                             value={formValues.projectName}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.projectName}
                         />
+                        {
+                            validator.projectName &&
+                            <FormHelperText error>Tên dự án không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Logo</FormLabel>
                         <OutlinedInput
+                            required
                             id="logo"
                             name="logo"
                             type="file"
                             value={formValues.logo}
                             inputProps={{accept:".png,.svg,.jpeg"}}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.logo}
                         />
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Mô tả , giới thiệu dự án</FormLabel>
                         <TextareaAutosize
+                            required
                             minRows={8}
                             maxRows={8}
+                            name="description"
                             placeholder="Mô tả dự án ngắn gọn."
-                            style={{ width: "100%" }}
-                        // value={formValues.description}
-                        // onChange={handleInputChange}
+                            style={{ width: "100%", fontFamily: 'Inter' }}
+                            value={formValues.description}
+                            onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            className={`textarea-required ${validator.description ? "textarea-required-error-null" : ""}`}
                         />
+                        {
+                            validator.description &&
+                            <FormHelperText error>Mô tả không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Whitepaper</FormLabel>
@@ -186,6 +273,8 @@ function Project(props) {
                             inputProps={{accept:".png,.svg,.jpeg"}}
                             value={formValues.whitepaper}
                             onChange={handleInputChange}
+                            // onBlur={handleInputBlur}
+                            error={validator.whitepaper}
                         />
                     </FormControl>
                     <FormControl className="form-control mb-16">
@@ -200,15 +289,23 @@ function Project(props) {
                         <FormLabel>Website dự án</FormLabel>
                         {formValues.websites.map((item, index) => (
                             <OutlinedInput
+                                required
                                 className="mb-16"
                                 id={`website-${index}`}
                                 name={`website-${index}`}
+                                data-website={index}
                                 type="text"
                                 placeholder="Website"
-                            // value={item}
-                            // onChange={handleArrayChange}
+                                value={formValues.websites[index]}
+                                onChange={handleInputChange}
+                                onBlur={handleInputBlur}
+                                error={validator[`website-${index}`]}
                             />
                         ))}
+                        {
+                            validator[`website-${index}`] &&
+                            <FormHelperText error>Website không được để trống hoặc chưa đúng định dạng</FormHelperText>
+                        }
                         <Box mt={2} sx={{ display: "flex" }}>
                             <img src="/assets/icons/Vector.svg" alt="Vector" />
                             <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
@@ -222,12 +319,12 @@ function Project(props) {
                         <FormLabel>Mạng xã hội</FormLabel>
                         <FormGroup sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
                         {formValues.socialMedias.map((item, index) => (
-                            <Box sx={{ display: "flex", position: "relative" }} mb={2}>
-                                <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5" }}
-                                    value={personName}
-                                    onChange={handleChange}
+                            <Box sx={{ display: "flex", position: "relative" }} mb={2} className={`box-select-social ${validator[`websociallink-${index}`] ? "box-select-social-error-null" : ""}`}>
+                                <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
+                                    value={formValues.socialMedias[index].type}
+                                    name={`websocial-${index}`}
+                                    onChange={handleChangeSelectSocial}
                                     input={<OutlinedInput label="Tag" />}
-                                    renderValue={(selected) => selected.join(', ')}
                                     className="social-items"
                                 >
                                     {socials.map((item, index) => (
@@ -239,11 +336,11 @@ function Project(props) {
                                 </Select>
                                 <span className="line-verticle"></span>
                                 <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
-                                    id="projectName"
-                                    name="projectName"
+                                    id={`websociallink-${index}`}
+                                    name={`websociallink-${index}`}
                                     type="text"
-                                    value={formValues.socialLink}
-                                    onChange={handleInputChange}
+                                    value={formValues.socialMedias[index].link}
+                                    onChange={handleInputChangeSocial}
                                 />
                             </Box>
                         ))}

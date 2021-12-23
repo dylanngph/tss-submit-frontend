@@ -16,10 +16,12 @@ function a11yProps(index) {
 function Application(props) {
     const [value, setValue] = React.useState(0);
     const [activeStep, setActiveStep] = React.useState(0);
+    const [stateNextBtn, setStateNextButton] = React.useState(false);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         setValue((prevActiveStep) => prevActiveStep + 1);
+        setStateNextButton(false);
     };
 
     const handleBack = () => {
@@ -92,6 +94,7 @@ function Application(props) {
         background: '#FFFFFF',
         padding: '24px',
         justifyContent: 'end',
+        zIndex: 11,
     }
 
     return (
@@ -102,14 +105,14 @@ function Application(props) {
             <Box mb={5} sx={{ padding: "24px" }}>
                 <Box>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab disabled className="tab-title" label="Tổ chức" {...a11yProps(0)} />
+                        <Tab disabled className="tab-title" label="Tổ chức" {...a11yProps(0)}/>
                         <Tab disabled className="tab-title" label="Dự án" {...a11yProps(1)} />
                         <Tab disabled className="tab-title" label="Tokenomics" {...a11yProps(2)} />
                         <Tab disabled className="tab-title" label="Đại diện pháp luật" {...a11yProps(3)} />
                     </Tabs>
                 </Box>
                 <Box sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
-                    <Incorporation value={value} index={0} />
+                    <Incorporation value={value} index={0} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
                     <Project value={value} index={1} />
                     <Tokenomics value={value} index={2} />
                     <LegalRepresentative value={value} index={3} />
@@ -156,7 +159,7 @@ function Application(props) {
                     null}
 
                 <Box sx={{ width: '212px' }}>
-                    <Button onClick={handleNext} variant="contained" className="button" type="submit">
+                    <Button onClick={handleNext} variant="contained" className="button" type="submit" disabled={!stateNextBtn}>
                         Tiếp tục
                     </Button>
                 </Box>

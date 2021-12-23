@@ -90,9 +90,10 @@ a {
   text-transform: inherit !important;
 }
 
-.button.button-disable {
+.button.button-disable, .button.Mui-disabled {
   background: #EFF2F5 !important;
   pointer-events: none!important;
+  color: #446DFF !important;
 }
 
 .button.button-my-custom:disabled {
@@ -190,6 +191,12 @@ textarea,
 
 textarea:focus-visible {
   border: none;
+  outline: none;
+}
+
+textarea.textarea-required.textarea-required-error-null,
+textarea.textarea-required.textarea-required-error-null:focus-visible {
+  border: 1px #e74c3c solid;
 }
 
 .MuiOutlinedInput-root input::placeholder {
