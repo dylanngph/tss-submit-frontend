@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
 import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
@@ -9,11 +9,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import CssBaseline from '@mui/material/CssBaseline';
+import { useAppSelector } from 'app/hooks';
 
 const Header = ({ auth, handleLogout, error, props }) => {
     const drawerWidth = 244;
     const { window } = props;
     const container = window !== undefined ? () => window().document.body : undefined;
+
+    const breadcrumbStore = useAppSelector(state => state?.rootReducer?.breadcrumbReducers?.breadcrumbStore ?? 'default');
+
+    useEffect(() => {
+        // renderedListItems(breadcrumbStore)
+    }, [breadcrumbStore])
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -125,14 +132,31 @@ const Header = ({ auth, handleLogout, error, props }) => {
         </List>
     );
 
+    const RenderedListItems = () => {
+        console.log('abc===>', breadcrumbStore);
+        return (
+            <Breadcrumbs aria-label="breadcrumb">
+                {breadcrumbStore.breadcrumbs && breadcrumbStore.breadcrumbs.map((item, index, breadcrumbs) => (
+                        index == breadcrumbs.length - 1
+                        ?
+                        <Typography variant='h5'> {item.label} </Typography>
+                        :
+                        <Typography sx={{color: "#A6B0C3"}} variant='h5'> {item.label} </Typography>
+                ))}
+            </Breadcrumbs>
+        )
+    }
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar
+            <AppBar className='abc'
                 position="fixed"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
+                    background: '#FFFFFF',
+                    boxShadow: 'none',
                 }}>
                 <Toolbar>
                     <IconButton
@@ -145,17 +169,7 @@ const Header = ({ auth, handleLogout, error, props }) => {
                         <MenuIcon />
                     </IconButton>
                     <Breadcrumbs aria-label="breadcrumb">
-                        <Link underline="hover" color="inherit" href="/">
-                            MUI
-                        </Link>
-                        <Link
-                            underline="hover"
-                            color="inherit"
-                            href="/getting-started/installation/"
-                        >
-                            Core
-                        </Link>
-                        <Typography color="text.primary">Breadcrumbs</Typography>
+                        <RenderedListItems/>
                     </Breadcrumbs>
                 </Toolbar>
             </AppBar>

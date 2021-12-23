@@ -1,11 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Link } from 'react-router-dom';
 import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 
 function NFTMainScreen() {
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(postBreadcrumb([
+            {
+                'label': 'Con dấu NFT',
+            },
+        ]))
+    }, [])
     const ListStampNFT = [
         {
             img_path: '/assets/images/stampNFT/NFT1.png',
@@ -31,13 +41,6 @@ function NFTMainScreen() {
     ]
     return (
         <div>
-            <BreadcrumbsWrapper aria-label="breadcrumb">
-                <Link
-                    to="/stamp-nft"
-                >
-                    CON DẤU NFT
-                </Link>
-            </BreadcrumbsWrapper>
             <Box sx={{ padding: '36px 24px' }}>
                 <Box sx={{
                     color: '#58667E',

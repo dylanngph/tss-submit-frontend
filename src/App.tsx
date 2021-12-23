@@ -84,6 +84,7 @@ function App() {
           })
           setError(false)
           setAuth(true)
+          Cookies.set("email", values.email)
           Cookies.set("user", "loginTrue")
           return
         }

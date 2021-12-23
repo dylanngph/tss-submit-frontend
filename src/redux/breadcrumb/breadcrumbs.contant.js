@@ -1,1 +1,1 @@
-export const BREADCRUMBS = [];
+export const BREADCRUMBS = 'BREADCRUMBS';
