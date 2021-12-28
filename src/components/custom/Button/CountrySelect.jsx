@@ -4,12 +4,16 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Box, FormControl, FormLabel } from '@mui/material';
 
 export default function CountrySelect() {
+  const countryToFlag = (value) => {
+    return countries.filter((country) => country.label === value)[0].code;
+  };
   return (
     <FormControl className="form-control mb-16">
       <FormLabel>Quốc gia</FormLabel>
       <Autocomplete
         id="country-select-demo"
         sx={{ width: "100%", background: "#EFF2F5" }}
+        defaultValue={{ code: 'VN', label: 'Vietnam', phone: '84' }}
         options={countries}
         autoHighlight
         getOptionLabel={(option) => option.label}
@@ -26,13 +30,35 @@ export default function CountrySelect() {
           </Box>
         )}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            inputProps={{
-              ...params.inputProps,
-              autoComplete: 'new-password', // disable autocomplete and autofill
-            }}
-          />
+          <>
+            {params.inputProps.value && (
+              <span
+                style={{
+                  position: "absolute",
+                  transform: "translateY(50%)",
+                  marginLeft: "15px",
+                  marginTop: "5px"
+                }}
+              >
+                {}
+                <img
+                  loading="lazy"
+                  width="20"
+                  src={`https://flagcdn.com/w20/${countryToFlag(params.inputProps.value).toLowerCase()}.png`}
+                  srcSet={`https://flagcdn.com/w40/${countryToFlag(params.inputProps.value).toLowerCase()}.png 2x`}
+                  alt=""
+                />
+              </span>
+            )}
+            <TextField
+              {...params}
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: 'new-password', // disable autocomplete and autofill
+              }}
+              sx={{ marginLeft: '30px', width: 'calc(100% - 30px)' }}
+            />
+          </>
         )}
       />
     </FormControl>

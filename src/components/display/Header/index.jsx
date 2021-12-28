@@ -139,9 +139,9 @@ const Header = ({ auth, handleLogout, error, props }) => {
                 {breadcrumbStore.breadcrumbs && breadcrumbStore.breadcrumbs.map((item, index, breadcrumbs) => (
                         index == breadcrumbs.length - 1
                         ?
-                        <Typography variant='h5'> {item.label} </Typography>
+                        <Typography key={index} variant='h5'> {item.label} </Typography>
                         :
-                        <Typography sx={{color: "#A6B0C3"}} variant='h5'> {item.label} </Typography>
+                        <Typography key={index} sx={{color: "#A6B0C3"}} variant='h5'> {item.label} </Typography>
                 ))}
             </Breadcrumbs>
         )

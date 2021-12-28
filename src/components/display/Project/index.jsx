@@ -3,6 +3,7 @@ import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize,
 import Select from '@mui/material/Select';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import DevelopmentPartner from 'components/custom/DevelopmentPartner';
+import uuid from 'uuid';
 
 function Project(props) {
     const { children, value, index, ...other } = props;
@@ -16,12 +17,9 @@ function Project(props) {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
-        console.log('> value: ', value);
-        console.log('> name: ', name);
         const index = name.split("-").pop();
         let tpm_websitessocial = formValues.socialMedias;
         tpm_websitessocial[index].type = typeof value === 'string' ? value.split(',') : value;
-        // tpm_websitessocial[index] = {type: '', link: value};
         setFormValues({
             ...formValues,
             ["socialMedias"]: tpm_websitessocial,
@@ -75,6 +73,16 @@ function Project(props) {
         projectName: "",
         logo: "",
         whitepaper: "",
+        devTeam: [
+            { id: uuid(), avatar: [], name: '', position: '' },
+            { id: uuid(), avatar: [], name: '', position: '' },
+            { id: uuid(), avatar: [], name: '', position: '' },
+        ],
+        partners: [
+            { id: uuid(), imgPartner: [], name: '', website: '' },
+            { id: uuid(), imgPartner: [], name: '', website: '' },
+            { id: uuid(), imgPartner: [], name: '', website: '' },
+        ],
         description: "",
         businessAreas: 1,
         companyCode: "",
@@ -93,9 +101,15 @@ function Project(props) {
     const [formValues, setFormValues] = useState(defaultValues);
     const [validator, setValidator] = useState({});
 
+    const setFormValuesProject = (name, value) => {
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('> handleInputChange ', name);
         if (name.indexOf('website-') !== -1) {
             const index = name.split("-").pop();
             let tpm_websites = formValues.websites;
@@ -137,7 +151,6 @@ function Project(props) {
                 [name]: value ? false : true,
             });
         }
-        // checkDataActiveButton();
     };
 
     const validate = (e) => {
@@ -147,7 +160,6 @@ function Project(props) {
             ...validator,
             [name]: value ? false : true,
         });
-        console.log('>> validator ', validator);
     };
 
     const handleArrayChange = (e) => {
@@ -277,17 +289,20 @@ function Project(props) {
                             error={validator.whitepaper}
                         />
                     </FormControl>
-                    <FormControl className="form-control mb-16">
+                    <Box className="form-control mb-16">
                         <FormLabel>Đội ngũ phát triển</FormLabel>
-                        <DevelopmentTeam />
-                    </FormControl>
+                        <DevelopmentTeam defaultValues={defaultValues} setFormValuesProject={setFormValuesProject} />
+                    </Box>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đối tác phát triển (Không bắt buộc)</FormLabel>
-                        <DevelopmentPartner />
+                        <DevelopmentPartner defaultValues={defaultValues} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
-                    <FormControl className="form-control mb-16">
-                        <FormLabel>Website dự án</FormLabel>
-                        {formValues.websites.map((item, index) => (
+                    {formValues.websites.map((item, index) => (
+                        <FormControl key={index} className="form-control">
+                            {
+                                index === 0 &&
+                                <FormLabel>Website dự án</FormLabel>
+                            }
                             <OutlinedInput
                                 required
                                 className="mb-16"
@@ -301,58 +316,59 @@ function Project(props) {
                                 onBlur={handleInputBlur}
                                 error={validator[`website-${index}`]}
                             />
+                            
+                        </FormControl>
+                    ))}
+                    {
+                        validator[`website-${index}`] &&
+                        <FormHelperText error>Website không được để trống hoặc chưa đúng định dạng</FormHelperText>
+                    }
+                    <Box mt={2} mb={2} sx={{ display: "flex" }}>
+                        <img src="/assets/icons/Vector.svg" alt="Vector" />
+                        <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
+                            onClick={addWebsite}>
+                            Thêm
+                        </Typography>
+                    </Box>
+                        
+                    <Box key={index} className="form-control mb-16">
+                        <Box>Mạng xã hội</Box>
+                        {formValues.socialMedias.map((item, index) => (
+                            <Box key={index} sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
+                                <Box sx={{ display: "flex", position: "relative" }} mb={2} className={`box-select-social ${validator[`websociallink-${index}`] ? "box-select-social-error-null" : ""}`}>
+                                    <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
+                                        value={formValues.socialMedias[index].type}
+                                        name={`websocial-${index}`}
+                                        onChange={handleChangeSelectSocial}
+                                        input={<OutlinedInput label="Tag" />}
+                                        className="social-items"
+                                    >
+                                        {socials.map((item, index) => (
+                                            <MenuItem key={index} className="social-item" key={item.name} value={item.value}>
+                                                <img src={item.icon} alt={item.name} />
+                                                {item.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    <span className="line-verticle"></span>
+                                    <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
+                                        id={`websociallink-${index}`}
+                                        name={`websociallink-${index}`}
+                                        type="text"
+                                        value={formValues.socialMedias[index].link}
+                                        onChange={handleInputChangeSocial}
+                                    />
+                                </Box>
+                            </Box>
                         ))}
-                        {
-                            validator[`website-${index}`] &&
-                            <FormHelperText error>Website không được để trống hoặc chưa đúng định dạng</FormHelperText>
-                        }
-                        <Box mt={2} sx={{ display: "flex" }}>
+                        <Box mt={2} mb={2} sx={{ display: "flex" }}>
                             <img src="/assets/icons/Vector.svg" alt="Vector" />
                             <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
-                                onClick={addWebsite}>
+                                onClick={addSocial}>
                                 Thêm
                             </Typography>
                         </Box>
-
-                    </FormControl>
-                    <FormControl className="form-control mb-16">
-                        <FormLabel>Mạng xã hội</FormLabel>
-                        <FormGroup sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
-                        {formValues.socialMedias.map((item, index) => (
-                            <Box sx={{ display: "flex", position: "relative" }} mb={2} className={`box-select-social ${validator[`websociallink-${index}`] ? "box-select-social-error-null" : ""}`}>
-                                <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
-                                    value={formValues.socialMedias[index].type}
-                                    name={`websocial-${index}`}
-                                    onChange={handleChangeSelectSocial}
-                                    input={<OutlinedInput label="Tag" />}
-                                    className="social-items"
-                                >
-                                    {socials.map((item, index) => (
-                                        <MenuItem className="social-item" key={item.name} value={item.value}>
-                                            <img src={item.icon} alt={item.name} />
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                                <span className="line-verticle"></span>
-                                <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
-                                    id={`websociallink-${index}`}
-                                    name={`websociallink-${index}`}
-                                    type="text"
-                                    value={formValues.socialMedias[index].link}
-                                    onChange={handleInputChangeSocial}
-                                />
-                            </Box>
-                        ))}
-                            <Box mt={2} sx={{ display: "flex" }}>
-                                <img src="/assets/icons/Vector.svg" alt="Vector" />
-                                <Typography ml={1} sx={{ fontStyle: "normal", fontWeight: "600", fontSize: "16px", lineHeight: "19px", color: "#446DFF", cursor: "pointer" }}
-                                    onClick={addSocial}>
-                                    Thêm
-                                </Typography>
-                            </Box>
-                        </FormGroup>
-                    </FormControl>
+                    </Box>
                 </form>
             )}
         </Box>

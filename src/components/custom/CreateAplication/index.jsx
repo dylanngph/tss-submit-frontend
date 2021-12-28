@@ -42,13 +42,13 @@ const CreateAplication = (props) => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
-    const isStepOptional = (step) => {
-        return step === 1;
-    };
+    // const isStepOptional = (step) => {
+    //     return step === 1;
+    // };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+    // const handleReset = () => {
+    //     setActiveStep(0);
+    // };
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -66,10 +66,7 @@ const CreateAplication = (props) => {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 400,
         bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
         p: 4,
         width: "100%",
         maxWidth: "846px",
@@ -135,7 +132,7 @@ const CreateAplication = (props) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    {activeStep == 0 ? 
+                    {activeStep === 0 ? 
                         <React.Fragment>
                             <Box className="wrapper-icon-title" sx={{display: 'flex', flexDirection: 'row'}}>
                                 <div onClick={handleClose} className="icon-call-to-action-relative">
@@ -146,7 +143,7 @@ const CreateAplication = (props) => {
                             <Divider sx={{margin: "23px 0 37px !important"}} />
                             <Box sx={{maxWidth:"430px", margin: "auto",}}>
                                 {data.map((item, index) => (
-                                    <Box className="mb-16" onClick={() => handleSelectType(index + 1)} sx={formValues.appType === (index + 1) ? appItemActive : appItem}>
+                                    <Box key={index} className="mb-16" onClick={() => handleSelectType(index + 1)} sx={formValues.appType === (index + 1) ? appItemActive : appItem}>
                                         <Box sx={iconAppItem}>
                                             <img src={formValues.appType === (index + 1) ? item.iconActive : item.icon}
                                                 alt="company" />

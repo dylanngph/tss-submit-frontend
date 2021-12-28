@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { styled } from '@mui/material/styles';
-import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, Input, IconButton, FormControl, FormLabel, OutlinedInput } from '@mui/material';
+import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, IconButton, FormControl, FormLabel, OutlinedInput } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
+import ImageUploading from 'react-images-uploading';
 import uuid from 'uuid';
 
 const style = {
@@ -9,10 +10,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
     width: "100%",
     maxWidth: "846px",
     boxShadow: "0px 4px 17px rgba(0, 0, 0, 0.05)",
@@ -20,7 +18,7 @@ const style = {
     border: "1px solid #ffffff",
 };
 
-const avarta = {
+const imgPartner = {
     background: "#EFF2F5",
     borderRadius: "8px",
     width: "73px",
@@ -65,10 +63,7 @@ const wrapItem = {
     overflow: "auto",
 }
 
-function renderItem({ item, handleInputChange, handleRemoveFruit }) {
-    const Input = styled('input')({
-        display: 'none',
-    });
+function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner }) {
     
     const gridStyle = {
         width: "100%",
@@ -84,16 +79,65 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
         cursor: "pointer",
     }
 
+    const BoxImageUpload = styled('div')({
+        position: "relative",
+        paddingTop: "8px",
+        "& .image-item": {
+            position: "absolute",
+            top: "8px",
+            left: 0,
+            width: "73px",
+            height: "73px",
+        },
+        "& .image-item img": {
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+        }
+    })
+
+    const onChangeImageUpload = (imageList) => {
+        handleImgPartnerUpload(index, imageList);
+    };
+
+    const handleInputChange = (e) => {
+        if (!e.target) return;
+        const { name, value } = e.target;
+        handleInputPartnerChange(index, name, value);
+    };
+
     return (
         <ListItem>
             <Grid sx={gridStyle} container spacing={2}>
                 <Grid item xs={1.5}>
-                    <label htmlFor="icon-button-file">
-                        <Input accept="images/*" id="icon-button-file" type="file" />
-                        <IconButton sx={avarta} aria-label="upload picture" component="span">
-                            <img src="/assets/icons/people.svg" alt="people" />
-                        </IconButton>
-                    </label>
+                    <ImageUploading
+                        value={item.imgPartner}
+                        onChange={onChangeImageUpload}
+                        dataURLKey="data_url"
+                    >
+                        {({
+                            imageList,
+                            onImageUpload,
+                            onImageUpdate,
+                            dragProps
+                        }) => (
+                            <BoxImageUpload>
+                                <div
+                                    onClick={onImageUpload}
+                                    {...dragProps}
+                                >
+                                    <IconButton sx={imgPartner} aria-label="upload picture" component="span">
+                                        <img src="/assets/icons/people.svg" alt="people" />
+                                    </IconButton>
+                                </div>
+                                {imageList.map((image, index) => (
+                                    <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                        <img src={image['data_url']} alt="" width="100" />
+                                    </div>
+                                ))}
+                            </BoxImageUpload>
+                        )}
+                    </ImageUploading>
                 </Grid>
                 <Grid item xs={4.5}>
                     <FormControl className="form-control mb-16">
@@ -103,8 +147,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             name="name"
                             type="text"
                             placeholder="Tên đối tác"
-                            // value={item.name}
-                            // onChange={handleInputChange}
+                            value={item.name}
+                            onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
@@ -112,17 +156,17 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Website</FormLabel>
                         <OutlinedInput
-                            id="position"
-                            name="position"
+                            id="website"
+                            name="website"
                             type="text"
                             placeholder="http://"
-                            // value={item.position}
-                            // onChange={handleInputChange}
+                            value={item.website}
+                            onChange={handleInputChange}
                         />
                     </FormControl>
                 </Grid>
                 <Grid sx={{position: "relative"}} item xs={1.5}>
-                    <Box sx={deleteButton} onClick={() => handleRemoveFruit(item.id)}>
+                    <Box sx={deleteButton} onClick={() => handleRemovePartner(item.id)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -131,12 +175,7 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
     );
 }
 
-const DevelopmentPartner = (props) => {
-    const [items, setItems] = useState([
-        { id: uuid(), avarta: '', name: '', position: '' },
-        { id: uuid(), avarta: '', name: '', position: '' },
-        { id: uuid(), avarta: '', name: '', position: '' },
-    ]);
+const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -144,43 +183,53 @@ const DevelopmentPartner = (props) => {
         setOpen(false)
     };
 
-    const handleAddFruit = () => {
-        const nextHiddenItem = {
+    const [partner, setPartner] = useState(defaultValues.partners);
+
+    const handleAddPartner = () => {
+        const nextItem = {
             id: uuid(),
-            avarta: "",
+            imgPartner: [],
             name: "",
-            postion: "",
+            website: "",
         }
-        if (nextHiddenItem) {
-            setItems((items) => [
-                ...items,
-                nextHiddenItem,
-              ]);
+        if (nextItem) {
+            let arrNewPartner = partner;
+            arrNewPartner.push(nextItem);
+            setPartnerForm(arrNewPartner);
         }
     };
 
-    const handleRemoveFruit = (id) => {
-        setItems((items) =>
-                      items.filter((item) => item.id !== id)
-                    )
+    const handleRemovePartner = (id) => {
+        let arrNewPartner = partner;
+        arrNewPartner = arrNewPartner.filter((item) => item.id !== id);
+        setPartnerForm(arrNewPartner);
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        // setFormValues({
-        //     ...formValues,
-        //     [name]: value,
-        // });
+    const handleImgPartnerUpload = (index, data) => {
+        let arrNewPartner = partner;
+        arrNewPartner[index].imgPartner = data;
+        setPartnerForm(arrNewPartner);
     };
 
-    const addFruitButton = (
+    const handleInputPartnerChange = (index, name, data) => {
+        let arrNewPartner = partner;
+        arrNewPartner[index][name] = data;
+        setPartnerForm(arrNewPartner);
+    };
+
+    const setPartnerForm = (arrData) => {
+        setPartner(arrData);
+        setFormValuesProject('partner', arrData);
+    };
+
+    const addPartnerButton = (
         <Box
             sx={addMember}
             variant="contained"
-            onClick={handleAddFruit}
+            onClick={handleAddPartner}
         >
             <img src="/assets/icons/add-circle.svg" alt="add-circle" />
-            Thêm  thành viên
+            Thêm  đối tác
         </Box>
     );
 
@@ -199,15 +248,15 @@ const DevelopmentPartner = (props) => {
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
-                            {items.map((item, index) => (
-                                <Collapse>
-                                    {renderItem({ item, handleInputChange, handleRemoveFruit })}
+                            {partner.map((item, index) => (
+                                <Collapse key={index}>
+                                    {renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner })}
                                 </Collapse>
                             ))}
                         </TransitionGroup>
                     </List>
                     <Box sx={{padding: "10px 26px"}}>
-                        {addFruitButton}
+                        {addPartnerButton}
                     </Box>
                     <Box sx={{padding: "12px 24px", textAlign: "right", background: "#F6F8FA", borderBottomLeftRadius: "12px", borderBottomRightRadius: "12px"}}>
                         <Button sx={{maxWidth: "118px"}} className="button" onClick={handleClose}>Xong</Button>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { styled } from '@mui/material/styles';
-import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, Input, IconButton, FormControl, FormLabel, OutlinedInput } from '@mui/material';
+import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, IconButton, OutlinedInput } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
+import ImageUploading from 'react-images-uploading';
 import uuid from 'uuid';
 
 const style = {
@@ -20,7 +21,7 @@ const style = {
     border: "1px solid #ffffff",
 };
 
-const avarta = {
+const avatar = {
     background: "#EFF2F5",
     borderRadius: "36.5px",
     width: "73px",
@@ -58,6 +59,9 @@ const chose = {
     padding: "16px",
     background: "#EFF2F5",
     borderRadius: "8px",
+    "&.valid": {
+        border: "2px solid #58667E"
+    }
 }
 
 const wrapItem = {
@@ -65,11 +69,8 @@ const wrapItem = {
     overflow: "auto",
 }
 
-function renderItem({ item, handleInputChange, handleRemoveFruit }) {
-    const Input = styled('input')({
-        display: 'none',
-    });
-    
+function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember }) {
+
     const gridStyle = {
         width: "100%",
         margin: 0,
@@ -84,22 +85,76 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
         cursor: "pointer",
     }
 
-    // console.log('>> item: ', item);
+    const BoxImageUpload = styled('div')({
+        position: "relative",
+        paddingTop: "8px",
+        "& .image-item": {
+            position: "absolute",
+            top: "8px",
+            left: 0,
+            width: "73px",
+            height: "73px",
+        },
+        "& .image-item img": {
+            width: "100%",
+            height: "100%",
+            borderRadius: "50%",
+            objectFit: "contain",
+        }
+    })
+
+    const onChangeImageUpload = (imageList) => {
+        handleImgTeamUpload(index, imageList);
+    };
+
+    const handleInputChange = (e) => {
+        if (!e.target) return;
+        const { name, value } = e.target;
+        handleInputTeamChange(index, name, value);
+    };
+
+    const handleInputBlur = (e) => {
+        if (!e.target) return;
+        const { name } = e.target;
+        handleInputTeamBlur(index, name);
+    };
 
     return (
         <ListItem>
             <Grid sx={gridStyle} container spacing={2}>
                 <Grid item xs={1.5}>
-                    <label htmlFor="icon-button-file">
-                        <Input accept="images/*" id="icon-button-file" type="file" />
-                        <IconButton sx={avarta} aria-label="upload picture" component="span">
-                            <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
-                        </IconButton>
-                    </label>
+                    <ImageUploading
+                        value={item.avatar}
+                        onChange={onChangeImageUpload}
+                        dataURLKey="data_url"
+                    >
+                        {({
+                            imageList,
+                            onImageUpload,
+                            onImageUpdate,
+                            dragProps
+                        }) => (
+                            <BoxImageUpload>
+                                <div
+                                    onClick={onImageUpload}
+                                    {...dragProps}
+                                >
+                                    <IconButton sx={avatar} aria-label="upload picture" component="span">
+                                        <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
+                                    </IconButton>
+                                </div>
+                                {imageList.map((image, index) => (
+                                    <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                        <img src={image['data_url']} alt="" width="100" />
+                                    </div>
+                                ))}
+                            </BoxImageUpload>
+                        )}
+                    </ImageUploading>
                 </Grid>
                 <Grid item xs={4.5}>
-                    <FormControl className="form-control mb-16">
-                        <FormLabel>Tên thành viên</FormLabel>
+                    <Box className="form-control mb-16">
+                        <label>Tên thành viên</label>
                         <OutlinedInput
                             id="name"
                             name="name"
@@ -107,12 +162,14 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             placeholder="Tên thành viên"
                             value={item.name}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator[`${item.id}-name`]}
                         />
-                    </FormControl>
+                    </Box>
                 </Grid>
                 <Grid item xs={4.5}>
-                    <FormControl className="form-control mb-16">
-                        <FormLabel>Chức danh</FormLabel>
+                    <Box className="form-control mb-16">
+                        <label>Chức danh</label>
                         <OutlinedInput
                             id="position"
                             name="position"
@@ -120,11 +177,13 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
                             placeholder="Chức danh"
                             value={item.position}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator[`${item.id}-position`]}
                         />
-                    </FormControl>
+                    </Box>
                 </Grid>
-                <Grid sx={{position: "relative"}} item xs={1.5}>
-                    <Box sx={deleteButton} onClick={() => handleRemoveFruit(item.id)}>
+                <Grid sx={{ position: "relative" }} item xs={1.5}>
+                    <Box sx={deleteButton} onClick={() => handleRemoveMember(item.id)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -133,12 +192,7 @@ function renderItem({ item, handleInputChange, handleRemoveFruit }) {
     );
 }
 
-const DevelopmentTeam = (props) => {
-    const [items, setItems] = useState([
-        { id: uuid(), avarta: '', name: '', position: '' },
-        { id: uuid(), avarta: '', name: '', position: '' },
-        { id: uuid(), avarta: '', name: '', position: '' },
-    ]);
+const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -146,52 +200,76 @@ const DevelopmentTeam = (props) => {
         setOpen(false)
     };
 
-    const handleAddFruit = () => {
-        const nextHiddenItem = {
+    const [devTeam, setDevTeam] = useState(defaultValues.devTeam);
+    const [validator, setValidator] = useState({});
+    const [validatorTeam, setValidatorTeam] = useState(false);
+
+    const handleAddMember = () => {
+        const nextItem = {
             id: uuid(),
-            avarta: "",
+            avatar: [],
             name: "",
             postion: "",
         }
-        if (nextHiddenItem) {
-            setItems((items) => [
-                ...items,
-                nextHiddenItem,
-              ]);
+        if (nextItem) {
+            let arrNewTeam = devTeam;
+            arrNewTeam.push(nextItem);
+            setDevTeamForm(arrNewTeam);
         }
     };
 
-    const handleRemoveFruit = (id) => {
-        console.log('id==>', id);
-        setItems((items) =>
-                      items.filter((item) => item.id !== id)
-                    );
+    const handleImgTeamUpload = (index, data) => {
+        let arrNewTeam = devTeam;
+        arrNewTeam[index].avatar = data;
+        setDevTeamForm(arrNewTeam);
     };
 
-    const handleInputChange = (e) => {
-        // const { name, value } = e.target;
-        // setItems({
-        //     ...items,
-        //     [name]: value,
-        // });
+    const handleInputTeamChange = (index, name, data) => {
+        let arrNewTeam = devTeam;
+        arrNewTeam[index][name] = data;
+        setDevTeamForm(arrNewTeam);
     };
 
-    const addFruitButton = (
+    const handleInputTeamBlur = (index, name) => {
+        const memberItem = devTeam[index][name];
+        setValidator({
+            ...validator,
+            [`${devTeam[index].id}-${name}`]: !memberItem ? true : false,
+        })
+    };
+
+    const handleRemoveMember = (id) => {
+        let arrNewTeam = devTeam;
+        arrNewTeam = arrNewTeam.filter((item) => item.id !== id);
+        setDevTeamForm(arrNewTeam);
+        if (!arrNewTeam.length) setValidatorTeam(false);
+    };
+
+    const setDevTeamForm = (arrData) => {
+        setDevTeam(arrData);
+        setFormValuesProject('devTeam', arrData);
+        if (!devTeam.length) setValidatorTeam(false);
+        const validatorDevTeam = devTeam.filter((member) => {
+            return member.avatar.length && member.name && member.position;
+        });
+        if (validatorDevTeam.length) setValidatorTeam(true);
+        else setValidatorTeam(false);
+    };
+
+    const addMemberButton = (
         <Box
             sx={addMember}
             variant="contained"
-            onClick={handleAddFruit}
+            onClick={handleAddMember}
         >
             <img src="/assets/icons/add-circle.svg" alt="add-circle" />
             Thêm  thành viên
         </Box>
     );
 
-    // console.log('>> items: ', items);
-
     return (
         <div>
-            <Box sx={chose} onClick={handleOpen}>Đội ngũ phát triển</Box>
+            <Box sx={chose} onClick={handleOpen} className={validatorTeam ? 'valid': ''}>Đội ngũ phát triển</Box>
 
             <Modal
                 open={open}
@@ -204,18 +282,18 @@ const DevelopmentTeam = (props) => {
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
-                            {items.map((item, index) => (
-                                <Collapse>
-                                    {renderItem({ item, handleInputChange, handleRemoveFruit })}
+                            {devTeam.map((item, index) => (
+                                <Collapse key={index}>
+                                    {renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember })}
                                 </Collapse>
                             ))}
                         </TransitionGroup>
                     </List>
-                    <Box sx={{padding: "10px 26px"}}>
-                        {addFruitButton}
+                    <Box sx={{ padding: "10px 26px" }}>
+                        {addMemberButton}
                     </Box>
-                    <Box sx={{padding: "12px 24px", textAlign: "right", background: "#F6F8FA", borderBottomLeftRadius: "12px", borderBottomRightRadius: "12px"}}>
-                        <Button sx={{maxWidth: "118px"}} className="button" onClick={handleClose}>Xong</Button>
+                    <Box sx={{ padding: "12px 24px", textAlign: "right", background: "#F6F8FA", borderBottomLeftRadius: "12px", borderBottomRightRadius: "12px" }}>
+                        <Button sx={{ maxWidth: "118px" }} className="button" onClick={handleClose}>Xong</Button>
                     </Box>
                 </Box>
             </Modal>

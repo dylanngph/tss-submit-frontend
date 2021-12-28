@@ -15,7 +15,7 @@ import HomeScreen from "./screens/home";
 import NFTScreen from "./screens/stampNFT";
 import Application from "./screens/application";
 import User from "./screens/user";
-import { ThemeProvider, createMuiTheme, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import { adminData } from 'screens/user/config';
@@ -28,7 +28,7 @@ interface LoginProps {
 
 function App() {
   const theme = createTheme();
-  const THEME = createMuiTheme({
+  const THEME = createTheme({
     typography: {
       "fontFamily": `"Inter", sans-serif`,
       "fontSize": 14,
