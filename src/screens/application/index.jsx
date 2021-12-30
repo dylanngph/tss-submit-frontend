@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import { useAppDispatch } from 'app/hooks';
 import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import { Box, Typography, Tabs, Tab, Stepper, Step, StepLabel, Button } from '@mui/material';
@@ -6,7 +7,34 @@ import Incorporation from '../../components/display/Incorporation';
 import Project from '../../components/display/Project';
 import Tokenomics from '../../components/display/Tokenomics';
 import LegalRepresentative from '../../components/display/LegalRepresentative';
-import Information from '../../components/custom/Information';
+import uuid from 'uuid';
+
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+  
+    return (
+      <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        {value === index && (
+          <Box>
+            {children}
+          </Box>
+        )}
+      </div>
+    );
+  }
+  
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+};
+  
 
 function a11yProps(index) {
     return {
@@ -20,6 +48,52 @@ function Application(props) {
     const [stateNextBtn, setStateNextButton] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);   
     const dispatch = useAppDispatch();
+
+    const [projectItem, setProjectItem] = useState({
+        step1: {
+            incorporationName: "",
+            incorporationAddress: "",
+            transactionName: "",
+            transactionAddress: "",
+            businessAreas: [],
+            companyCode: "",
+            taxCode: "",
+            acceptDate: null,
+            businessLicense: null,
+        },
+        step2: {
+            projectName: "",
+            logo: "",
+            whitepaper: "",
+            devTeam: [
+                { id: uuid(), avatar: [], name: '', position: '' },
+                { id: uuid(), avatar: [], name: '', position: '' },
+                { id: uuid(), avatar: [], name: '', position: '' },
+            ],
+            partners: [
+                { id: uuid(), imgPartner: [], name: '', website: '' },
+                { id: uuid(), imgPartner: [], name: '', website: '' },
+                { id: uuid(), imgPartner: [], name: '', website: '' },
+            ],
+            description: "",
+            websites: [''],
+            socialMedias: [
+                {
+                    type: '',
+                    link: '',
+                }
+            ]
+        }
+        
+    });
+
+    const setProjectItemStep = (step, data) => {
+        let tpmData = projectItem;
+        if (step === 1) {
+            tpmData.step1 = data;
+            setProjectItem(tpmData);
+        }
+    }
 
     useEffect(() => {
         dispatch(postBreadcrumb([
@@ -123,10 +197,18 @@ function Application(props) {
                     </Tabs>
                 </Box>
                 <Box sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
-                    <Incorporation value={value} index={0} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
-                    <Project value={value} index={1} />
-                    <Tokenomics value={value} index={2} />
-                    <LegalRepresentative value={value} index={3} />
+                    <TabPanel value={value} index={0}>
+                        <Incorporation projectItem={projectItem.step1} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <Project projectItem={projectItem.step2} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <Tokenomics stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <LegalRepresentative stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                    </TabPanel>
                 </Box>
             </Box>
             <Box sx={wrapStepper}>

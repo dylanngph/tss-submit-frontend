@@ -5,7 +5,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 function Incorporation(props) {
-    const { children, value, index, ...other } = props;
+    const { projectItem, children, value, index, ...other } = props;
     
 
     let businessAreas = [
@@ -272,19 +272,19 @@ function Incorporation(props) {
 
     ]
 
-    const defaultValues = {
-        incorporationName: "",
-        incorporationAddress: "",
-        transactionName: "",
-        transactionAddress: "",
-        businessAreas: [],
-        companyCode: "",
-        taxCode: "",
-        acceptDate: null,
-        businessLicense: "",
-    };
+    // const defaultValues = {
+    //     incorporationName: "",
+    //     incorporationAddress: "",
+    //     transactionName: "",
+    //     transactionAddress: "",
+    //     businessAreas: [],
+    //     companyCode: "",
+    //     taxCode: "",
+    //     acceptDate: null,
+    //     businessLicense: "",
+    // };
 
-    const [formValues, setFormValues] = useState(defaultValues);
+    const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
@@ -293,18 +293,27 @@ function Incorporation(props) {
             ...formValues,
             [name]: value,
         });
+        props.setProjectItemStep(1, formValues);
         validate(e);
-        // if (e.target.hasAttribute('required')) {
-        //     if (value) props.setStateNextButton(true)
-        //     else props.setStateNextButton(false);
-        // }
     };
+
+    const handleInputChangeFile = (e) => {
+        setFormValues({
+            ...formValues,
+            ["businessLicense"]: e.target.files[0],
+        });
+        props.setProjectItemStep(1, formValues);
+        checkDataActiveButton();
+    };
+
+    
 
     const handleAutocompleteChange = (event, newValue) => {
         setFormValues({
             ...formValues,
             ['businessAreas']: newValue,
         });
+        props.setProjectItemStep(1, formValues);
         setValidator({
             ...validator,
             ['businessAreas']: newValue.length > 0 ? false : true,
@@ -345,7 +354,7 @@ function Incorporation(props) {
             formValues.incorporationAddress &&
             formValues.businessAreas.length &&
             formValues.companyCode &&
-            formValues.businessLicense &&
+            !formValues.businessLicense &&
             formValues.acceptDate
             ) {
                 props.setStateNextButton(true)
@@ -359,6 +368,7 @@ function Incorporation(props) {
             ...formValues,
             ["acceptDate"]: newValue,
         });
+        props.setProjectItemStep(1, formValues);
         checkDataActiveButton();
     };
 
@@ -446,7 +456,9 @@ function Incorporation(props) {
                             multiple
                             id="tags-outlined"
                             options={businessAreas}
+                            defaultValue={formValues.businessAreas}
                             getOptionLabel={(businessAreas) => businessAreas.area}
+                            isOptionEqualToValue={(option, value) => option.area === value.area}
                             onChange={handleAutocompleteChange}
                             onBlur={handleInputAutocompleteBlur}
                             renderInput={(params) => (
@@ -511,9 +523,9 @@ function Incorporation(props) {
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
                             inputProps={{accept:"application/pdf"}}
-                            value={formValues.businessLicense}
-                            onChange={handleInputChange}
-                            onBlur={handleInputBlur}
+                            // value={businessLicense}
+                            onChange={handleInputChangeFile}
+                            // onBlur={handleInputBlur}
                             error={validator.businessLicense}
                         />
                         {

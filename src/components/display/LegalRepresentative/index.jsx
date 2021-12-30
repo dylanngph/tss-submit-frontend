@@ -1,27 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, Select, FormGroup, TextField } from '@mui/material';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, Select, FormGroup, TextField, FormHelperText } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 function LegalRepresentative(props) {
     const { children, value, index, ...other } = props;
-    const [personName, setPersonName] = useState([]);
-    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
-
+    const idTypePassport = "3";
     let informations = [
         {
             value: "1",
@@ -32,25 +18,26 @@ function LegalRepresentative(props) {
             name: "CCCD",
         },
         {
-            value: "3",
+            value: idTypePassport,
             name: "Hộ Chiếu",
         },
     ]
 
     const defaultValues = {
-        tokenName: "",
-        smartContractAddress: "",
-        symbol: "",
+        name: "",
         position: "",
         cmndBefore: "",
         cmndAfter: "",
         phone: "",
         email: "",
-        id: "",
+        idAuth: "",
         idType: "",
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    
+
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -58,6 +45,29 @@ function LegalRepresentative(props) {
             ...formValues,
             [name]: value,
         });
+        validate(e);
+    };
+
+    const handleInputChangeSelect = (e) => {
+        const { name, value } = e.target;
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    };
+
+    const handleInputBlur = (e) => {
+        validate(e);
+    };
+
+    const validate = (e) => {
+        const { name, value } = e.target;
+        if (!e.target.hasAttribute('required')) return;
+        setValidator({
+            ...validator,
+            [name]: value ? false : true,
+        });
+        checkDataActiveButton();
     };
 
     const handleDatePickerChange = (newValue) => {
@@ -65,11 +75,28 @@ function LegalRepresentative(props) {
             ...formValues,
             ["acceptDate"]: newValue,
         });
+        checkDataActiveButton();
+    };
+
+    const checkDataActiveButton = () => {
+        console.log('>> formValues ', formValues);
+        if (formValues.name &&
+            formValues.position &&
+            formValues.phone &&
+            formValues.email &&
+            formValues.idType &&
+            formValues.idAuth &&
+            formValues.cmndBefore &&
+            formValues.cmndAfter 
+            ) {
+                props.setStateNextButton(true)
+            }
+        else
+            props.setStateNextButton(false)
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
 
     return (
@@ -83,13 +110,20 @@ function LegalRepresentative(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Họ và Tên</FormLabel>
                         <OutlinedInput
+                            required
                             id="name"
                             name="name"
                             type="text"
                             placeholder="Họ và Tên"
                             value={formValues.name}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.name}
                         />
+                        {
+                            validator.name &&
+                            <FormHelperText error>Họ và Tên không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16 datePicker">
                         <FormLabel>Ngày sinh</FormLabel>
@@ -105,15 +139,22 @@ function LegalRepresentative(props) {
                     <FormControl className="form-control mb-16">
                         <FormLabel>Chức vụ</FormLabel>
                         <OutlinedInput
+                            required
                             id="position"
                             name="position"
                             type="text"
                             placeholder="Chức vụ"
                             value={formValues.position}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.position}
                         />
+                        {
+                            validator.position &&
+                            <FormHelperText error>Chức vụ không được để trống</FormHelperText>
+                        }
                     </FormControl>
-                    <FormControl className="form-control mb-16">
+                    <Box className="form-control mb-16">
                         <FormLabel>Giấy tờ tùy thân</FormLabel>
                         <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
                             <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
@@ -121,65 +162,89 @@ function LegalRepresentative(props) {
                                 name="idType"
                                 id="idType"
                                 value={formValues.idType}
-                                onChange={handleInputChange}
+                                onChange={handleInputChangeSelect}
                             >
                                 {informations.map((item, index) => (
-                                    <MenuItem value={item.value}>{item.name}</MenuItem>
+                                    <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
                                 ))}
                             </Select>
                             <OutlinedInput sx={{ maxWidth: "275px", width: "100%" }}
-                                id="id"
-                                name="id"
+                                required
+                                id="idAuth"
+                                name="idAuth"
                                 type="text"
                                 placeholder="0678****"
-                                value={formValues.id}
+                                value={formValues.idAuth}
                                 onChange={handleInputChange}
+                                onBlur={handleInputBlur}
+                                error={validator.idAuth}
                             />
                         </FormGroup>
-                    </FormControl>
+                    </Box>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tải lên mặt trước</FormLabel>
                         <OutlinedInput
+                            required
                             id="cmndBefore"
                             name="cmndBefore"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
                             value={formValues.cmndBefore}
                             onChange={handleInputChange}
+                            error={validator.cmndBefore}
                         />
                     </FormControl>
-                    <FormControl className="form-control mb-16">
-                        <FormLabel>Tải lên mặt sau</FormLabel>
-                        <OutlinedInput
-                            id="cmndAfter"
-                            name="cmndAfter"
-                            type="file"
-                            placeholder="Tải lên (Tối đa 5mb)"
-                            value={formValues.cmndAfter}
-                            onChange={handleInputChange}
-                        />
-                    </FormControl>
+                    {
+                        formValues.idType !== idTypePassport &&
+                        <FormControl className="form-control mb-16">
+                            <FormLabel>Tải lên mặt sau</FormLabel>
+                            <OutlinedInput
+                                required
+                                id="cmndAfter"
+                                name="cmndAfter"
+                                type="file"
+                                placeholder="Tải lên (Tối đa 5mb)"
+                                value={formValues.cmndAfter}
+                                onChange={handleInputChange}
+                                error={validator.cmndAfter}
+                            />
+                        </FormControl>
+                    }
                     <FormControl className="form-control mb-16">
                         <FormLabel>Điện thoại</FormLabel>
                         <OutlinedInput
+                            required
                             id="phone"
                             name="phone"
                             type="tel"
                             placeholder="Điện thoại"
                             value={formValues.phone}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.phone}
                         />
+                        {
+                            validator.phone &&
+                            <FormHelperText error>Điện thoại không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Email</FormLabel>
                         <OutlinedInput
+                            required
                             id="email"
                             name="email"
                             type="email"
                             placeholder="Email"
                             value={formValues.email}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.email}
                         />
+                        {
+                            validator.email &&
+                            <FormHelperText error>Email không được để trống</FormHelperText>
+                        }
                     </FormControl>
                 </form>
             )}

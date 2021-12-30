@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { styled } from '@mui/material/styles';
-import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, Input, IconButton, FormControl, TextareaAutosize, OutlinedInput } from '@mui/material';
-import { TransitionGroup } from 'react-transition-group';
+import { Box, Button, Modal, Typography, Divider, FormControl, TextareaAutosize, OutlinedInput } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,14 +24,6 @@ const style = {
     borderRadius: "12px",
     border: "1px solid #ffffff",
 };
-
-const avarta = {
-    background: "#EFF2F5",
-    borderRadius: "36.5px",
-    width: "73px",
-    height: "73px",
-    padding: 0,
-}
 
 const label = {
     fontWeight: "bold",
@@ -67,15 +57,7 @@ const chose = {
     borderRadius: "8px",
 }
 
-const wrapItem = {
-    maxHeight: "380px",
-    overflow: "auto",
-}
-
-function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
-    const Input = styled('input')({
-        display: 'none',
-    });
+function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
 
     const numberStyle = {
         color: "#11142D",
@@ -92,9 +74,14 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
         cursor: "pointer",
     }
 
-    return (
+    const handleInputChange = (e) => {
+        if (!e.target) return;
+        const { name, value } = e.target;
+        handleInputCateChange(index, name, value);
+    }
 
-        <TableRow>
+    return (
+        <TableRow key={index}>
             <TableCell component="th" scope="row">
                 <Typography sx={numberStyle}>{index + 1}</Typography>
             </TableCell>
@@ -117,8 +104,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="ratio"
                         type="text"
                         placeholder="100%"
-                        // value={item.ratio}
-                        // onChange={handleInputChange}
+                    // value={item.ratio}
+                    // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
@@ -129,8 +116,8 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="price"
                         type="text"
                         placeholder="$10.000"
-                        // value={item.price}
-                        // onChange={handleInputChange}
+                    // value={item.price}
+                    // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
@@ -141,25 +128,25 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
                         name="quantily"
                         type="text"
                         placeholder="56.160.000"
-                        // value={item.quantily}
-                        // onChange={handleInputChange}
+                    // value={item.quantily}
+                    // onChange={handleInputChange}
                     />
                 </FormControl>
             </TableCell>
             <TableCell align="right">
                 <FormControl className="form-control">
                     <TextareaAutosize
-                            minRows={4}
-                            maxRows={4}
-                            placeholder="5% unlock at TGE, 90-days cliff, 6% monthly"
-                            style={{ width: "auto" }}
-                        // value={formValues.vesting}
-                        // onChange={handleInputChange}
-                        />
+                        minRows={4}
+                        maxRows={4}
+                        placeholder="5% unlock at TGE, 90-days cliff, 6% monthly"
+                        style={{ width: "auto" }}
+                    // value={formValues.vesting}
+                    // onChange={handleInputChange}
+                    />
                 </FormControl>
             </TableCell>
             <TableCell sx={{ position: "relative" }} align="right">
-                <Box sx={deleteButton} onClick={() => handleRemoveFruit(item.id)}>
+                <Box sx={deleteButton} onClick={() => handleRemoveCate(item.id)}>
                     <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                 </Box>
             </TableCell>
@@ -169,9 +156,9 @@ function renderItem({ item, handleInputChange, handleRemoveFruit, index }) {
 
 const TokenAllocationRate = (props) => {
     const [items, setItems] = useState([
-        { id: uuid(), category: '', ratio: '', price: '', quantily: '', vesting: '' },
-        { id: uuid(), category: '', ratio: '', price: '', quantily: '', vesting: '' },
-        { id: uuid(), category: '', ratio: '', price: '', quantily: '', vesting: '' },
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
     ]);
 
     const [open, setOpen] = useState(false);
@@ -180,12 +167,14 @@ const TokenAllocationRate = (props) => {
         setOpen(false)
     };
 
-    const handleAddFruit = () => {
+    const handleAddCate = () => {
         const nextHiddenItem = {
             id: uuid(),
-            avarta: "",
-            name: "",
-            postion: "",
+            category: "",
+            ratio: null,
+            price: null,
+            quantily: null,
+            vesting: "",
         }
         if (nextHiddenItem) {
             setItems((items) => [
@@ -195,25 +184,23 @@ const TokenAllocationRate = (props) => {
         }
     };
 
-    const handleRemoveFruit = (id) => {
+    const handleRemoveCate = (id) => {
         setItems((items) =>
             items.filter((item) => item.id !== id)
         )
     };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        // setFormValues({
-        //     ...formValues,
-        //     [name]: value,
-        // });
+    const handleInputCateChange = (index, name, data) => {
+        let newItem = items;
+        newItem[index][name] = newItem[index][name] + data;
+        setItems(newItem);
     };
 
-    const addFruitButton = (
+    const addCateButton = (
         <Box
             sx={addMember}
             variant="contained"
-            onClick={handleAddFruit}
+            onClick={handleAddCate}
         >
             <img src="/assets/icons/add-circle.svg" alt="add-circle" />
             Thêm hạng mục
@@ -233,9 +220,9 @@ const TokenAllocationRate = (props) => {
 
     const fontStyle = {
         color: "#11142D",
-            fontWeight: "500",
-            fontSize: "18px",
-            lineHeight: "22px",
+        fontWeight: "500",
+        fontSize: "18px",
+        lineHeight: "22px",
     }
 
     return (
@@ -250,7 +237,7 @@ const TokenAllocationRate = (props) => {
                 <Box sx={style}>
                     <Typography sx={label}>Đội ngũ phát triển</Typography>
                     <Divider />
-                    <TableContainer component={Paper} sx={{ padding: "15px 35px", width: "auto" }}>
+                    <TableContainer component={Paper} sx={{ padding: "15px 35px", width: "auto", maxHeight: "70vh" }}>
                         <Table sx={{ borderRadius: "10px", overflow: "hidden" }} aria-label="simple table">
                             <TableHead sx={styleHead}>
                                 <TableRow>
@@ -265,7 +252,7 @@ const TokenAllocationRate = (props) => {
                             </TableHead>
                             <TableBody>
                                 {items.map((item, index) => (
-                                    renderItem({ item, handleInputChange, handleRemoveFruit, index })
+                                    renderItem({ item, handleInputCateChange, handleRemoveCate, index })
                                 ))}
                                 <TableRow>
                                     <TableCell></TableCell>
@@ -282,7 +269,7 @@ const TokenAllocationRate = (props) => {
                                 </TableRow>
                                 <TableRow sx={styleHead}>
                                     <TableCell component="th" scope="row" colSpan={3}>
-                                        {addFruitButton}
+                                        {addCateButton}
                                     </TableCell>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>

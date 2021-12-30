@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, Typography, FormHelperText } from '@mui/material';
+import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, Typography, FormHelperText } from '@mui/material';
 import Select from '@mui/material/Select';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import DevelopmentPartner from 'components/custom/DevelopmentPartner';
 import uuid from 'uuid';
 
 function Project(props) {
-    const { children, value, index, ...other } = props;
+    const { projectItem, children, value, index, ...other } = props;
     const [personName, setPersonName] = useState([]);
 
     const handleChangeSelectSocial = (event) => {
@@ -24,6 +24,7 @@ function Project(props) {
             ...formValues,
             ["socialMedias"]: tpm_websitessocial,
         });
+        props.setProjectItemStep(2, formValues);
     };
 
     let socials = [
@@ -69,43 +70,54 @@ function Project(props) {
         },
     ]
 
-    const defaultValues = {
-        projectName: "",
-        logo: "",
-        whitepaper: "",
-        devTeam: [
-            { id: uuid(), avatar: [], name: '', position: '' },
-            { id: uuid(), avatar: [], name: '', position: '' },
-            { id: uuid(), avatar: [], name: '', position: '' },
-        ],
-        partners: [
-            { id: uuid(), imgPartner: [], name: '', website: '' },
-            { id: uuid(), imgPartner: [], name: '', website: '' },
-            { id: uuid(), imgPartner: [], name: '', website: '' },
-        ],
-        description: "",
-        businessAreas: 1,
-        companyCode: "",
-        taxCode: "",
-        acceptDate: React.useState(new Date('2014-08-18T21:11:54')),
-        businessLicense: "",
-        websites: [''],
-        socialMedias: [
-            {
-                type: '',
-                link: '',
-            }
-        ]
-    };
+    // const defaultValues = {
+    //     projectName: "",
+    //     logo: "",
+    //     whitepaper: "",
+    //     devTeam: [
+    //         { id: uuid(), avatar: [], name: '', position: '' },
+    //         { id: uuid(), avatar: [], name: '', position: '' },
+    //         { id: uuid(), avatar: [], name: '', position: '' },
+    //     ],
+    //     partners: [
+    //         { id: uuid(), imgPartner: [], name: '', website: '' },
+    //         { id: uuid(), imgPartner: [], name: '', website: '' },
+    //         { id: uuid(), imgPartner: [], name: '', website: '' },
+    //     ],
+    //     description: "",
+    //     websites: [''],
+    //     socialMedias: [
+    //         {
+    //             type: '',
+    //             link: '',
+    //         }
+    //     ]
+    // };
 
-    const [formValues, setFormValues] = useState(defaultValues);
+    const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
+
+    const checkDataActiveButton = () => {
+        props.setProjectItemStep(2, formValues);
+        if (formValues.projectName &&
+            formValues.logo &&
+            formValues.whitepaper &&
+            formValues.description &&
+            formValues.websites.length &&
+            formValues.socialMedias.length
+            ) {
+                props.setStateNextButton(true)
+            }
+        else
+            props.setStateNextButton(false)
+    };
 
     const setFormValuesProject = (name, value) => {
         setFormValues({
             ...formValues,
             [name]: value,
         });
+        checkDataActiveButton();
     };
 
     const handleInputChange = (e) => {
@@ -118,11 +130,13 @@ function Project(props) {
                 ...formValues,
                 ["websites"]: tpm_websites,
             });
+            props.setProjectItemStep(2, formValues);
         } else {
             setFormValues({
                 ...formValues,
                 [name]: value,
             });
+            props.setProjectItemStep(2, formValues);
         }
         validate(e);
     };
@@ -136,6 +150,7 @@ function Project(props) {
             ...formValues,
             ["socialMedias"]: tpm_websitessocial,
         });
+        props.setProjectItemStep(2, formValues);
     };
 
     const handleInputBlur = (e) => {
@@ -160,21 +175,7 @@ function Project(props) {
             ...validator,
             [name]: value ? false : true,
         });
-    };
-
-    const handleArrayChange = (e) => {
-        const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
-    }
-
-    const handleDatePickerChange = (newValue) => {
-        setFormValues({
-            ...formValues,
-            ["acceptDate"]: newValue,
-        });
+        checkDataActiveButton();
     };
 
     const addWebsite = () => {
@@ -185,6 +186,7 @@ function Project(props) {
                 ...formValues,
                 ["websites"]: nextHiddenItem,
             });
+            props.setProjectItemStep(2, formValues);
         }
     }
 
@@ -291,11 +293,11 @@ function Project(props) {
                     </FormControl>
                     <Box className="form-control mb-16">
                         <FormLabel>Đội ngũ phát triển</FormLabel>
-                        <DevelopmentTeam defaultValues={defaultValues} setFormValuesProject={setFormValuesProject} />
+                        <DevelopmentTeam defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </Box>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đối tác phát triển (Không bắt buộc)</FormLabel>
-                        <DevelopmentPartner defaultValues={defaultValues} setFormValuesProject={setFormValuesProject} />
+                        <DevelopmentPartner defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
                     {formValues.websites.map((item, index) => (
                         <FormControl key={index} className="form-control">

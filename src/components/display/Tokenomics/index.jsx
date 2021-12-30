@@ -1,24 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, FormGroup, TextField, Autocomplete, Checkbox } from '@mui/material';
+import { Box, FormControl, FormLabel, OutlinedInput, TextField, Autocomplete, Checkbox, FormHelperText } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import TokenAllocationRate from 'components/custom/TokenAllocationRate'
 
 function Tokenomics(props) {
     const { children, value, index, ...other } = props;
-    const [personName, setPersonName] = useState([]);
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;  
-
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+    const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
     let communications = [
         {
@@ -52,11 +41,14 @@ function Tokenomics(props) {
 
     const defaultValues = {
         tokenName: "",
+        symbol: "",
+        communications: [],
+        standards: [],
         smartContractAddress: "",
-        symbol: ""
     };
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState(defaultValues);
+    const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -64,18 +56,48 @@ function Tokenomics(props) {
             ...formValues,
             [name]: value,
         });
+        validate(e);
     };
 
-    const handleDatePickerChange = (newValue) => {
-        setFormValues({
-            ...formValues,
-            ["acceptDate"]: newValue,
+    const handleInputBlur = (e) => {
+        validate(e);
+    };
+
+    const handleAutocompleteChangeCommunications = (e, newValue) => {
+        let arrTmp = formValues;
+        arrTmp.communications = newValue
+        setFormValues(arrTmp);
+        checkDataActiveButton();
+    };
+
+    const handleAutocompleteChangeStandards = (e, newValue) => {
+        let arrTmp = formValues;
+        arrTmp.standards = newValue
+        setFormValues(arrTmp);
+        checkDataActiveButton();
+    };
+
+    const validate = (e) => {
+        const { name, value } = e.target;
+        if (!e.target.hasAttribute('required')) return;
+        setValidator({
+            ...validator,
+            [name]: value ? false : true,
         });
+        checkDataActiveButton();
+    };
+
+    const checkDataActiveButton = () => {
+        if (formValues.tokenName &&
+            formValues.symbol) {
+                props.setStateNextButton(true)
+            }
+        else
+            props.setStateNextButton(false)
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
 
     return (
@@ -92,26 +114,41 @@ function Tokenomics(props) {
                     }}>
                         <FormLabel>Tên gọi Token</FormLabel>
                         <OutlinedInput
+                            required
                             id="tokenName"
                             name="tokenName"
                             type="text"
                             placeholder="Tên gọi Token"
                             value={formValues.tokenName}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.tokenName}
                         />
+                        {
+                            validator.tokenName &&
+                            <FormHelperText error>Tên Token không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16" sx={{
                         width: "48%",
                     }}>
                         <FormLabel>Ký hiệu</FormLabel>
                         <OutlinedInput
+                            required
                             id="symbol"
                             name="symbol"
                             type="text"
                             placeholder="BIT, JDT..."
+                            inputProps={{ maxLength: 10 }}
                             value={formValues.symbol}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
+                            error={validator.symbol}
                         />
+                        {
+                            validator.symbol &&
+                            <FormHelperText error>Ký hiệu không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Nền tảng (Không bắt buộc)</FormLabel>
@@ -125,6 +162,8 @@ function Tokenomics(props) {
                             options={communications}
                             disableCloseOnSelect
                             getOptionLabel={(option) => option.name}
+                            onChange={handleAutocompleteChangeCommunications}
+                            isOptionEqualToValue={(option, value) => option.value === value.value}
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Checkbox
@@ -151,9 +190,12 @@ function Tokenomics(props) {
                         }}
                             multiple
                             id="standard"
+                            name="standard"
                             options={standards}
                             disableCloseOnSelect
                             getOptionLabel={(option) => option.name}
+                            isOptionEqualToValue={(option, value) => option.value === value.value}
+                            onChange={handleAutocompleteChangeStandards}
                             renderOption={(props, option, { selected }) => (
                                 <li {...props}>
                                     <Checkbox
