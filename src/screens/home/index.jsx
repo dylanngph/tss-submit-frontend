@@ -3,6 +3,7 @@ import { Box, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import {postAccountLogin} from 'redux/account/account.action'
 import "react-toastify/dist/ReactToastify.css";
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 
 function HomeScreen(props) {
     const accountStore = useAppSelector(state => state?.rootReducer?.accountReducers?.accountStore ?? 'default');
@@ -11,6 +12,11 @@ function HomeScreen(props) {
 
     useEffect(() => {
         dispatch(postAccountLogin({username: 'admin', password: '1234567'}))
+        dispatch(postBreadcrumb([
+            {
+                'label': '',
+            },
+        ]))
     }, [])
 
     return (

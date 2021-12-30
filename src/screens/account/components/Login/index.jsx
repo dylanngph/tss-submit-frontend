@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, TextField, InputAdornment, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 function LoginAccount({handleLogin , error}) {
+    const dispatch = useAppDispatch();
 
     const [values, setValues] = useState({
         email: '',
@@ -31,6 +34,14 @@ function LoginAccount({handleLogin , error}) {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     }
+
+    useEffect(() => {
+        dispatch(postBreadcrumb([
+            {
+                'label': '',
+            },
+        ]))
+    }, [])
 
     return (
         <Box sx={{

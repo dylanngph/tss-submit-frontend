@@ -10,6 +10,11 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useAppSelector } from 'app/hooks';
+import {ReactComponent as AboutIcon} from 'assets/icons/about.svg'
+import {ReactComponent as DashboardIcon} from 'assets/icons/dashboard.svg'
+import {ReactComponent as NftIcon} from 'assets/icons/nft.svg'
+import {ReactComponent as UserIcon} from 'assets/icons/user.svg'
+import {ReactComponent as LoginIcon} from 'assets/icons/login.svg'
 
 const Header = ({ auth, handleLogout, error, props }) => {
     const drawerWidth = 244;
@@ -17,10 +22,6 @@ const Header = ({ auth, handleLogout, error, props }) => {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     const breadcrumbStore = useAppSelector(state => state?.rootReducer?.breadcrumbReducers?.breadcrumbStore ?? 'default');
-
-    useEffect(() => {
-        // renderedListItems(breadcrumbStore)
-    }, [breadcrumbStore])
 
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -49,7 +50,6 @@ const Header = ({ auth, handleLogout, error, props }) => {
         lineHeight: "17px !important",
         color: "#EA3943 !important",
 
-
         "img": {
             marginRight: "14px"
         }
@@ -70,7 +70,7 @@ const Header = ({ auth, handleLogout, error, props }) => {
             <Box mt={5}>
                 <NavLink exact to='/'>
                     <ListItem button key='Về TSS'>
-                        <img src='/assets/icons/about.svg' alt='Về TSS' />
+                        <AboutIcon />
                         <ListItemText sx={itemStyle}
                             primary='Về TSS' />
                     </ListItem>
@@ -80,14 +80,14 @@ const Header = ({ auth, handleLogout, error, props }) => {
                     <>
                         <NavLink exact to='/manage'>
                             <ListItem button key='Quản lý hồ sơ'>
-                                <img src='/assets/icons/dashboard.svg' alt='Quản lý hồ sơ' />
+                                <DashboardIcon />
                                 <ListItemText sx={itemStyle}
                                     primary='Quản lý hồ sơ' />
                             </ListItem>
                         </NavLink>
                         <NavLink exact to='/stamp-nft'>
                             <ListItem button key='Con dấu NFT'>
-                                <img src='/assets/icons/nft.svg' alt='Con dấu NFT' />
+                                <NftIcon />
                                 <ListItemText sx={itemStyle}
                                     primary='Con dấu NFT' />
                             </ListItem>
@@ -102,7 +102,7 @@ const Header = ({ auth, handleLogout, error, props }) => {
                     <>
                         <NavLink exact to="/user">
                             <ListItem button key='User Name'>
-                                <img src='/assets/icons/user.svg' alt='User Name' />
+                                <UserIcon />
                                 <ListItemText sx={itemStyle}
                                     primary='User Name' />
                             </ListItem>
@@ -114,7 +114,7 @@ const Header = ({ auth, handleLogout, error, props }) => {
                     :
                     <NavLink exact to="/login">
                         <ListItem button key='Đăng nhập'>
-                            <img src='/assets/icons/login.svg' alt='Đăng nhập' />
+                            <LoginIcon />
                             <ListItemText sx={itemStyle}
                                 primary='Đăng nhập' />
                         </ListItem>
@@ -133,7 +133,6 @@ const Header = ({ auth, handleLogout, error, props }) => {
     );
 
     const RenderedListItems = () => {
-        console.log('abc===>', breadcrumbStore);
         return (
             <Breadcrumbs aria-label="breadcrumb">
                 {breadcrumbStore.breadcrumbs && breadcrumbStore.breadcrumbs.map((item, index, breadcrumbs) => (
@@ -150,7 +149,7 @@ const Header = ({ auth, handleLogout, error, props }) => {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar className='abc'
+            <AppBar
                 position="fixed"
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
