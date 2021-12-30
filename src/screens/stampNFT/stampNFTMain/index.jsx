@@ -16,6 +16,7 @@ function NFTMainScreen() {
             },
         ]))
     }, [])
+    
     const ListStampNFT = [
         {
             img_path: '/assets/images/stampNFT/NFT1.png',

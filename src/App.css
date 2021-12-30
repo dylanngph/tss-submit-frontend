@@ -295,6 +295,10 @@ textarea.textarea-required.textarea-required-error-null:focus-visible {
   color: #446DFF;
 }
 
+.active path {
+  stroke: #446DFF;
+}
+
 .MuiOutlinedInput-root .MuiAutocomplete-input {
   padding: 0 !important;
 }
