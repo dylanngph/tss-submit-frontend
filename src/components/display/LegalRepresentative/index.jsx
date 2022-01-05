@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, Select, FormGroup, TextField, FormHelperText } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 function LegalRepresentative(props) {
-    const { children, value, index, ...other } = props;
+    const { projectItem, children, value, index, ...other } = props;
 
     const idTypePassport = "3";
     let informations = [
@@ -23,20 +23,7 @@ function LegalRepresentative(props) {
         },
     ]
 
-    const defaultValues = {
-        name: "",
-        position: "",
-        cmndBefore: "",
-        cmndAfter: "",
-        phone: "",
-        email: "",
-        idAuth: "",
-        idType: "",
-    };
-
-    
-
-    const [formValues, setFormValues] = useState(defaultValues);
+    const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
@@ -73,13 +60,12 @@ function LegalRepresentative(props) {
     const handleDatePickerChange = (newValue) => {
         setFormValues({
             ...formValues,
-            ["acceptDate"]: newValue,
+            ["dob"]: newValue,
         });
         checkDataActiveButton();
     };
 
     const checkDataActiveButton = () => {
-        console.log('>> formValues ', formValues);
         if (formValues.name &&
             formValues.position &&
             formValues.phone &&
@@ -98,6 +84,10 @@ function LegalRepresentative(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
     };
+
+    useEffect(() => {
+        props.setProjectItemStep(formValues);
+    }, [formValues])
 
     return (
         <Box role="tabpanel" className="application"
@@ -130,7 +120,7 @@ function LegalRepresentative(props) {
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
                                 inputFormat="MM/dd/yyyy"
-                                value={formValues.acceptDate}
+                                value={formValues.dob}
                                 onChange={handleDatePickerChange}
                                 renderInput={(params) => <TextField {...params} />}
                             />
@@ -189,6 +179,7 @@ function LegalRepresentative(props) {
                             name="cmndBefore"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
+                            inputProps={{accept:"application/png,jpg,svg"}}
                             value={formValues.cmndBefore}
                             onChange={handleInputChange}
                             error={validator.cmndBefore}
@@ -204,12 +195,25 @@ function LegalRepresentative(props) {
                                 name="cmndAfter"
                                 type="file"
                                 placeholder="Tải lên (Tối đa 5mb)"
+                                inputProps={{accept:"application/png,jpg,svg"}}
                                 value={formValues.cmndAfter}
                                 onChange={handleInputChange}
                                 error={validator.cmndAfter}
                             />
                         </FormControl>
                     }
+                    <FormControl className="form-control mb-16">
+                        <FormLabel>Địa chỉ liên lạc (Không bắt buộc)</FormLabel>
+                        <OutlinedInput
+                            id="address"
+                            name="address"
+                            type="text"
+                            placeholder="Địa chỉ liên lạc"
+                            value={formValues.address}
+                            onChange={handleInputChange}
+                            error={validator.address}
+                        />
+                    </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Điện thoại</FormLabel>
                         <OutlinedInput

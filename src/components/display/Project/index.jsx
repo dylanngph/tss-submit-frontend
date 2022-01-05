@@ -1,22 +1,14 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, Typography, FormHelperText } from '@mui/material';
 import Select from '@mui/material/Select';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import DevelopmentPartner from 'components/custom/DevelopmentPartner';
-import uuid from 'uuid';
 
 function Project(props) {
     const { projectItem, children, value, index, ...other } = props;
-    const [personName, setPersonName] = useState([]);
 
     const handleChangeSelectSocial = (event) => {
-        const {
-            target: { value, name },
-        } = event;
-        setPersonName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        const { target: { value, name } } = event;
         const index = name.split("-").pop();
         let tpm_websitessocial = formValues.socialMedias;
         tpm_websitessocial[index].type = typeof value === 'string' ? value.split(',') : value;
@@ -24,7 +16,6 @@ function Project(props) {
             ...formValues,
             ["socialMedias"]: tpm_websitessocial,
         });
-        props.setProjectItemStep(2, formValues);
     };
 
     let socials = [
@@ -70,35 +61,10 @@ function Project(props) {
         },
     ]
 
-    // const defaultValues = {
-    //     projectName: "",
-    //     logo: "",
-    //     whitepaper: "",
-    //     devTeam: [
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //     ],
-    //     partners: [
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //     ],
-    //     description: "",
-    //     websites: [''],
-    //     socialMedias: [
-    //         {
-    //             type: '',
-    //             link: '',
-    //         }
-    //     ]
-    // };
-
     const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
 
     const checkDataActiveButton = () => {
-        props.setProjectItemStep(2, formValues);
         if (formValues.projectName &&
             formValues.logo &&
             formValues.whitepaper &&
@@ -130,13 +96,11 @@ function Project(props) {
                 ...formValues,
                 ["websites"]: tpm_websites,
             });
-            props.setProjectItemStep(2, formValues);
         } else {
             setFormValues({
                 ...formValues,
                 [name]: value,
             });
-            props.setProjectItemStep(2, formValues);
         }
         validate(e);
     };
@@ -150,7 +114,6 @@ function Project(props) {
             ...formValues,
             ["socialMedias"]: tpm_websitessocial,
         });
-        props.setProjectItemStep(2, formValues);
     };
 
     const handleInputBlur = (e) => {
@@ -218,6 +181,10 @@ function Project(props) {
             '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return !!pattern.test(str);
     }
+
+    useEffect(() => {
+        props.setProjectItemStep(formValues);
+    }, [formValues])
 
     return (
         <Box role="tabpanel" className="application"

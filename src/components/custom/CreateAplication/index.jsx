@@ -83,6 +83,7 @@ const CreateAplication = (props) => {
         display: "flex",
         padding: "12px 16px",
         alignItems: "center",
+        pointerEvents: 'none',
     }
 
     const appItemActive = {
@@ -94,6 +95,17 @@ const CreateAplication = (props) => {
         padding: "12px 16px",
         alignItems: "center",
     }
+
+    // const appItemDisable = {
+    //     background: "#EFF2F5",
+    //     width: "56px",
+    //     height: "56px",
+    //     display: "flex",
+    //     alignItems: "center",
+    //     justifyContent: "center",
+    //     borderRadius: "50%",
+    //     pointerEvents: 'none',
+    // }
 
     const iconAppItem = {
         background: "#EFF2F5",
