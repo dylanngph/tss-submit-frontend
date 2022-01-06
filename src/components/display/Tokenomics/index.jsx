@@ -65,7 +65,7 @@ function Tokenomics(props) {
 
     const handleAutocompleteChangeStandards = (e, newValue) => {
         let arrTmp = formValues;
-        arrTmp.standards = newValue
+        arrTmp.standards = newValue;
         setFormValues(arrTmp);
         checkDataActiveButton();
     };

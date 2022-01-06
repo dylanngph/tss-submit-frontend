@@ -9,6 +9,7 @@ import Tokenomics from '../../components/display/Tokenomics';
 import LegalRepresentative from '../../components/display/LegalRepresentative';
 import Information from 'components/custom/Information';
 import { projectData } from './config';
+import axios from 'axios';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -58,7 +59,6 @@ function Application(props) {
 
     const setProjectItemStep = (data) => {
         setProjectItem(data);
-        console.log('>> projectItem ', projectItem);
     }
 
     useEffect(() => {
@@ -93,7 +93,95 @@ function Application(props) {
     }
 
     const handlePostForm = () => {
-        console.log('>>> handlePostForm');
+        let projectForm = verifyObjectProject(projectItem);
+        console.log('>> projectForm: ', projectForm);
+        // console.log('>> projectItem: ', projectItem);
+
+        try {
+            setTimeout( async () => {
+                const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
+                console.log('>> response: ', response);
+            }, 1000);
+            
+        } catch (error) {
+            console.log('>> error: ', error);
+        }
+        
+    }
+
+    const verifyObjectProject = (data) => {
+        let tpmProject = data;
+        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper", "backIdImage", "frontIdImage"];
+        const KEY_ACCEPT_DATE = "acceptDate";
+
+        // convert all file to base64
+        ARR_LIST_KEY_FILE.map((key) => {
+            if (!tpmProject[key]) return;
+            convertFile(tpmProject[key])
+            .then(res => {
+                tpmProject[key] = res;
+            })
+            .catch(error => console.log(error));
+        });
+
+        // businessAreas
+        let tpmBusinessAreas = [];
+        tpmProject.businessAreas.map((item) => {
+            tpmBusinessAreas.push(item.area)
+        })
+        tpmProject.businessAreas = tpmBusinessAreas;
+
+        // companyCode, taxCode
+        tpmProject.companyCode = parseInt(tpmProject.companyCode);
+        tpmProject.taxCode = parseInt(tpmProject.taxCode);
+
+        // date to string
+        tpmProject[KEY_ACCEPT_DATE] = convertDateToString(tpmProject[KEY_ACCEPT_DATE]);
+
+        // communications, standards
+        let tpmCommunications = [];
+        tpmProject.communications.map((item) => {
+            tpmCommunications.push(item.name)
+        })
+        tpmProject.communications = tpmCommunications;
+        let tpmStandards = [];
+        tpmProject.standards.map((item) => {
+            tpmStandards.push(item.name)
+        })
+        tpmProject.standards = tpmStandards;
+
+        // process legalRepresentative
+        tpmProject.legalRepresentative = {
+            name: tpmProject.name,
+            dob: convertDateToString(tpmProject.dob),
+            position: tpmProject.position,
+            identity: {
+                type: tpmProject.idType,
+                id: tpmProject.idAuth
+            },
+            frontIdImage: "",
+            backIdImage: "",
+            address: tpmProject.address,
+            phone: tpmProject.phone,
+            email: tpmProject.email
+        }
+        return tpmProject;
+    }
+
+    const convertDateToString = (date) => {
+        return date.toISOString().slice(0, 10);
+    };
+
+    const convertFile = async (props) => {
+        const blobToBase64 = (blob) =>
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            })
+        const toBase64 = await blobToBase64(props).then((data) => data);
+        return toBase64?.toString().slice(toBase64?.toString().indexOf(",") + 1);
     }
     
     const handleChange = (event, newValue) => {

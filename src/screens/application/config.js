@@ -14,21 +14,21 @@ export const projectData = {
     projectName: "",
     logo: "",
     whitepaper: "",
-    devTeam: [
-        { id: uuid(), avatar: [], name: '', position: '' },
-        { id: uuid(), avatar: [], name: '', position: '' },
-        { id: uuid(), avatar: [], name: '', position: '' },
+    developmentTeam: [
+        { id: uuid(), image: [], name: '', position: '' },
+        { id: uuid(), image: [], name: '', position: '' },
+        { id: uuid(), image: [], name: '', position: '' },
     ],
-    partners: [
-        { id: uuid(), imgPartner: [], name: '', website: '' },
-        { id: uuid(), imgPartner: [], name: '', website: '' },
-        { id: uuid(), imgPartner: [], name: '', website: '' },
+    developmentPartner: [
+        { id: uuid(), image: [], name: '', website: '' },
+        { id: uuid(), image: [], name: '', website: '' },
+        { id: uuid(), image: [], name: '', website: '' },
     ],
     description: "",
     websites: [''],
-    socialMedias: [
+    socialWebs: [
         {
-            type: '',
+            name: '',
             link: '',
         }
     ],
@@ -40,9 +40,10 @@ export const projectData = {
     smartContractAddress: "",
 
     name: "",
+    dob: "",
     position: "",
-    cmndBefore: "",
-    cmndAfter: "",
+    frontIdImage: "",
+    backIdImage: "",
     address: "",
     phone: "",
     email: "",

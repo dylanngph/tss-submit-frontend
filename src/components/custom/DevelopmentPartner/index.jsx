@@ -111,7 +111,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
             <Grid sx={gridStyle} container spacing={2}>
                 <Grid item xs={1.5}>
                     <ImageUploading
-                        value={item.imgPartner}
+                        value={item.image}
                         onChange={onChangeImageUpload}
                         dataURLKey="data_url"
                     >
@@ -183,12 +183,12 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
         setOpen(false)
     };
 
-    const [partner, setPartner] = useState(defaultValues.partners);
+    const [partner, setPartner] = useState(defaultValues.developmentPartner);
 
     const handleAddPartner = () => {
         const nextItem = {
             id: uuid(),
-            imgPartner: [],
+            image: [],
             name: "",
             website: "",
         }
@@ -207,7 +207,7 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
 
     const handleImgPartnerUpload = (index, data) => {
         let arrNewPartner = partner;
-        arrNewPartner[index].imgPartner = data;
+        arrNewPartner[index].image = data;
         setPartnerForm(arrNewPartner);
     };
 
@@ -219,7 +219,7 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
 
     const setPartnerForm = (arrData) => {
         setPartner(arrData);
-        setFormValuesProject('partner', arrData);
+        setFormValuesProject('developmentPartner', arrData);
     };
 
     const addPartnerButton = (

@@ -10,11 +10,11 @@ function Project(props) {
     const handleChangeSelectSocial = (event) => {
         const { target: { value, name } } = event;
         const index = name.split("-").pop();
-        let tpm_websitessocial = formValues.socialMedias;
-        tpm_websitessocial[index].type = typeof value === 'string' ? value.split(',') : value;
+        let tpm_websitessocial = formValues.socialWebs;
+        tpm_websitessocial[index].name = value;
         setFormValues({
             ...formValues,
-            ["socialMedias"]: tpm_websitessocial,
+            ["socialWebs"]: tpm_websitessocial,
         });
     };
 
@@ -70,7 +70,7 @@ function Project(props) {
             formValues.whitepaper &&
             formValues.description &&
             formValues.websites.length &&
-            formValues.socialMedias.length
+            formValues.socialWebs.length
             ) {
                 props.setStateNextButton(true)
             }
@@ -97,10 +97,18 @@ function Project(props) {
                 ["websites"]: tpm_websites,
             });
         } else {
-            setFormValues({
-                ...formValues,
-                [name]: value,
-            });
+            const typeFile = ["logo", "whitepaper"];
+            if (typeFile.includes(name)) {
+                setFormValues({
+                    ...formValues,
+                    [name]: e.target.files[0],
+                });
+            } else {
+                setFormValues({
+                    ...formValues,
+                    [name]: value,
+                });
+            }
         }
         validate(e);
     };
@@ -108,11 +116,11 @@ function Project(props) {
     const handleInputChangeSocial = (e) => {
         const { name, value } = e.target;
         const index = name.split("-").pop();
-        let tpm_websitessocial = formValues.socialMedias;
+        let tpm_websitessocial = formValues.socialWebs;
         tpm_websitessocial[index].link = value;
         setFormValues({
             ...formValues,
-            ["socialMedias"]: tpm_websitessocial,
+            ["socialWebs"]: tpm_websitessocial,
         });
     };
 
@@ -154,7 +162,7 @@ function Project(props) {
     }
 
     const addSocial = () => {
-        const nextHiddenItem = formValues.socialMedias;
+        const nextHiddenItem = formValues.socialWebs;
         nextHiddenItem.push({
             type: '',
             link: '',
@@ -162,7 +170,7 @@ function Project(props) {
         if (nextHiddenItem) {
             setFormValues({
                 ...formValues,
-                ["socialMedias"]: nextHiddenItem,
+                ["socialWebs"]: nextHiddenItem,
             });
         }
     }
@@ -219,7 +227,7 @@ function Project(props) {
                             id="logo"
                             name="logo"
                             type="file"
-                            value={formValues.logo}
+                            // value={formValues.logo}
                             inputProps={{accept:".png,.svg,.jpeg"}}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
@@ -252,7 +260,7 @@ function Project(props) {
                             name="whitepaper"
                             type="file"
                             inputProps={{accept:".png,.svg,.jpeg"}}
-                            value={formValues.whitepaper}
+                            // value={formValues.whitepaper}
                             onChange={handleInputChange}
                             // onBlur={handleInputBlur}
                             error={validator.whitepaper}
@@ -302,11 +310,11 @@ function Project(props) {
                         
                     <Box key={index} className="form-control mb-16">
                         <Box>Mạng xã hội</Box>
-                        {formValues.socialMedias.map((item, index) => (
+                        {formValues.socialWebs.map((item, index) => (
                             <Box key={index} sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
                                 <Box sx={{ display: "flex", position: "relative" }} mb={2} className={`box-select-social ${validator[`websociallink-${index}`] ? "box-select-social-error-null" : ""}`}>
                                     <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
-                                        value={formValues.socialMedias[index].type}
+                                        value={formValues.socialWebs[index].name}
                                         name={`websocial-${index}`}
                                         onChange={handleChangeSelectSocial}
                                         input={<OutlinedInput label="Tag" />}
@@ -324,7 +332,7 @@ function Project(props) {
                                         id={`websociallink-${index}`}
                                         name={`websociallink-${index}`}
                                         type="text"
-                                        value={formValues.socialMedias[index].link}
+                                        value={formValues.socialWebs[index].link}
                                         onChange={handleInputChangeSocial}
                                     />
                                 </Box>

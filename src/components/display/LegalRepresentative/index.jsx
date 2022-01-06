@@ -28,10 +28,18 @@ function LegalRepresentative(props) {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormValues({
-            ...formValues,
-            [name]: value,
-        });
+        const typeFile = ["frontIdImage", "backIdImage"];
+        if (typeFile.includes(name)) {
+            setFormValues({
+                ...formValues,
+                [name]: e.target.files[0],
+            });
+        } else {
+            setFormValues({
+                ...formValues,
+                [name]: value,
+            });
+        }
         validate(e);
     };
 
@@ -72,8 +80,8 @@ function LegalRepresentative(props) {
             formValues.email &&
             formValues.idType &&
             formValues.idAuth &&
-            formValues.cmndBefore &&
-            formValues.cmndAfter 
+            formValues.frontIdImage &&
+            formValues.backIdImage 
             ) {
                 props.setStateNextButton(true)
             }
@@ -175,14 +183,13 @@ function LegalRepresentative(props) {
                         <FormLabel>Tải lên mặt trước</FormLabel>
                         <OutlinedInput
                             required
-                            id="cmndBefore"
-                            name="cmndBefore"
+                            id="frontIdImage"
+                            name="frontIdImage"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
-                            inputProps={{accept:"application/png,jpg,svg"}}
-                            value={formValues.cmndBefore}
+                            inputProps={{accept:".png,.svg,.jpeg"}}
                             onChange={handleInputChange}
-                            error={validator.cmndBefore}
+                            error={validator.frontIdImage}
                         />
                     </FormControl>
                     {
@@ -191,14 +198,13 @@ function LegalRepresentative(props) {
                             <FormLabel>Tải lên mặt sau</FormLabel>
                             <OutlinedInput
                                 required
-                                id="cmndAfter"
-                                name="cmndAfter"
+                                id="backIdImage"
+                                name="backIdImage"
                                 type="file"
                                 placeholder="Tải lên (Tối đa 5mb)"
-                                inputProps={{accept:"application/png,jpg,svg"}}
-                                value={formValues.cmndAfter}
+                                inputProps={{accept:".png,.svg,.jpeg"}}
                                 onChange={handleInputChange}
-                                error={validator.cmndAfter}
+                                error={validator.backIdImage}
                             />
                         </FormControl>
                     }
