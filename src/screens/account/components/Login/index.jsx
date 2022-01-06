@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, TextField, InputAdornment, IconButton } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import PropTypes from 'prop-types';
+import axios from "axios";
 
-function LoginAccount({handleLogin , error}) {
+function LoginAccount({setToken}) {
     const dispatch = useAppDispatch();
+    let history = useHistory();
 
     const [values, setValues] = useState({
         email: '',
         password: '',
         showPassword: false,
     })
+
     const [errorsState, setErrorsState] = useState(false);
 
     const handleChange = (prop) => (event) => {
@@ -21,8 +25,17 @@ function LoginAccount({handleLogin , error}) {
         setErrorsState(true);
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = async (event) => {
+        try {
+            event.preventDefault();
+            const res = await axios.post('http://localhost:5555/auth/sign-in', values);
+            if(res.data) {
+                setToken(res.data.data.accessToken);
+                history.push('/')
+            }
+        } catch (error) {
+            console.log('error===>', error);
+        }
     };
 
     const handleClickShowPassword = () => {
@@ -97,13 +110,13 @@ function LoginAccount({handleLogin , error}) {
                 </div>
                 {
                     (!values.password || !values.email) &&
-                    <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit" disabled>
+                    <Button variant="contained" className="button mb-16" type="submit" disabled>
                         Đăng nhập
                     </Button>
                 }
                 {
                     (values.password && values.email) &&
-                    <Button onClick={() => handleLogin(values)} variant="contained" className="button mb-16" type="submit">
+                    <Button variant="contained" className="button mb-16" type="submit">
                         Đăng nhập
                     </Button>
                 }
@@ -116,3 +129,7 @@ function LoginAccount({handleLogin , error}) {
 }
 
 export default LoginAccount;
+
+LoginAccount.propTypes = {
+    setToken: PropTypes.func.isRequired
+};

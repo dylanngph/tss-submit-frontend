@@ -16,7 +16,7 @@ import {ReactComponent as NftIcon} from 'assets/icons/nft.svg'
 import {ReactComponent as UserIcon} from 'assets/icons/user.svg'
 import {ReactComponent as LoginIcon} from 'assets/icons/login.svg'
 
-const Header = ({ auth, handleLogout, error, props }) => {
+const Header = ({ auth, handleLogout, props }) => {
     const drawerWidth = 244;
     const { window } = props;
     const container = window !== undefined ? () => window().document.body : undefined;

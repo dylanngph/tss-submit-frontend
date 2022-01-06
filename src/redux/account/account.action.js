@@ -38,6 +38,12 @@ export const postAccountRegisterFail = (payload, callback) => ({
   callback,
 });
 
+export const postAccountRegisterData = (payload, callback) => ({
+  type: constants.ACCOUNT_REGISTER_DATA,
+  payload,
+  callback,
+});
+
 /** ForgotPass */
 
 export const postAccountForgotPass = (payload, callback) => ({

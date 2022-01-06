@@ -4,7 +4,7 @@ import { Box, Button, FormControl, FormLabel, OutlinedInput, Divider } from '@mu
 function Profile(props) {
     const { children, value, index, ...other } = props;
     const defaultValues = {
-        user: "",
+        email: "",
     };
 
     const [formValues, setFormValues] = useState(defaultValues)
@@ -45,11 +45,11 @@ function Profile(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Địa chỉ email của bạn</FormLabel>
                     <OutlinedInput
-                        id="user"
-                        name="user"
+                        id="email"
+                        name="email"
                         type="email"
                         placeholder="Địa chỉ email của bạn"
-                        value={formValues.user}
+                        value={formValues.email}
                         onChange={handleInputChange}
                     />
                 </FormControl>

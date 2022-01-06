@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { postAccountRegisterData } from 'redux/account/account.action'
+import { Link, useHistory } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 
 function RegisterAccount(props) {
+    let history = useHistory();
     const defaultValues = {
-        user: "",
+        email: "",
+        name: "",
+        phone: "",
+        password: "",
+        retypePassword: "",
     };
 
+    const dispatch = useAppDispatch();
     const [formValues, setFormValues] = useState(defaultValues);
     const [errorsState, setErrorsState] = useState(false);
     const [stateBtnContinue, setStateBtnContinue] = useState(false);
@@ -53,7 +61,7 @@ function RegisterAccount(props) {
     };
 
     const handleStateButtonContinue = (e) => {
-        if (formValues.user && formValues.name && formValues.tel && formValues.password && formValues.retypePassword) {
+        if (formValues.email && formValues.name && formValues.phone && formValues.password && formValues.retypePassword) {
             const vals = Object.keys(errorsState).map(key => errorsState[key]);
             const isValid = (currentValue) => currentValue === false;
             if (vals.every(isValid)) {
@@ -64,9 +72,9 @@ function RegisterAccount(props) {
         setStateBtnContinue(false);
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(formValues);
+    const handleSubmit = () => {
+        dispatch(postAccountRegisterData(formValues));
+        history.push("/security-question");
     };
 
     return (
@@ -76,7 +84,7 @@ function RegisterAccount(props) {
             alignItems: "center",
             justifyContent: "center",
         }}>
-            <form className="login-form" onSubmit={handleSubmit}>
+            <form className="login-form">
                 <div className="wrapper-icon-title mb-36">
                     <Link className="icon-call-to-action" to='/login' underline="none">
                         <img props src="/assets/icons/back.svg" alt='arrow' />
@@ -86,11 +94,11 @@ function RegisterAccount(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Địa chỉ email của bạn</FormLabel>
                     <OutlinedInput
-                        id="user"
-                        name="user"
+                        id="email"
+                        name="email"
                         type="email"
                         placeholder="Địa chỉ email của bạn"
-                        value={formValues.user}
+                        value={formValues.email}
                         onChange={handleInputChange}
                         onBlur={handleInputBlurEmail}
                         error={errorsState.user}
@@ -112,14 +120,14 @@ function RegisterAccount(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Số điện thoại</FormLabel>
                     <OutlinedInput
-                        id="tel"
-                        name="tel"
+                        id="phone"
+                        name="phone"
                         type="tel"
                         placeholder="Số điện thoại"
-                        value={formValues.tel}
+                        value={formValues.phone}
                         onChange={handleInputChange}
                         onBlur={handleInputBlur}
-                        error={errorsState.tel}
+                        error={errorsState.phone}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
@@ -148,17 +156,14 @@ function RegisterAccount(props) {
                         error={errorsState.retypePassword}
                     />
                 </FormControl>
-                {/* <Button variant="contained" className="button mb-16" type="submit">
-                    Tiếp tục
-                </Button> */}
                 <p className="text-center">
                     {
                         stateBtnContinue &&
-                        <Link to="/security-question" className="button mb-16 buttom-example" underline="none">Tiếp tục</Link>
+                        <Button onClick={handleSubmit} className="button mb-16 buttom-example" underline="none">Tiếp tục</Button>
                     }
                     {
                         !stateBtnContinue &&
-                        <Link to="/security-question" className="button mb-16 buttom-example button-disable" underline="none">Tiếp tục</Link>
+                        <Button className="button mb-16 buttom-example button-disable" underline="none">Tiếp tục</Button>
                     }
 
                 </p>

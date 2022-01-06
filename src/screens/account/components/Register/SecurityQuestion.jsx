@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, FormHelperText } from '@mui/material';
-import { Link } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { Link, useHistory } from 'react-router-dom'
+import axios from "axios";
 
 function SecurityQuestion(props) {
+    const registerStore = useAppSelector(state => state?.rootReducer?.accountReducers?.accountStore?.registerData ?? 'default');
+    let history = useHistory();
+
     const defaultValues = {
         question1: "",
         answer1: "",
@@ -12,27 +17,27 @@ function SecurityQuestion(props) {
 
     let questions = [
         {
-            value: 1,
+            value: '1',
             question: "Thú nuôi của bạn tên là gì?",
         },
         {
-            value: 2,
+            value: '2',
             question: "Bố và mẹ bạn gặp nhau lần đầu tiên ở đâu?",
         },
         {
-            value: 3,
+            value: '3',
             question: "Tên người bạn thân thời bé của bạn?",
         },
         {
-            value: 4,
+            value: '4',
             question: "Công việc mơ ước của bạn là gì?",
         },
         {
-            value: 5,
+            value: '5',
             question: "Biệt danh của bạn thời đi học là gì?",
         },
         {
-            value: 6,
+            value: '6',
             question: "Món ăn ưa thích của bạn là gì?",
         },
     ]
@@ -152,9 +157,29 @@ function SecurityQuestion(props) {
         }
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(formValues);
+    const handleSubmit = async (event) => {
+        try {
+            event.preventDefault();
+            let registerData = registerStore;
+
+            registerData.securityQuestions = [
+                {
+                    'id': formValues.question1,
+                    'answer': formValues.answer1
+                },
+                {
+                    'id': formValues.question2,
+                    'answer': formValues.answer2
+                },
+            ]
+
+            const res = await axios.post('http://localhost:5555/auth/sign-up', registerData);
+            if(res.data) {
+                history.push("/register-success");
+            }
+        } catch (error) {
+            console.log('error===>', error);
+        }
     };
 
     return (
@@ -226,7 +251,7 @@ function SecurityQuestion(props) {
                     }
                 </FormControl>
                 <FormControl className="form-control mb-16">
-                    <FormLabel>Câu trả lời 1</FormLabel>
+                    <FormLabel>Câu trả lời 2</FormLabel>
                     <OutlinedInput
                         id="answer2"
                         name="answer2"

@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from "react";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import ProjectManage from "screens/manage/components/Project";
 import Header from "./components/display/Header";
 import NotFound from "./components/display/NotFound";
@@ -18,15 +18,11 @@ import User from "./screens/user";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
-import { adminData } from 'screens/user/config';
-import Cookies from 'js-cookie'
-
-interface LoginProps {
-  email: string,
-  password: string
-}
+import Cookies from 'js-cookie';
+import useToken from 'components/hook/useToken';
 
 function App() {
+  let history = useHistory();
   const theme = createTheme();
   const THEME = createTheme({
     typography: {
@@ -60,56 +56,24 @@ function App() {
     },
   });
 
-  const [auth, setAuth] = useState(false)
-  const [error, setError] = useState(false)
   const [user, setUser] = useState({ email: "" })
-
-  const readCookies = () => {
-    const userCookies = Cookies.get("user")
-    if (userCookies) {
-      setAuth(true)
-    }
-  }
-
-  useEffect(() => {
-    readCookies()
-  }, [])
-
-  const handleLogin = (values: LoginProps) => {
-    for (let i = 0; i < adminData.length; i++) {
-      if (values.email === adminData[i].email) {
-        if (values.password === adminData[i].password) {
-          setUser({
-            email: values.email
-          })
-          setError(false)
-          setAuth(true)
-          Cookies.set("email", values.email)
-          Cookies.set("user", "loginTrue")
-          return
-        }
-      }
-    }
-    setError(true)
-    return auth
-  }
+  const {token, setToken} = useToken();
 
   const handleLogout = () => {
-    setUser({ email: "" })
-    setAuth(false)
-    Cookies.remove("user")
-    return <Redirect to='/'  />
+    setUser({ email: "" });
+    setToken(null);
+    history.push("/login");
   }
 
   return (
     <ThemeProvider theme={THEME}>
       <Grid container direction="row">
-        <Header auth={auth} handleLogout={handleLogout} error={error} props="true" />
+        <Header auth={token} handleLogout={handleLogout} props="true" />
         <Box sx={{ flexGrow: 1, background: "#fcfcfd", width: { sm: `calc(100% - 244px)` }, minHeight: "calc(100vh - 64px)", height: "auto" }}>
           <Toolbar />
           <Switch>
             <Route path="/" component={HomeScreen} exact />
-            {auth ?
+            {token ?
               <>
                 <Route path="/manage" component={ProjectManage} />
                 <Route path="/stamp-nft" component={NFTScreen} />
@@ -119,7 +83,7 @@ function App() {
               :
               <>
                 
-                <Route exact path="/login" render={(props) => <LoginScreen handleLogin={handleLogin} error={error} /> } />
+                <Route exact path="/login" render={(props) => <LoginScreen setToken={setToken} /> } />
                 <Route path="/register" component={RegisterScreen} />
                 <Route path="/register-success" component={RegisterSuccess} />
                 <Route path="/security-question" component={SecurityQuestion} />
@@ -129,7 +93,6 @@ function App() {
             }
           </Switch>
         </Box>
-
       </Grid>
     </ThemeProvider>
   );

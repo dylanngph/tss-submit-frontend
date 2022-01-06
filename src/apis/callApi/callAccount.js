@@ -6,7 +6,7 @@ const accountApi = {
   },
 
   postRegisterAccount(args) {
-    return callApiAccount("post", "/account/register", args);
+    return callApiAccount("post", "/auth/sign-up", args);
   },
 
   postForgotPassAccount(args){

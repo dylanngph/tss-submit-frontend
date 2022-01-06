@@ -10,6 +10,12 @@ const initialState = {
 
 function accountStore(state = initialState, action) {
   switch (action.type) {
+    case constants.ACCOUNT_REGISTER_DATA:
+      return {
+        ...state,
+        isLoadingRegister: false,
+        registerData: action?.payload,
+      };
     case constants.ACCOUNT_REGISTER:
       return {
         ...state,
