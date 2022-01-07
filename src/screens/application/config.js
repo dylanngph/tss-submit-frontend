@@ -39,9 +39,9 @@ export const projectData = {
     standards: [],
     smartContractAddress: "",
     tokenAllocations: [
-        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
-        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
-        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
     ],
 
     name: "",

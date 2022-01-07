@@ -96,11 +96,11 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell component="th" scope="row">
                 <FormControl className="form-control">
                     <OutlinedInput
-                        id="category"
-                        name="category"
+                        id="allocationName"
+                        name="allocationName"
                         type="text"
                         placeholder="Tên hạng mục"
-                        value={item.category}
+                        value={item.allocationName}
                         onChange={handleInputChange}
                     />
                 </FormControl>
@@ -108,12 +108,12 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <OutlinedInput
-                        id="ratio"
-                        name="ratio"
+                        id="rate"
+                        name="rate"
                         type="text"
                         placeholder="100%"
                         inputProps={{ maxLength: 3 }}
-                        value={item.ratio}
+                        value={item.rate}
                         onChange={handleInputChange}
                     />
                 </FormControl>
@@ -133,11 +133,11 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <OutlinedInput
-                        id="quantily"
-                        name="quantily"
+                        id="amount"
+                        name="amount"
                         type="text"
                         placeholder="56.160.000"
-                        value={item.quantily}
+                        value={item.amount}
                         onChange={handleInputChange}
                     />
                 </FormControl>
@@ -176,10 +176,10 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject }) => {
     const handleAddCate = () => {
         const nextHiddenItem = {
             id: uuid(),
-            category: "",
-            ratio: null,
+            allocationName: "",
+            rate: null,
             price: null,
-            quantily: null,
+            amount: null,
             vesting: "",
         };
         if (nextHiddenItem) {
@@ -192,9 +192,6 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject }) => {
     };
 
     const handleInputCateChange = (index, name, data) => {
-        console.log(">>> handleInputCateChange");
-        console.log('>> name', name);
-        console.log('>> data', data);
         let newItem = items;
         newItem[index][name] = data;
         setTokenAllocations(newItem);

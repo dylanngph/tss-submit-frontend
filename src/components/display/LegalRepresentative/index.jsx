@@ -127,7 +127,7 @@ function LegalRepresentative(props) {
                         <FormLabel>Ngày sinh</FormLabel>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DesktopDatePicker
-                                inputFormat="MM/dd/yyyy"
+                                inputFormat="dd/MM/yyyy"
                                 value={formValues.dob}
                                 onChange={handleDatePickerChange}
                                 renderInput={(params) => <TextField {...params} />}

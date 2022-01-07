@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useAppDispatch } from 'app/hooks';
 import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import { Box, Typography, Tabs, Tab, Stepper, Step, StepLabel, Button } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Incorporation from '../../components/display/Incorporation';
 import Project from '../../components/display/Project';
 import Tokenomics from '../../components/display/Tokenomics';
@@ -51,12 +52,19 @@ const STEPS = [
 
 function Application(props) {
     const [value, setValue] = React.useState(0);
+    const [loadingButton, setLoadingButton] = React.useState(false);
     const [stateNextBtn, setStateNextButton] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [showPreview, setShowPreview]  = React.useState(false);
     const dispatch = useAppDispatch();
     const {token, setToken} = useToken();
-
+    const [listBase64, setListBase64] = React.useState({
+        businessLicense: "",
+        logo: "",
+        whitepaper: "",
+        backIdImage: "",
+        frontIdImage: "",
+    });
     const [projectItem, setProjectItem] = useState(projectData);
 
     const setProjectItemStep = (data) => {
@@ -82,6 +90,22 @@ function Application(props) {
             setValue((prevActiveStep) => prevActiveStep + 1);
             setStateNextButton(false);
         }
+
+        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper", "backIdImage", "frontIdImage"];
+        // convert all file to base64
+        ARR_LIST_KEY_FILE.map((key) => {
+            if (!projectItem[key] || listBase64[key]) return;
+            let file = projectItem[key];
+            convertFile(file)
+            .then(res => {
+                setListBase64({
+                    ...listBase64,
+                    [key]: res
+                });
+            })
+            .catch(error => console.log(error));
+        });
+        
     };
 
     const handleBack = () => {
@@ -96,21 +120,17 @@ function Application(props) {
 
     const handlePostForm = () => {
         let projectForm = verifyObjectProject(projectItem);
-        console.log('>> projectForm: ', projectForm);
-        // console.log('>> projectItem: ', projectItem);
-
+        setLoadingButton(true);
         try {
             setTimeout( async () => {
                 // const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
-                console.log('token==>', token);
                 const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
-               
+                // console.log('>> response ', response);
+                setLoadingButton(false);
             }, 1000);
-            
         } catch (error) {
-            console.log('>> error: ', error);
+            setLoadingButton(false);
         }
-        
     }
 
     const verifyObjectProject = (data) => {
@@ -120,12 +140,7 @@ function Application(props) {
 
         // convert all file to base64
         ARR_LIST_KEY_FILE.map((key) => {
-            if (!tpmProject[key]) return;
-            convertFile(tpmProject[key])
-            .then(res => {
-                tpmProject[key] = res;
-            })
-            .catch(error => console.log(error));
+            tpmProject[key] = listBase64[key];
         });
 
         // businessAreas
@@ -154,6 +169,36 @@ function Application(props) {
         })
         tpmProject.standards = tpmStandards;
 
+        // tokenAllocations
+        let listTokenAllocations = [];
+        tpmProject.tokenAllocations.map((item) => {
+            if (item.allocationName && item.price && item.amount && item.rate && item.vesting) {
+                item.rate = parseInt(item.rate / 100);
+                item.price = parseInt(item.price);
+                item.amount = parseInt(item.amount);
+                listTokenAllocations.push(item);
+            }
+        });
+        tpmProject.tokenAllocations = listTokenAllocations;
+
+        // developmentTeam, developmentPartner
+        let listDevelopmentTeam = [];
+        tpmProject.developmentTeam.map((item) => {
+            if (item.image[0] && item.name && item.position) {
+                item.image = item.image[0].data_url;
+                listDevelopmentTeam.push(item);
+            }
+        })
+        tpmProject.developmentTeam = listDevelopmentTeam;
+        let listDevelopmentPartner = [];
+        tpmProject.developmentPartner.map((item) => {
+            if (item.image[0] && item.name && item.website) {
+                item.image = item.image[0].data_url;
+                listDevelopmentPartner.push(item);
+            }
+        })
+        tpmProject.developmentPartner = listDevelopmentPartner;
+
         // process legalRepresentative
         tpmProject.legalRepresentative = {
             name: tpmProject.name,
@@ -163,8 +208,8 @@ function Application(props) {
                 type: tpmProject.idType,
                 id: tpmProject.idAuth
             },
-            frontIdImage: "",
-            backIdImage: "",
+            frontIdImage: listBase64.frontIdImage,
+            backIdImage: listBase64.backIdImage,
             address: tpmProject.address,
             phone: tpmProject.phone,
             email: tpmProject.email
@@ -298,9 +343,18 @@ function Application(props) {
                             :
                             null}
                         <Box sx={{ width: '212px' }}>
-                            <Button onClick={handlePostForm} variant="contained" className="button" type="submit">
-                                Gửi
-                            </Button>
+                            {
+                                !loadingButton ?
+                                <Button onClick={handlePostForm} variant="contained" className="button" type="submit">
+                                    Gửi
+                                </Button>
+                                :
+                                <LoadingButton loading variant="outlined" sx={{width: '100%', height: '43px', backgroundColor: '#446DFF'}}>
+                                    Submit
+                                </LoadingButton>
+                            }
+                            
+                            
                         </Box>
                     </Box>
                 </>
