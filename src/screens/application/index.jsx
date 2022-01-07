@@ -118,16 +118,13 @@ function Application(props) {
         setShowPreview(false);
     }
 
-    const handlePostForm = () => {
+    const handlePostForm = async () => {
         let projectForm = verifyObjectProject(projectItem);
         setLoadingButton(true);
         try {
-            setTimeout( async () => {
-                // const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
-                const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
-                // console.log('>> response ', response);
-                setLoadingButton(false);
-            }, 1000);
+            const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
+            console.log('>> response ', response);
+            setLoadingButton(false);
         } catch (error) {
             setLoadingButton(false);
         }
@@ -216,8 +213,9 @@ function Application(props) {
         }
         return tpmProject;
     }
-
+    
     const convertDateToString = (date) => {
+        if (!date) return;
         return date.toISOString().slice(0, 10);
     };
 

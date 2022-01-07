@@ -78,7 +78,7 @@ const Information = (props) => {
         return (
             <>
                 <Typography sx={labelInforItem}>{item.title}</Typography>
-                <Box>
+                <Box sx={{maxWidth: '50%', overflow: 'hidden'}}>
                     {/* <OutlinedInput sx={valueInforItem}
                         id="incorporationName"
                         name="incorporationName"
