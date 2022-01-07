@@ -124,7 +124,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
             <Grid sx={gridStyle} container spacing={2}>
                 <Grid item xs={1.5}>
                     <ImageUploading
-                        value={item.avatar}
+                        value={item.image}
                         onChange={onChangeImageUpload}
                         dataURLKey="data_url"
                     >
@@ -200,57 +200,57 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
         setOpen(false)
     };
 
-    const [devTeam, setDevTeam] = useState(defaultValues.devTeam);
+    const [developmentTeam, setDevelopmentTeam] = useState(defaultValues.developmentTeam);
     const [validator, setValidator] = useState({});
     const [validatorTeam, setValidatorTeam] = useState(false);
 
     const handleAddMember = () => {
         const nextItem = {
             id: uuid(),
-            avatar: [],
+            image: [],
             name: "",
             postion: "",
         }
         if (nextItem) {
-            let arrNewTeam = devTeam;
+            let arrNewTeam = developmentTeam;
             arrNewTeam.push(nextItem);
-            setDevTeamForm(arrNewTeam);
+            setDevelopmentTeamForm(arrNewTeam);
         }
     };
 
     const handleImgTeamUpload = (index, data) => {
-        let arrNewTeam = devTeam;
-        arrNewTeam[index].avatar = data;
-        setDevTeamForm(arrNewTeam);
+        let arrNewTeam = developmentTeam;
+        arrNewTeam[index].image = data;
+        setDevelopmentTeamForm(arrNewTeam);
     };
 
     const handleInputTeamChange = (index, name, data) => {
-        let arrNewTeam = devTeam;
+        let arrNewTeam = developmentTeam;
         arrNewTeam[index][name] = data;
-        setDevTeamForm(arrNewTeam);
+        setDevelopmentTeamForm(arrNewTeam);
     };
 
     const handleInputTeamBlur = (index, name) => {
-        const memberItem = devTeam[index][name];
+        const memberItem = developmentTeam[index][name];
         setValidator({
             ...validator,
-            [`${devTeam[index].id}-${name}`]: !memberItem ? true : false,
+            [`${developmentTeam[index].id}-${name}`]: !memberItem ? true : false,
         })
     };
 
     const handleRemoveMember = (id) => {
-        let arrNewTeam = devTeam;
+        let arrNewTeam = developmentTeam;
         arrNewTeam = arrNewTeam.filter((item) => item.id !== id);
-        setDevTeamForm(arrNewTeam);
+        setDevelopmentTeamForm(arrNewTeam);
         if (!arrNewTeam.length) setValidatorTeam(false);
     };
 
-    const setDevTeamForm = (arrData) => {
-        setDevTeam(arrData);
-        setFormValuesProject('devTeam', arrData);
-        if (!devTeam.length) setValidatorTeam(false);
-        const validatorDevTeam = devTeam.filter((member) => {
-            return member.avatar.length && member.name && member.position;
+    const setDevelopmentTeamForm = (arrData) => {
+        setDevelopmentTeam(arrData);
+        setFormValuesProject('developmentTeam', arrData);
+        if (!developmentTeam.length) setValidatorTeam(false);
+        const validatorDevTeam = developmentTeam.filter((member) => {
+            return member.image.length && member.name && member.position;
         });
         if (validatorDevTeam.length) setValidatorTeam(true);
         else setValidatorTeam(false);
@@ -282,7 +282,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
-                            {devTeam.map((item, index) => (
+                            {developmentTeam.map((item, index) => (
                                 <Collapse key={index}>
                                     {renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember })}
                                 </Collapse>

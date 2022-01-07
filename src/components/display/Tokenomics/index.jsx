@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, FormControl, FormLabel, OutlinedInput, TextField, Autocomplete, Checkbox, FormHelperText } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import TokenAllocationRate from 'components/custom/TokenAllocationRate'
 
 function Tokenomics(props) {
-    const { children, value, index, ...other } = props;
+    const { projectItem, children, value, index, ...other } = props;
     const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
@@ -39,15 +39,8 @@ function Tokenomics(props) {
         },
     ]
 
-    const defaultValues = {
-        tokenName: "",
-        symbol: "",
-        communications: [],
-        standards: [],
-        smartContractAddress: "",
-    };
 
-    const [formValues, setFormValues] = useState(defaultValues);
+    const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
 
     const handleInputChange = (e) => {
@@ -65,14 +58,14 @@ function Tokenomics(props) {
 
     const handleAutocompleteChangeCommunications = (e, newValue) => {
         let arrTmp = formValues;
-        arrTmp.communications = newValue
+        arrTmp.communications = newValue;
         setFormValues(arrTmp);
         checkDataActiveButton();
     };
 
     const handleAutocompleteChangeStandards = (e, newValue) => {
         let arrTmp = formValues;
-        arrTmp.standards = newValue
+        arrTmp.standards = newValue;
         setFormValues(arrTmp);
         checkDataActiveButton();
     };
@@ -99,6 +92,18 @@ function Tokenomics(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
     };
+
+    const setFormValuesProject = (name, value) => {
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+        checkDataActiveButton();
+    };
+
+    useEffect(() => {
+        props.setProjectItemStep(formValues);
+    }, [formValues])
 
     return (
         <Box role="tabpanel" className="application"
@@ -139,7 +144,7 @@ function Tokenomics(props) {
                             name="symbol"
                             type="text"
                             placeholder="BIT, JDT..."
-                            inputProps={{ maxLength: 10 }}
+                            inputProps={{ maxLength: 3 }}
                             value={formValues.symbol}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
@@ -160,6 +165,7 @@ function Tokenomics(props) {
                             multiple
                             id="communication"
                             options={communications}
+                            defaultValue={formValues.communications}
                             disableCloseOnSelect
                             getOptionLabel={(option) => option.name}
                             onChange={handleAutocompleteChangeCommunications}
@@ -192,6 +198,7 @@ function Tokenomics(props) {
                             id="standard"
                             name="standard"
                             options={standards}
+                            defaultValue={formValues.standards}
                             disableCloseOnSelect
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -226,7 +233,7 @@ function Tokenomics(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Phân bổ token</FormLabel>
-                        <TokenAllocationRate />
+                        <TokenAllocationRate defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
                 </form>
             )}

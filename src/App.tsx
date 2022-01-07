@@ -18,7 +18,6 @@ import User from "./screens/user";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
-import Cookies from 'js-cookie';
 import useToken from 'components/hook/useToken';
 
 function App() {

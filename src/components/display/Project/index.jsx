@@ -1,30 +1,21 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, Typography, FormHelperText } from '@mui/material';
 import Select from '@mui/material/Select';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import DevelopmentPartner from 'components/custom/DevelopmentPartner';
-import uuid from 'uuid';
 
 function Project(props) {
     const { projectItem, children, value, index, ...other } = props;
-    const [personName, setPersonName] = useState([]);
 
     const handleChangeSelectSocial = (event) => {
-        const {
-            target: { value, name },
-        } = event;
-        setPersonName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
+        const { target: { value, name } } = event;
         const index = name.split("-").pop();
-        let tpm_websitessocial = formValues.socialMedias;
-        tpm_websitessocial[index].type = typeof value === 'string' ? value.split(',') : value;
+        let tpm_websitessocial = formValues.socialWebs;
+        tpm_websitessocial[index].name = value;
         setFormValues({
             ...formValues,
-            ["socialMedias"]: tpm_websitessocial,
+            ["socialWebs"]: tpm_websitessocial,
         });
-        props.setProjectItemStep(2, formValues);
     };
 
     let socials = [
@@ -70,41 +61,16 @@ function Project(props) {
         },
     ]
 
-    // const defaultValues = {
-    //     projectName: "",
-    //     logo: "",
-    //     whitepaper: "",
-    //     devTeam: [
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //         { id: uuid(), avatar: [], name: '', position: '' },
-    //     ],
-    //     partners: [
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //         { id: uuid(), imgPartner: [], name: '', website: '' },
-    //     ],
-    //     description: "",
-    //     websites: [''],
-    //     socialMedias: [
-    //         {
-    //             type: '',
-    //             link: '',
-    //         }
-    //     ]
-    // };
-
     const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
 
     const checkDataActiveButton = () => {
-        props.setProjectItemStep(2, formValues);
         if (formValues.projectName &&
             formValues.logo &&
             formValues.whitepaper &&
             formValues.description &&
             formValues.websites.length &&
-            formValues.socialMedias.length
+            formValues.socialWebs.length
             ) {
                 props.setStateNextButton(true)
             }
@@ -130,13 +96,19 @@ function Project(props) {
                 ...formValues,
                 ["websites"]: tpm_websites,
             });
-            props.setProjectItemStep(2, formValues);
         } else {
-            setFormValues({
-                ...formValues,
-                [name]: value,
-            });
-            props.setProjectItemStep(2, formValues);
+            const typeFile = ["logo", "whitepaper"];
+            if (typeFile.includes(name)) {
+                setFormValues({
+                    ...formValues,
+                    [name]: e.target.files[0],
+                });
+            } else {
+                setFormValues({
+                    ...formValues,
+                    [name]: value,
+                });
+            }
         }
         validate(e);
     };
@@ -144,13 +116,12 @@ function Project(props) {
     const handleInputChangeSocial = (e) => {
         const { name, value } = e.target;
         const index = name.split("-").pop();
-        let tpm_websitessocial = formValues.socialMedias;
+        let tpm_websitessocial = formValues.socialWebs;
         tpm_websitessocial[index].link = value;
         setFormValues({
             ...formValues,
-            ["socialMedias"]: tpm_websitessocial,
+            ["socialWebs"]: tpm_websitessocial,
         });
-        props.setProjectItemStep(2, formValues);
     };
 
     const handleInputBlur = (e) => {
@@ -191,7 +162,7 @@ function Project(props) {
     }
 
     const addSocial = () => {
-        const nextHiddenItem = formValues.socialMedias;
+        const nextHiddenItem = formValues.socialWebs;
         nextHiddenItem.push({
             type: '',
             link: '',
@@ -199,7 +170,7 @@ function Project(props) {
         if (nextHiddenItem) {
             setFormValues({
                 ...formValues,
-                ["socialMedias"]: nextHiddenItem,
+                ["socialWebs"]: nextHiddenItem,
             });
         }
     }
@@ -218,6 +189,10 @@ function Project(props) {
             '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return !!pattern.test(str);
     }
+
+    useEffect(() => {
+        props.setProjectItemStep(formValues);
+    }, [formValues])
 
     return (
         <Box role="tabpanel" className="application"
@@ -252,7 +227,7 @@ function Project(props) {
                             id="logo"
                             name="logo"
                             type="file"
-                            value={formValues.logo}
+                            // value={formValues.logo}
                             inputProps={{accept:".png,.svg,.jpeg"}}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
@@ -285,7 +260,7 @@ function Project(props) {
                             name="whitepaper"
                             type="file"
                             inputProps={{accept:".png,.svg,.jpeg"}}
-                            value={formValues.whitepaper}
+                            // value={formValues.whitepaper}
                             onChange={handleInputChange}
                             // onBlur={handleInputBlur}
                             error={validator.whitepaper}
@@ -335,11 +310,11 @@ function Project(props) {
                         
                     <Box key={index} className="form-control mb-16">
                         <Box>Mạng xã hội</Box>
-                        {formValues.socialMedias.map((item, index) => (
+                        {formValues.socialWebs.map((item, index) => (
                             <Box key={index} sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
                                 <Box sx={{ display: "flex", position: "relative" }} mb={2} className={`box-select-social ${validator[`websociallink-${index}`] ? "box-select-social-error-null" : ""}`}>
                                     <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
-                                        value={formValues.socialMedias[index].type}
+                                        value={formValues.socialWebs[index].name}
                                         name={`websocial-${index}`}
                                         onChange={handleChangeSelectSocial}
                                         input={<OutlinedInput label="Tag" />}
@@ -357,7 +332,7 @@ function Project(props) {
                                         id={`websociallink-${index}`}
                                         name={`websociallink-${index}`}
                                         type="text"
-                                        value={formValues.socialMedias[index].link}
+                                        value={formValues.socialWebs[index].link}
                                         onChange={handleInputChangeSocial}
                                     />
                                 </Box>

@@ -7,34 +7,32 @@ import Incorporation from '../../components/display/Incorporation';
 import Project from '../../components/display/Project';
 import Tokenomics from '../../components/display/Tokenomics';
 import LegalRepresentative from '../../components/display/LegalRepresentative';
-import uuid from 'uuid';
+import Information from 'components/custom/Information';
+import { projectData } from './config';
+import axios from 'axios';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-  
     return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
-        {value === index && (
-          <Box>
-            {children}
-          </Box>
-        )}
-      </div>
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box>{children}</Box>
+            )}
+        </div>
     );
-  }
+}
   
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
 };
-  
 
 function a11yProps(index) {
     return {
@@ -43,56 +41,24 @@ function a11yProps(index) {
     };
 }
 
+const STEPS = [
+    'Thông tin tổ chức',
+    'Thông tin dự án',
+    'Thông tin Tokenomic',
+    'Đại diện pháp luật'
+]
+
 function Application(props) {
     const [value, setValue] = React.useState(0);
     const [stateNextBtn, setStateNextButton] = React.useState(false);
-    const [activeStep, setActiveStep] = React.useState(0);   
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [showPreview, setShowPreview]  = React.useState(false);
     const dispatch = useAppDispatch();
 
-    const [projectItem, setProjectItem] = useState({
-        step1: {
-            incorporationName: "",
-            incorporationAddress: "",
-            transactionName: "",
-            transactionAddress: "",
-            businessAreas: [],
-            companyCode: "",
-            taxCode: "",
-            acceptDate: null,
-            businessLicense: null,
-        },
-        step2: {
-            projectName: "",
-            logo: "",
-            whitepaper: "",
-            devTeam: [
-                { id: uuid(), avatar: [], name: '', position: '' },
-                { id: uuid(), avatar: [], name: '', position: '' },
-                { id: uuid(), avatar: [], name: '', position: '' },
-            ],
-            partners: [
-                { id: uuid(), imgPartner: [], name: '', website: '' },
-                { id: uuid(), imgPartner: [], name: '', website: '' },
-                { id: uuid(), imgPartner: [], name: '', website: '' },
-            ],
-            description: "",
-            websites: [''],
-            socialMedias: [
-                {
-                    type: '',
-                    link: '',
-                }
-            ]
-        }
-        
-    });
+    const [projectItem, setProjectItem] = useState(projectData);
 
-    const setProjectItemStep = (step, data) => {
-        let tpmData = projectItem;
-        if (step === 1) {
-            tpmData.step1 = data;
-            setProjectItem(tpmData);
-        }
+    const setProjectItemStep = (data) => {
+        setProjectItem(data);
     }
 
     useEffect(() => {
@@ -108,8 +74,12 @@ function Application(props) {
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setValue((prevActiveStep) => prevActiveStep + 1);
-        setStateNextButton(false);
+        if (activeStep >= STEPS.length - 1) {
+            setShowPreview(true);
+        } else {
+            setValue((prevActiveStep) => prevActiveStep + 1);
+            setStateNextButton(false);
+        }
     };
 
     const handleBack = () => {
@@ -117,49 +87,104 @@ function Application(props) {
         setValue((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const steps = [
-        'Thông tin tổ chức',
-        'Thông tin dự án',
-        'Thông tin Tokenomic',
-        'Đại diện pháp luật'
-    ]
-
-    const incorporation = {
-        title: "Tổ chức",
-        data: [
-            {
-                title: "Tên tổ chức",
-                value: "JadeLabs",
-            },
-            {
-                title: "Tên giao dịch",
-                value: "138 Robinson Road #02-50 Singapore",
-            },
-            {
-                title: "Trụ sở",
-                value: "138 Robinson Road #02-50 Singapore",
-            },
-            {
-                title: "Lĩnh vực kinh doanh",
-                value: "Information Technology",
-            },
-            {
-                title: "Mã số doanh nghiệp / số giấy phép thành lập",
-                value: "jadelab-biz-reg.pdf",
-            },
-            {
-                title: "Ngày cấp",
-                value: "22/12/2022",
-            },
-            {
-                title: "Tải lên giấy phép đăng ký kinh doanh",
-                value: "TEXCODE123456",
-            },
-        ]
+    const handleBackFromPreview = () => {
+        setActiveStep(STEPS.length - 1);
+        setShowPreview(false);
     }
 
+    const handlePostForm = () => {
+        let projectForm = verifyObjectProject(projectItem);
+        console.log('>> projectForm: ', projectForm);
+        // console.log('>> projectItem: ', projectItem);
+
+        try {
+            setTimeout( async () => {
+                const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
+                console.log('>> response: ', response);
+            }, 1000);
+            
+        } catch (error) {
+            console.log('>> error: ', error);
+        }
+        
+    }
+
+    const verifyObjectProject = (data) => {
+        let tpmProject = data;
+        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper", "backIdImage", "frontIdImage"];
+        const KEY_ACCEPT_DATE = "acceptDate";
+
+        // convert all file to base64
+        ARR_LIST_KEY_FILE.map((key) => {
+            if (!tpmProject[key]) return;
+            convertFile(tpmProject[key])
+            .then(res => {
+                tpmProject[key] = res;
+            })
+            .catch(error => console.log(error));
+        });
+
+        // businessAreas
+        let tpmBusinessAreas = [];
+        tpmProject.businessAreas.map((item) => {
+            tpmBusinessAreas.push(item.area)
+        })
+        tpmProject.businessAreas = tpmBusinessAreas;
+
+        // companyCode, taxCode
+        tpmProject.companyCode = parseInt(tpmProject.companyCode);
+        tpmProject.taxCode = parseInt(tpmProject.taxCode);
+
+        // date to string
+        tpmProject[KEY_ACCEPT_DATE] = convertDateToString(tpmProject[KEY_ACCEPT_DATE]);
+
+        // communications, standards
+        let tpmCommunications = [];
+        tpmProject.communications.map((item) => {
+            tpmCommunications.push(item.name)
+        })
+        tpmProject.communications = tpmCommunications;
+        let tpmStandards = [];
+        tpmProject.standards.map((item) => {
+            tpmStandards.push(item.name)
+        })
+        tpmProject.standards = tpmStandards;
+
+        // process legalRepresentative
+        tpmProject.legalRepresentative = {
+            name: tpmProject.name,
+            dob: convertDateToString(tpmProject.dob),
+            position: tpmProject.position,
+            identity: {
+                type: tpmProject.idType,
+                id: tpmProject.idAuth
+            },
+            frontIdImage: "",
+            backIdImage: "",
+            address: tpmProject.address,
+            phone: tpmProject.phone,
+            email: tpmProject.email
+        }
+        return tpmProject;
+    }
+
+    const convertDateToString = (date) => {
+        return date.toISOString().slice(0, 10);
+    };
+
+    const convertFile = async (props) => {
+        const blobToBase64 = (blob) =>
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            })
+        const toBase64 = await blobToBase64(props).then((data) => data);
+        return toBase64?.toString().slice(toBase64?.toString().indexOf(",") + 1);
+    }
+    
     const handleChange = (event, newValue) => {
-        console.log('newValue===>', newValue);
         setValue(newValue);
     };
 
@@ -187,76 +212,95 @@ function Application(props) {
 
     return (
         <Box sx={{ position: 'relative' }}>
-            <Box mb={5} sx={{ padding: "24px" }}>
-                <Box>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab disabled className="tab-title" label="Tổ chức" {...a11yProps(0)}/>
-                        <Tab disabled className="tab-title" label="Dự án" {...a11yProps(1)} />
-                        <Tab disabled className="tab-title" label="Tokenomics" {...a11yProps(2)} />
-                        <Tab disabled className="tab-title" label="Đại diện pháp luật" {...a11yProps(3)} />
-                    </Tabs>
-                </Box>
-                <Box sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
-                    <TabPanel value={value} index={0}>
-                        <Incorporation projectItem={projectItem.step1} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <Project projectItem={projectItem.step2} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
-                    </TabPanel>
-                    <TabPanel value={value} index={2}>
-                        <Tokenomics stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
-                    </TabPanel>
-                    <TabPanel value={value} index={3}>
-                        <LegalRepresentative stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
-                    </TabPanel>
-                </Box>
-            </Box>
-            <Box sx={wrapStepper}>
-                <Typography mb={1} variant='h5'>Tạo hồ sơ dự án</Typography>
-                <Stepper sx={{ paddingLeft: '10px' }} activeStep={activeStep} orientation="vertical">
-                    {steps.map((step, index) => (
-                        <Step key={step}>
-                            <StepLabel>
-                                <Typography variant='h6'>
-                                    {step}
-                                </Typography>
-                            </StepLabel>
-                        </Step>
-                    ))}
-                </Stepper>
-                <Typography mt={3} mb={1} variant='h5'>Xem xét dự án</Typography>
-                <Stepper className="project-review" sx={{ paddingLeft: '10px' }} activeStep={activeStep + 1} orientation="vertical">
-                    <Step key="vertical">
-                        <StepLabel>
-                            <Typography variant='h6'>
-                                Chúng tôi sẽ xem xét dự án và phản hồi thông qua email đăng ký
-                            </Typography>
-                        </StepLabel>
-                    </Step>
-                </Stepper>
-            </Box>
-            {/* <Box>
-                <Information tilte={incorporation.title} data={incorporation.data} />
-                <Information tilte={incorporation.title} data={incorporation.data} />
-                <Information tilte={incorporation.title} data={incorporation.data} />
-                <Information tilte={incorporation.title} data={incorporation.data} />
-            </Box> */}
-            <Box sx={wrapButtonFooter}>
-                {activeStep != 0 ?
-                    <Box sx={{ width: '212px' }} mr={2}>
-                        <Button onClick={handleBack} variant="contained" className="button back-button" type="submit">
-                            Trở lại
-                        </Button>
+            {
+                !showPreview ?
+                <>
+                    <Box mb={5} sx={{ padding: "24px" }}>
+                        <Box>
+                            <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                <Tab disabled className="tab-title" label="Tổ chức" {...a11yProps(0)}/>
+                                <Tab disabled className="tab-title" label="Dự án" {...a11yProps(1)} />
+                                <Tab disabled className="tab-title" label="Tokenomics" {...a11yProps(2)} />
+                                <Tab disabled className="tab-title" label="Đại diện pháp luật" {...a11yProps(3)} />
+                            </Tabs>
+                        </Box>
+                        <Box sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
+                            <TabPanel value={value} index={0}>
+                                <Incorporation projectItem={projectItem} setProjectItemStep={setProjectItemStep}/>
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                                <Project projectItem={projectItem} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                            </TabPanel>
+                            <TabPanel value={value} index={2}>
+                                <Tokenomics projectItem={projectItem} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                            </TabPanel>
+                            <TabPanel value={value} index={3}>
+                                <LegalRepresentative projectItem={projectItem} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
+                            </TabPanel>
+                        </Box>
                     </Box>
-                    :
-                    null}
-
-                <Box sx={{ width: '212px' }}>
-                    <Button onClick={handleNext} variant="contained" className="button" type="submit" disabled={!stateNextBtn}>
-                        Tiếp tục
-                    </Button>
-                </Box>
-            </Box>
+                    <Box sx={wrapStepper}>
+                        <Typography mb={1} variant='h5'>Tạo hồ sơ dự án</Typography>
+                        <Stepper sx={{ paddingLeft: '10px' }} activeStep={activeStep} orientation="vertical">
+                            {STEPS.map((step) => (
+                                <Step key={step}>
+                                    <StepLabel>
+                                        <Typography variant='h6'>
+                                            {step}
+                                        </Typography>
+                                    </StepLabel>
+                                </Step>
+                            ))}
+                        </Stepper>
+                        <Typography mt={3} mb={1} variant='h5'>Xem xét dự án</Typography>
+                        <Stepper className="project-review" sx={{ paddingLeft: '10px' }} activeStep={activeStep + 1} orientation="vertical">
+                            <Step key="vertical">
+                                <StepLabel>
+                                    <Typography variant='h6'>
+                                        Chúng tôi sẽ xem xét dự án và phản hồi thông qua email đăng ký
+                                    </Typography>
+                                </StepLabel>
+                            </Step>
+                        </Stepper>
+                    </Box>
+                    <Box sx={wrapButtonFooter}>
+                        {activeStep != 0 ?
+                            <Box sx={{ width: '212px' }} mr={2}>
+                                <Button onClick={handleBack} variant="contained" className="button back-button" type="submit">
+                                    Trở lại
+                                </Button>
+                            </Box>
+                            :
+                            null}
+                        <Box sx={{ width: '212px' }}>
+                            <Button onClick={handleNext} variant="contained" className="button" type="submit">
+                                Tiếp tục
+                            </Button>
+                        </Box>
+                    </Box>
+                </>
+                :
+                <>
+                    <Box sx={{padding: "24px 24px 100px"}}>
+                        <Information project={projectItem} />
+                    </Box>
+                    <Box sx={wrapButtonFooter}>
+                        {activeStep != 0 ?
+                            <Box sx={{ width: '212px' }} mr={2}>
+                                <Button onClick={handleBackFromPreview} variant="contained" className="button back-button" type="submit">
+                                    Trở lại
+                                </Button>
+                            </Box>
+                            :
+                            null}
+                        <Box sx={{ width: '212px' }}>
+                            <Button onClick={handlePostForm} variant="contained" className="button" type="submit">
+                                Gửi
+                            </Button>
+                        </Box>
+                    </Box>
+                </>
+            }
         </Box>
     )
 }

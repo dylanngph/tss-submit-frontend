@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Autocomplete, FormControl, FormLabel, OutlinedInput, TextField, FormHelperText } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -6,7 +6,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 function Incorporation(props) {
     const { projectItem, children, value, index, ...other } = props;
-    
 
     let businessAreas = [
         {
@@ -272,20 +271,8 @@ function Incorporation(props) {
 
     ]
 
-    // const defaultValues = {
-    //     incorporationName: "",
-    //     incorporationAddress: "",
-    //     transactionName: "",
-    //     transactionAddress: "",
-    //     businessAreas: [],
-    //     companyCode: "",
-    //     taxCode: "",
-    //     acceptDate: null,
-    //     businessLicense: "",
-    // };
-
     const [formValues, setFormValues] = useState(projectItem);
-    const [validator, setValidator] = useState({});
+    const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -293,8 +280,7 @@ function Incorporation(props) {
             ...formValues,
             [name]: value,
         });
-        props.setProjectItemStep(1, formValues);
-        validate(e);
+        validateForm({ [name]: value });
     };
 
     const handleInputChangeFile = (e) => {
@@ -302,65 +288,7 @@ function Incorporation(props) {
             ...formValues,
             ["businessLicense"]: e.target.files[0],
         });
-        props.setProjectItemStep(1, formValues);
-        checkDataActiveButton();
-    };
-
-    
-
-    const handleAutocompleteChange = (event, newValue) => {
-        setFormValues({
-            ...formValues,
-            ['businessAreas']: newValue,
-        });
-        props.setProjectItemStep(1, formValues);
-        setValidator({
-            ...validator,
-            ['businessAreas']: newValue.length > 0 ? false : true,
-        });
-        checkDataActiveButton();
-        if (!newValue.length) props.setStateNextButton(false)
-    };
-
-    const handleInputBlur = (e) => {
-        const { name, value } = e.target;
-        setValidator({
-            ...validator,
-            [name]: value ? false : true,
-        });
-        checkDataActiveButton();
-    };
-
-    const handleInputAutocompleteBlur = () => {
-        setValidator({
-            ...validator,
-            ['businessAreas']: formValues.businessAreas.length ? false : true,
-        });
-        checkDataActiveButton();
-    };
-
-    const validate = (e) => {
-        const { name, value } = e.target;
-        if (!e.target.hasAttribute('required')) return;
-        setValidator({
-            ...validator,
-            [name]: value ? false : true,
-        });
-        checkDataActiveButton();
-    };
-
-    const checkDataActiveButton = () => {
-        if (formValues.incorporationName &&
-            formValues.incorporationAddress &&
-            formValues.businessAreas.length &&
-            formValues.companyCode &&
-            !formValues.businessLicense &&
-            formValues.acceptDate
-            ) {
-                props.setStateNextButton(true)
-            }
-        else
-            props.setStateNextButton(false)
+        validateForm({ ["businessLicense"]: e.target.files[0] });
     };
 
     const handleDatePickerChange = (newValue) => {
@@ -368,14 +296,43 @@ function Incorporation(props) {
             ...formValues,
             ["acceptDate"]: newValue,
         });
-        props.setProjectItemStep(1, formValues);
-        checkDataActiveButton();
+        validateForm({ ["acceptDate"]: newValue });
+    };
+
+    const handleAutocompleteChange = (event, newValue) => {
+        setFormValues({
+            ...formValues,
+            ['businessAreas']: newValue,
+        });
+        validateForm({ ["businessAreas"]: newValue });
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
+
+    const validateForm = (fieldValues) => {
+        let temp = { ...errors }
+        if ('incorporationName' in fieldValues)
+            temp.incorporationName = fieldValues.incorporationName ? false : true;
+        if ('incorporationAddress' in fieldValues)
+            temp.incorporationAddress = fieldValues.incorporationAddress ? false : true;
+        if ('companyCode' in fieldValues)
+            temp.companyCode = fieldValues.companyCode ? false : true;
+        if ('acceptDate' in fieldValues)
+            temp.acceptDate = fieldValues.acceptDate ? false : true;
+        if ('businessLicense' in fieldValues)
+            temp.businessLicense = fieldValues.businessLicense ? false : true;
+        if ('businessAreas' in fieldValues)
+            temp.businessAreas = fieldValues.businessAreas.length ? false : true;
+        setErrors({
+            ...temp
+        })
+    };
+
+    useEffect(() => {
+        props.setProjectItemStep(formValues);
+    }, [formValues])
 
     const autocomplete = {
         border: '1px solid #EFF2F5',
@@ -401,11 +358,10 @@ function Incorporation(props) {
                             placeholder="Tên tổ chức"
                             value={formValues.incorporationName}
                             onChange={handleInputChange}
-                            onBlur={handleInputBlur}
-                            error={validator.incorporationName}
+                            error={errors.incorporationName}
                         />
                         {
-                            validator.incorporationName &&
+                            errors.incorporationName &&
                             <FormHelperText error>Tên tổ chức không được để trống</FormHelperText>
                         }
                     </FormControl>
@@ -419,11 +375,10 @@ function Incorporation(props) {
                             placeholder="Địa chỉ"
                             value={formValues.incorporationAddress}
                             onChange={handleInputChange}
-                            onBlur={handleInputBlur}
-                            error={validator.incorporationAddress}
+                            error={errors.incorporationAddress}
                         />
                         {
-                            validator.incorporationAddress &&
+                            errors.incorporationAddress &&
                             <FormHelperText error>Địa chỉ trụ sở không được để trống</FormHelperText>
                         }
                     </FormControl>
@@ -456,21 +411,20 @@ function Incorporation(props) {
                             multiple
                             id="tags-outlined"
                             options={businessAreas}
-                            defaultValue={formValues.businessAreas}
+                            value={formValues.businessAreas}
                             getOptionLabel={(businessAreas) => businessAreas.area}
                             isOptionEqualToValue={(option, value) => option.area === value.area}
                             onChange={handleAutocompleteChange}
-                            onBlur={handleInputAutocompleteBlur}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    error={validator.businessAreas}
+                                    error={errors.businessAreas}
                                     placeholder="Lĩnh vực kinh doanh"
                                 />
                             )}
                         />
                         {
-                            validator.businessAreas &&
+                            errors.businessAreas &&
                             <FormHelperText error>Lĩnh vực kinh doanh không được để trống</FormHelperText>
                         }
                     </FormControl>
@@ -484,11 +438,10 @@ function Incorporation(props) {
                             placeholder="Mã số doanh nghiệp"
                             value={formValues.companyCode}
                             onChange={handleInputChange}
-                            onBlur={handleInputBlur}
-                            error={validator.companyCode}
+                            error={errors.companyCode}
                         />
                         {
-                            validator.companyCode &&
+                            errors.companyCode &&
                             <FormHelperText error>Mã số doanh nghiệp không được để trống</FormHelperText>
                         }
                     </FormControl>
@@ -523,13 +476,11 @@ function Incorporation(props) {
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
                             inputProps={{accept:"application/pdf"}}
-                            // value={businessLicense}
                             onChange={handleInputChangeFile}
-                            // onBlur={handleInputBlur}
-                            error={validator.businessLicense}
+                            error={errors.businessLicense}
                         />
                         {
-                            validator.businessLicense &&
+                            errors.businessLicense &&
                             <FormHelperText error>Giấy phép đăng ký kinh doanh chưa được chọn</FormHelperText>
                         }
                     </FormControl>
