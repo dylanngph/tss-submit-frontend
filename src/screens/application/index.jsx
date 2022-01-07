@@ -10,6 +10,7 @@ import LegalRepresentative from '../../components/display/LegalRepresentative';
 import Information from 'components/custom/Information';
 import { projectData } from './config';
 import axios from 'axios';
+import useToken from 'components/hook/useToken';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -54,6 +55,7 @@ function Application(props) {
     const [activeStep, setActiveStep] = React.useState(0);
     const [showPreview, setShowPreview]  = React.useState(false);
     const dispatch = useAppDispatch();
+    const {token, setToken} = useToken();
 
     const [projectItem, setProjectItem] = useState(projectData);
 
@@ -99,8 +101,10 @@ function Application(props) {
 
         try {
             setTimeout( async () => {
-                const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
-                console.log('>> response: ', response);
+                // const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm);
+                console.log('token==>', token);
+                const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
+               
             }, 1000);
             
         } catch (error) {
