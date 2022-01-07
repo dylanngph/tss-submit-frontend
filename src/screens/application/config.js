@@ -38,6 +38,11 @@ export const projectData = {
     communications: [],
     standards: [],
     smartContractAddress: "",
+    tokenAllocations: [
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+        { id: uuid(), category: '', ratio: null, price: null, quantily: null, vesting: '' },
+    ],
 
     name: "",
     dob: "",

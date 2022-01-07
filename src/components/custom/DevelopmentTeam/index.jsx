@@ -222,7 +222,6 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
         let arrNewTeam = developmentTeam;
         arrNewTeam[index].image = data;
         setDevelopmentTeamForm(arrNewTeam);
-        console.log('>> arrNewTeam ', arrNewTeam);
     };
 
     const handleInputTeamChange = (index, name, data) => {

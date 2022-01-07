@@ -93,6 +93,14 @@ function Tokenomics(props) {
         event.preventDefault();
     };
 
+    const setFormValuesProject = (name, value) => {
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+        checkDataActiveButton();
+    };
+
     useEffect(() => {
         props.setProjectItemStep(formValues);
     }, [formValues])
@@ -136,7 +144,7 @@ function Tokenomics(props) {
                             name="symbol"
                             type="text"
                             placeholder="BIT, JDT..."
-                            inputProps={{ maxLength: 10 }}
+                            inputProps={{ maxLength: 3 }}
                             value={formValues.symbol}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
@@ -225,7 +233,7 @@ function Tokenomics(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Phân bổ token</FormLabel>
-                        <TokenAllocationRate />
+                        <TokenAllocationRate defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
                 </form>
             )}
