@@ -9,7 +9,9 @@ import Project from '../../components/display/Project';
 import Tokenomics from '../../components/display/Tokenomics';
 import LegalRepresentative from '../../components/display/LegalRepresentative';
 import Information from 'components/custom/Information';
+import ConfirmDenial from '../../components/modals/ConfirmDenial'
 import { projectData } from './config';
+import { Link, useHistory } from 'react-router-dom'
 import axios from 'axios';
 import useToken from 'components/hook/useToken';
 
@@ -51,6 +53,7 @@ const STEPS = [
 ]
 
 function Application(props) {
+    let history = useHistory();
     const [value, setValue] = React.useState(0);
     const [loadingButton, setLoadingButton] = React.useState(false);
     const [stateNextBtn, setStateNextButton] = React.useState(false);
@@ -66,6 +69,7 @@ function Application(props) {
         frontIdImage: "",
     });
     const [projectItem, setProjectItem] = useState(projectData);
+    const [openModel, setopenModel] = useState(false);
 
     const setProjectItemStep = (data) => {
         setProjectItem(data);
@@ -123,11 +127,19 @@ function Application(props) {
         setLoadingButton(true);
         try {
             const response = await axios.post("https://dev-api.tss.org.vn/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
-            console.log('>> response ', response);
             setLoadingButton(false);
+            if (response && response.data) {
+                setopenModel(true);
+                console.log('open application==>', openModel);
+            }
         } catch (error) {
             setLoadingButton(false);
         }
+    }
+
+    const handleCloseModal = () => {
+        setopenModel(false);
+        history.push('/manage');
     }
 
     const verifyObjectProject = (data) => {
@@ -355,6 +367,7 @@ function Application(props) {
                             
                         </Box>
                     </Box>
+                    <ConfirmDenial handleCloseModal={handleCloseModal} open={openModel} />
                 </>
             }
         </Box>
