@@ -5,7 +5,9 @@ import { Box, FormControl, FormLabel } from '@mui/material';
 
 export default function CountrySelect() {
   const countryToFlag = (value) => {
-    return countries.filter((country) => country.label === value)[0].code;
+    console.log('countries==>', countries);
+    console.log('value==>', value);
+    return countries?.filter((country) => country.label === value)[0].code;
   };
   return (
     <FormControl className="form-control mb-16">
@@ -41,13 +43,13 @@ export default function CountrySelect() {
                 }}
               >
                 {}
-                <img
+                {/* <img
                   loading="lazy"
                   width="20"
                   src={`https://flagcdn.com/w20/${countryToFlag(params.inputProps.value).toLowerCase()}.png`}
                   srcSet={`https://flagcdn.com/w40/${countryToFlag(params.inputProps.value).toLowerCase()}.png 2x`}
                   alt=""
-                />
+                /> */}
               </span>
             )}
             <TextField

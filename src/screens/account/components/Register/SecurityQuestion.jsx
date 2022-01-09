@@ -173,7 +173,7 @@ function SecurityQuestion(props) {
                 },
             ]
 
-            const res = await axios.post('http://localhost:5555/auth/sign-up', registerData);
+            const res = await axios.post('https://dev-api.tss.org.vn/auth/sign-up', registerData);
             if(res.data) {
                 history.push("/register-success");
             }

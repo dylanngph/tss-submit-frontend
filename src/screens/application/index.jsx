@@ -122,7 +122,7 @@ function Application(props) {
         let projectForm = verifyObjectProject(projectItem);
         setLoadingButton(true);
         try {
-            const response = await axios.post("http://localhost:5555/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
+            const response = await axios.post("https://dev-api.tss.org.vn/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
             console.log('>> response ', response);
             setLoadingButton(false);
         } catch (error) {

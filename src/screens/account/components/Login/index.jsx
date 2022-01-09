@@ -28,7 +28,7 @@ function LoginAccount({setToken}) {
     const handleSubmit = async (event) => {
         try {
             event.preventDefault();
-            const res = await axios.post('http://localhost:5555/auth/sign-in', values);
+            const res = await axios.post('https://dev-api.tss.org.vn/auth/sign-in', values);
             if(res.data) {
                 setToken(res.data.data.accessToken);
                 history.push('/')
