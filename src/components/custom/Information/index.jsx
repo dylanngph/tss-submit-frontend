@@ -3,7 +3,6 @@ import { Box, FormControl, OutlinedInput, Typography, Tooltip } from '@mui/mater
 import { listTitle } from './config';
 
 const Information = (props) => {
-
     const [project, setProject] = useState(props.project);
     const [fieldUpdate, setFieldUpdate] = useState({});
     const [stateEditInput, setStateEditInput] = useState({});
@@ -68,10 +67,10 @@ const Information = (props) => {
                 case 'transactionName':
                 case 'companyCode':
                 case 'acceptDate':
-                    valueItem = project.detail[item.key];
+                    valueItem = project?.detail[item.key];
                     break;
                 case 'businessAreas':
-                    valueItem = project.detail[item.key].join("; ");
+                    valueItem = project?.detail[item.key].join("; ");
                     break;
                 case 'communications':
                 case 'standards':
@@ -84,10 +83,10 @@ const Information = (props) => {
                 case 'address':
                 case 'phone':
                 case 'email':
-                    valueItem = project.detail.legalRepresentative[item.key];
+                    valueItem = project?.detail.legalRepresentative[item.key];
                     break;
                 case 'identity':
-                    valueItem = project.detail.legalRepresentative[item.key].id ? project.detail.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
+                    valueItem = project?.detail.legalRepresentative[item.key].id ? project?.detail.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
                     break;
                 case 'logo':
                 case 'whitepaper':
@@ -97,7 +96,7 @@ const Information = (props) => {
                     valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
                     break;
                 case 'businessLicense':
-                    valueItem = `data:application/pdf;base64,${project.detail[item.key]}`;
+                    valueItem = `data:application/pdf;base64,${project?.detail[item.key]}`;
                     break;
                 case 'developmentTeam':
                 case 'developmentPartner':
