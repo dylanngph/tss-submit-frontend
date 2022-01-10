@@ -174,9 +174,9 @@ function SecurityQuestion(props) {
             ]
 
             const res = await axios.post('https://dev-api.tss.org.vn/auth/sign-up', registerData);
-            if(res.data) {
-                history.push("/register-success");
-            }
+            // if(res.data) {
+            //     history.push("/register-success");
+            // }
         } catch (error) {
             console.log('error===>', error);
         }
