@@ -4,9 +4,14 @@ import { Grid, Box } from '@mui/material';
 import styled from 'styled-components';
 import {postBreadcrumb} from 'redux/breadcrumb/breadcrumbs.action'
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import axios from 'axios';
+import useToken from 'components/hook/useToken';
+import { LegalProp, TechLevelProp, SocialValueProp, CommunRepuProp } from 'components/contants'
 
 function NFTDetailScreen() {
     const dispatch = useAppDispatch();
+    const [data, setData] = useState();
+    const {token, setToken} = useToken();
 
     useEffect(() => {
         dispatch(postBreadcrumb([
@@ -17,7 +22,31 @@ function NFTDetailScreen() {
                 'label': 'Passport of Blockchain',
             },
         ]))
-    }, [])
+        inintData()
+    }, []);
+
+    function formatDateTime(parram) {
+        let d = new Date(parram);
+        let date = d.getDate() + "/"+ parseInt(d.getMonth()+1) +"/"+d.getFullYear();
+        return date;
+    }
+
+    const inintData = async () => {
+        try {
+            const response = await axios.get("https://dev-api.tss.org.vn/nft/user", { headers: {"Authorization" : `Bearer ${token}`}});
+            if (response.data) {
+                setData(response.data.data[0]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const formatString = (string) => {
+        let firtString = string?.substring(0, 8);
+        let secondString = string?.substr(string.length - 4, string.length);
+        return firtString + '...' + secondString;
+    }
 
     return (
         <div>
@@ -47,44 +76,68 @@ function NFTDetailScreen() {
                     </BoxImage>
                     <BoxMoreInfo>
                         <span>Ngày cấp</span>
-                        <span>06/05/2022</span>
+                        <span>{formatDateTime(data?.issuedAt)}</span>
                     </BoxMoreInfo>
                     <BoxMoreInfo>
-                        <span className="block-copy">NFT ID</span>
-                        <span>153979</span>
+                        <span className="block-copy">Token ID</span>
+                        <span>{data?.tokenId}</span>
                     </BoxMoreInfo>
                     <BoxMoreInfo>
                         <span className="block-copy">Contract ID</span>
-                        <span>0xE1D7CB...647278</span>
+                        <span>{formatString('0xD0e366Ae42Ba7CE1a27c4Eab7b63524F1fBEA023')}</span>
                     </BoxMoreInfo>
                     <BoxMoreInfo>
                         <span className="block-copy">TX Hash</span>
-                        <span>0xE1D7CB...647278</span>
+                        <span>{formatString(data?.txHash)}</span>
                     </BoxMoreInfo>
                 </Grid>
                 <Grid container mt={0} spacing={2}>
                     <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Pháp lý</h5>
-                            <span className="green">Rủi ro thấp</span>
+                            <span className="green">
+                                {
+                                     Object.entries(LegalProp).map(([key,value],i) => (
+                                         key == data?.legalId ? value : ''
+                                     ))
+                                }
+                            </span>
                         </BoxMoreAnalytic>
                     </Grid>
                     <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Công nghệ</h5>
-                            <span className="yellow">Có khả năng ứng dụng</span>
+                            <span className="yellow">
+                                {
+                                     Object.entries(TechLevelProp).map(([key,value],i) => (
+                                         key == data?.techLevelId ? value : ''
+                                     ))
+                                }
+                            </span>
                         </BoxMoreAnalytic>
                     </Grid>
                     <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Giá trị xã hội </h5>
-                            <span className="yellow">Có tiềm năng đóng góp cho xã hội</span>
+                            <span className="yellow">
+                                {
+                                     Object.entries(SocialValueProp).map(([key,value],i) => (
+                                         key == data?.socialValueId ? value : ''
+                                     ))
+                                }
+                            </span>
                         </BoxMoreAnalytic>
                     </Grid>
                     <Grid item container lg={6} xs={12}>
                         <BoxMoreAnalytic>
                             <h5>Uy tín cộng đồng</h5>
-                            <span className="red">Có một số thông tin tiêu cực</span>
+                            <span className="red">
+                                {
+                                     Object.entries(CommunRepuProp).map(([key,value],i) => (
+                                         key == data?.communRepuId ? value : ''
+                                     ))
+                                }
+                            </span>
                         </BoxMoreAnalytic>
                     </Grid>
                 </Grid>

@@ -143,7 +143,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                                         <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
                                     </IconButton>
                                 </div>
-                                {imageList.map((image, index) => (
+                                {imageList?.map((image, index) => (
                                     <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
                                         <img src={image['data_url']} alt="" width="100" />
                                     </div>

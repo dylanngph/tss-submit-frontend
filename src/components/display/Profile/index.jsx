@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, Divider } from '@mui/material';
+import axios from 'axios';
 
 function Profile(props) {
-    const { children, value, index, ...other } = props;
-    const defaultValues = {
-        email: "",
-    };
+    const { token, data, children, value, index, ...other } = props;
 
-    const [formValues, setFormValues] = useState(defaultValues)
+    const [formValues, setFormValues] = useState({
+        email: "",
+        name: "",
+        phone: "",
+        currentPw: "",
+        newPw: "",
+        confirmNewPw: "",
+    })
+
+    useEffect(() => {
+        initData();
+    }, [data])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -16,6 +25,37 @@ function Profile(props) {
             [name]: value,
         });
     };
+
+    const initData = () => {
+        setFormValues({
+            ...formValues,
+            ['email']: data?.email,
+            ['name']: data?.name,
+            ['phone']: data?.phone,
+        });
+    }
+
+    const handleUpdateUserInfor = async () => {
+        try {
+            let dataValue = {}
+            if (formValues.currentPw && formValues.newPw) {
+                dataValue = {
+                    name: formValues.name,
+                    phone: formValues.phone,
+                    currentPw: formValues.currentPw,
+                    newPw: formValues.newPw,
+                }
+            } else {
+                dataValue = {
+                    name: formValues.name,
+                    phone: formValues.phone,
+                }
+            }
+            const response = await axios.post("https://dev-api.tss.org.vn/user/me", dataValue,  { headers: {"Authorization" : `Bearer ${token}`} });
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const formStyle = {
         maxWidth: "390px",
@@ -45,6 +85,7 @@ function Profile(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Địa chỉ email của bạn</FormLabel>
                     <OutlinedInput
+                        disabled
                         id="email"
                         name="email"
                         type="email"
@@ -67,8 +108,8 @@ function Profile(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Số điện thoại</FormLabel>
                     <OutlinedInput
-                        id="tel"
-                        name="tel"
+                        id="phone"
+                        name="phone"
                         type="tel"
                         placeholder="Số điện thoại"
                         value={formValues.phone}
@@ -79,37 +120,37 @@ function Profile(props) {
                 <FormControl className="form-control mb-16">
                     <FormLabel>Mật khẩu hiện tại</FormLabel>
                     <OutlinedInput
-                        id="password"
-                        name="password"
+                        id="currentPw"
+                        name="currentPw"
                         type="password"
                         placeholder="Password"
-                        value={formValues.password}
+                        value={formValues.currentPw}
                         onChange={handleInputChange}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Mật khẩu mới</FormLabel>
                     <OutlinedInput
-                        id="newPassword"
-                        name="newPassword"
+                        id="newPw"
+                        name="newPw"
                         type="password"
                         placeholder="Password"
-                        value={formValues.newPassword}
+                        value={formValues.newPw}
                         onChange={handleInputChange}
                     />
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Xác nhận mật khẩu mới</FormLabel>
                     <OutlinedInput
-                        id="confirmPassword"
-                        name="confirmPassword"
+                        id="confirmNewPw"
+                        name="confirmNewPw"
                         type="password"
                         placeholder="Confirm password"
-                        value={formValues.confirmPassword}
+                        value={formValues.confirmNewPw}
                         onChange={handleInputChange}
                     />
                 </FormControl>
-                <Button sx={buttonStyle} variant="contained" type="submit">
+                <Button onClick={handleUpdateUserInfor} sx={buttonStyle} variant="contained" type="submit">
                     Cập nhật
                 </Button>
             </Box>

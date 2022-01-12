@@ -122,7 +122,7 @@ function RegisterAccount(props) {
                     <OutlinedInput
                         id="phone"
                         name="phone"
-                        type="tel"
+                        type="number"
                         placeholder="Số điện thoại"
                         value={formValues.phone}
                         onChange={handleInputChange}

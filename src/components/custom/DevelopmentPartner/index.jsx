@@ -130,7 +130,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                                         <img src="/assets/icons/people.svg" alt="people" />
                                     </IconButton>
                                 </div>
-                                {imageList.map((image, index) => (
+                                {imageList?.map((image, index) => (
                                     <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
                                         <img src={image['data_url']} alt="" width="100" />
                                     </div>

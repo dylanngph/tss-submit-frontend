@@ -214,7 +214,7 @@ function Application(props) {
             dob: convertDateToString(tpmProject.dob),
             position: tpmProject.position,
             identity: {
-                type: tpmProject.idType,
+                idType: tpmProject.idType,
                 id: tpmProject.idAuth
             },
             frontIdImage: listBase64.frontIdImage,

@@ -291,6 +291,20 @@ function Incorporation(props) {
         validateForm({ ["businessLicense"]: e.target.files[0] });
     };
 
+    const handleInputChangeBusinessAreas = (newValue) => {
+        const { name, value } = newValue.target;
+
+        const item = [{
+            value: businessAreas.length + 1,
+            area: value,
+        }];
+        setFormValues({
+            ...formValues,
+            ['businessAreas']: item,
+        });
+        console.log('formValues==>', formValues);
+    }
+
     const handleDatePickerChange = (newValue) => {
         setFormValues({
             ...formValues,
@@ -300,6 +314,7 @@ function Incorporation(props) {
     };
 
     const handleAutocompleteChange = (event, newValue) => {
+        console.log('newValue==>', newValue);
         setFormValues({
             ...formValues,
             ['businessAreas']: newValue,
@@ -338,6 +353,7 @@ function Incorporation(props) {
         border: '1px solid #EFF2F5',
         background: '#EFF2F5',
         borderRadius: '8px',
+        marginBottom: '5px'
     }
 
     return (
@@ -423,6 +439,14 @@ function Incorporation(props) {
                                 />
                             )}
                         />
+                        <OutlinedInput
+                            id="businessAreasABC"
+                            name="businessAreasABC"
+                            type="text"
+                            placeholder="Lĩnh vực kinh doanh khác"
+                            value={formValues.businessAreasABC}
+                            onChange={handleInputChangeBusinessAreas}
+                        />
                         {
                             errors.businessAreas &&
                             <FormHelperText error>Lĩnh vực kinh doanh không được để trống</FormHelperText>
@@ -475,7 +499,7 @@ function Incorporation(props) {
                             name="businessLicense"
                             type="file"
                             placeholder="Tải lên (Tối đa 5mb)"
-                            inputProps={{accept:"application/pdf"}}
+                            inputProps={{ accept: "application/pdf" }}
                             onChange={handleInputChangeFile}
                             error={errors.businessLicense}
                         />

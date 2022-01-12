@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, FormHelperText } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, withRouter } from 'react-router-dom'
+import RegisterSuccess from './RegisterSuccess';
 import axios from "axios";
 
 function SecurityQuestion(props) {
@@ -86,7 +87,7 @@ function SecurityQuestion(props) {
         if (formValues.question1 === formValues.question2) {
             setErrorsState({
                 ...errorsState,
-                [name]: true,
+                [name]: true
             });
             handleStateBtnRegister();
             return;
@@ -160,7 +161,7 @@ function SecurityQuestion(props) {
     const handleSubmit = async (event) => {
         try {
             event.preventDefault();
-            let registerData = registerStore;
+            const registerData = {...registerStore};
 
             registerData.securityQuestions = [
                 {
@@ -174,9 +175,9 @@ function SecurityQuestion(props) {
             ]
 
             const res = await axios.post('https://dev-api.tss.org.vn/auth/sign-up', registerData);
-            // if(res.data) {
-            //     history.push("/register-success");
-            // }
+            if(res.data) {
+                history.push("/register-success");
+            }
         } catch (error) {
             console.log('error===>', error);
         }
@@ -208,7 +209,7 @@ function SecurityQuestion(props) {
                         error={errorsState.question1}
                     >
                         {questions.map((item, index) => (
-                            <MenuItem value={item.value}>{item.question}</MenuItem>
+                            <MenuItem key={index + item.value} value={item.value}>{item.question}</MenuItem>
                         ))}
                     </Select>
                     {
@@ -242,7 +243,7 @@ function SecurityQuestion(props) {
                         error={errorsState.question2}
                     >
                         {questions.map((item, index) => (
-                            <MenuItem value={item.value}>{item.question}</MenuItem>
+                            <MenuItem key={index + item.value} value={item.value}>{item.question}</MenuItem>
                         ))}
                     </Select>
                     {

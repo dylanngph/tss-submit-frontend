@@ -144,7 +144,6 @@ function Tokenomics(props) {
                             name="symbol"
                             type="text"
                             placeholder="BIT, JDT..."
-                            inputProps={{ maxLength: 3 }}
                             value={formValues.symbol}
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}

@@ -59,6 +59,16 @@ function Project(props) {
             name: "Instagram",
             icon: "/assets/icons/socials/instagram.svg"
         },
+        {
+            value: "YouTube",
+            name: "YouTube",
+            icon: "/assets/icons/socials/youtube.svg"
+        },
+        {
+            value: "Tùy chọn khác",
+            name: "Tùy chọn khác",
+            icon: "/assets/icons/socials/more.svg"
+        },
     ]
 
     const [formValues, setFormValues] = useState(projectItem);
@@ -259,10 +269,8 @@ function Project(props) {
                             id="whitepaper"
                             name="whitepaper"
                             type="file"
-                            inputProps={{accept:".png,.svg,.jpeg"}}
-                            // value={formValues.whitepaper}
+                            inputProps={{accept:".pdf"}}
                             onChange={handleInputChange}
-                            // onBlur={handleInputBlur}
                             error={validator.whitepaper}
                         />
                     </FormControl>
