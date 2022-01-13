@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize } from '@mui/material';
+import { Box, Button, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize } from '@mui/material';
 import { listTitle } from './config';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -10,15 +10,17 @@ import DevelopmentPartner from 'components/custom/DevelopmentPartner';
 import TokenAllocationRate from 'components/custom/TokenAllocationRate';
 import { businessAreas, socialsListConstant } from 'constants/config';
 import styled from '@emotion/styled';
-
+import axios from 'axios';
+import useToken from 'components/hook/useToken';
 
 const Information = (props) => {
     const [project, setProject] = useState(props.project);
+    const { token, setToken } = useToken();
     console.log('project==>', project);
     const [imageLogo, setImageLogo] = useState([]);
     const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
         let arrTpm = [];
-        props.project.businessAreas.map((item) => {
+        props?.project?.businessAreas.map((item) => {
             arrTpm.push({
                 value: item,
                 area: item,
@@ -223,10 +225,22 @@ const Information = (props) => {
         return date.split("-").reverse().join("/");
     }
 
+    const handleUpdateData = async () => {
+        try {
+            console.log('project==>', project);
+            const res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+            if (res.data) {
+                console.log('res===>', res);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const renderItem = ({item}) => {
         let valueItem;
 
-        if (props.stateEdit) {
+        if (project && props.stateEdit) {
             switch (item.key) {
                 case 'incorporationName':
                 case 'incorporationAddress':
@@ -687,7 +701,7 @@ const Information = (props) => {
                 return (
                     <>
                         {
-                            project[item.key].map((entry, index) => (
+                            project && project[item.key].map((entry, index) => (
                                 <Box key={index} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
                                     <Typography sx={labelInforItem}>{entry.name}</Typography>
                                     <Box sx={wrapperBoxValue}>
@@ -783,6 +797,7 @@ const Information = (props) => {
 
     return (
         <>
+            <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
             {
                 listTitle.map(entry => (
                     <Box key={entry.title} sx={{marginBottom: "24px"}}>
@@ -832,6 +847,26 @@ const BoxImageUploadPreview = styled(Box)`
     & img {
         max-width: 100%;
         height: auto;
+    }
+`;
+
+const ButtonUpdate = styled(Button)`
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    width: 100%;
+    padding: 12px;
+    background: #446DFF;
+    border-radius: 8px;
+    box-shadow: none;
+    margin-top: auto;
+    text-transform: inherit;
+    width: 200px;
+    margin-bottom: 20px;
+    &:hover {
+        color: #FFFFFF;
+        background: #446DFF;
     }
 `;
 

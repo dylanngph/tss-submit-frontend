@@ -193,7 +193,7 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
         setOpen(false)
     };
 
-    const [partner, setPartner] = useState(defaultValues.developmentPartner);
+    const [partner, setPartner] = useState(defaultValues?.developmentPartner);
 
     const handleAddPartner = () => {
         const nextItem = {
@@ -258,7 +258,7 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
-                            {partner.map((item, index) => (
+                            {partner?.map((item, index) => (
                                 <Collapse key={index}>
                                     {renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner, view })}
                                 </Collapse>

@@ -66,7 +66,7 @@ const chose = {
     borderRadius: "8px",
 };
 
-function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
+function renderItem({ item, index, handleInputCateChange, handleRemoveCate, view }) {
     const numberStyle = {
         color: "#11142D",
         fontWeight: "500",
@@ -96,6 +96,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell component="th" scope="row">
                 <FormControl className="form-control">
                     <OutlinedInput
+                        disabled={view}
                         id="allocationName"
                         name="allocationName"
                         type="text"
@@ -108,6 +109,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <OutlinedInput
+                        disabled={view}
                         id="rate"
                         name="rate"
                         type="text"
@@ -121,6 +123,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <OutlinedInput
+                        disabled={view}
                         id="price"
                         name="price"
                         type="text"
@@ -133,6 +136,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <OutlinedInput
+                        disabled={view}
                         id="amount"
                         name="amount"
                         type="text"
@@ -145,6 +149,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
             <TableCell align="right">
                 <FormControl className="form-control">
                     <TextareaAutosize
+                        disabled={view}
                         minRows={4}
                         maxRows={4}
                         placeholder="5% unlock at TGE, 90-days cliff, 6% monthly"
@@ -156,7 +161,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
                 </FormControl>
             </TableCell>
             <TableCell sx={{ position: "relative" }} align="right">
-                <Box sx={deleteButton} onClick={() => handleRemoveCate(item.id)}>
+                <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveCate(item.id)}>
                     <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                 </Box>
             </TableCell>
@@ -165,7 +170,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
 }
 
 const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
-    const [items, setItems] = useState(defaultValues.tokenAllocations);
+    const [items, setItems] = useState(defaultValues?.tokenAllocations);
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -258,7 +263,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {items.map((item, index) =>
+                                {items?.map((item, index) =>
                                     renderItem({
                                         item,
                                         handleInputCateChange,
@@ -282,7 +287,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
                                 </TableRow>
                                 <TableRow sx={styleHead}>
                                     <TableCell component="th" scope="row" colSpan={3}>
-                                        {addCateButton}
+                                        { view ? null : addCateButton }
                                     </TableCell>
                                     <TableCell></TableCell>
                                     <TableCell></TableCell>

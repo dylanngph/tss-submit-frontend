@@ -34,7 +34,10 @@ function MainPage(props) {
     const handleUpdateData = async () => {
         try {
             console.log('projectItem==>', projectItem);
-            // const res = await axios.post("https://dev-api.tss.org.vn/project/application/bussiness", projectItem,  { headers: {"Authorization" : `Bearer ${token}`} })
+            // const res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, projectItem,  { headers: {"Authorization" : `Bearer ${token}`} });
+            // if (res.data) {
+            //     console.log('res===>', res);
+            // }
         } catch (error) {
             console.log(error)
         }
@@ -45,12 +48,12 @@ function MainPage(props) {
             {
                 !loading ?
                     <>
-                        {
+                        {/* {
                             (
                                 projectItem && projectItem.note && projectItem.note.flags &&
                                 <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                             )
-                        }
+                        } */}
                         <Information project={projectItem} stateEdit={true} />
                         
                     </>

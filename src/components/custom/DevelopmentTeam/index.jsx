@@ -210,7 +210,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
         setOpen(false)
     };
 
-    const [developmentTeam, setDevelopmentTeam] = useState(defaultValues.developmentTeam);
+    const [developmentTeam, setDevelopmentTeam] = useState(defaultValues?.developmentTeam);
     const [validator, setValidator] = useState({});
     const [validatorTeam, setValidatorTeam] = useState(false);
 
@@ -294,7 +294,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
                     <Divider />
                     <List sx={wrapItem}>
                         <TransitionGroup>
-                            {developmentTeam.map((item, index) => (
+                            {developmentTeam?.map((item, index) => (
                                 <Collapse key={index}>
                                     {renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember, view })}
                                 </Collapse>

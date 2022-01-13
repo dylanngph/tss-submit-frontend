@@ -103,11 +103,11 @@ function LoginAccount({setToken}) {
                         error={!values.password && errorsState}
                     />
                 </FormControl>
-                <div className="mb-16">
+                {/* <div className="mb-16">
                     <p className="text-right">
                         <Link to="/forgotpass" className="call-to-action" underline="none">Quên mật khẩu</Link>
                     </p>
-                </div>
+                </div> */}
                 {
                     (!values.password || !values.email) &&
                     <Button variant="contained" className="button mb-16" type="submit" disabled>
