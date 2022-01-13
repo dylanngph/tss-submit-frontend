@@ -5,6 +5,7 @@ import useToken from 'components/hook/useToken';
 import { postBreadcrumb } from 'redux/breadcrumb/breadcrumbs.action'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import styled from '@emotion/styled';
 
 function MainPage(props) {
     const { token, setToken } = useToken();
@@ -45,11 +46,11 @@ function MainPage(props) {
                         {
                             (
                                 projectItem && projectItem.note && projectItem.note.flags &&
-                                <Button onClick={handleUpdateData}>Cập nhật</Button>
+                                <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                             )
                         }
                         
-                        <Information project={projectItem} />
+                        <Information project={projectItem} stateEdit={true} />
                     </>
 
                     :
@@ -58,5 +59,25 @@ function MainPage(props) {
         </Box>
     );
 }
+
+const ButtonUpdate = styled(Button)`
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #FFFFFF;
+    width: 100%;
+    padding: 12px;
+    background: #446DFF;
+    border-radius: 8px;
+    box-shadow: none;
+    margin-top: auto;
+    text-transform: inherit;
+    width: 200px;
+    margin-bottom: 20px;
+    &:hover {
+        color: #FFFFFF;
+        background: #446DFF;
+    }
+`;
 
 export default MainPage;
