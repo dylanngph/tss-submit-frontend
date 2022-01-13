@@ -224,16 +224,16 @@ const Information = (props) => {
                     valueItem = project?.legalRepresentative[item.key].id ? project?.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
                     break;
                 case 'logo':
-                    valueItem = `data:image/png;base64,${project[item.key]}`;
+                    valueItem = `${project[item.key]}`;
                     break;
                 case 'whitepaper':
-                    valueItem = `data:application/pdf;base64,${project[item.key]}`;
+                    valueItem = `${project[item.key]}`;
                     break;
                 case 'smartContractAddress':
                     valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
                     break;
                 case 'businessLicense':
-                    valueItem = `data:application/pdf;base64,${project?.[item.key]}`;
+                    valueItem = `${project?.[item.key]}`;
                     break;
                 case 'developmentTeam':
                 case 'developmentPartner':
