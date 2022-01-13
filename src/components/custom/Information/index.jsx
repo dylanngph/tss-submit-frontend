@@ -9,12 +9,13 @@ import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import { businessAreas } from 'constants/config';
 import styled from '@emotion/styled';
 
+
 const Information = (props) => {
     const [project, setProject] = useState(props.project);
     const [imageLogo, setImageLogo] = useState([]);
     const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
         let arrTpm = [];
-        props.project.detail.businessAreas.map((item) => {
+        props?.project?.detail?.businessAreas?.map((item) => {
             arrTpm.push({
                 value: item,
                 area: item,
@@ -457,7 +458,7 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <>
-                                        <DevelopmentTeam defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                                        <DevelopmentTeam defaultValues={project} />
                                     </>
                                 :
                                     valueItem
@@ -480,14 +481,14 @@ const Information = (props) => {
                                                     item.key === 'acceptDate' ?
                                                             <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
-                                                            value={project?.detail[item.key]}
+                                                            value={project && project?.detail[item.key]}
                                                             onChange={handleAcceptDateChange}
                                                             renderInput={(params) => <TextField {...params} />}
                                                         />
                                                     :
                                                         <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
-                                                            value={project?.detail.legalRepresentative[item.key]}
+                                                            value={project?.detail?.legalRepresentative[item.key]}
                                                             onChange={handleDobChange}
                                                             renderInput={(params) => <TextField {...params} />}
                                                         />
