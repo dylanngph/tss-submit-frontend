@@ -183,7 +183,7 @@ function Application(props) {
         let listTokenAllocations = [];
         tpmProject.tokenAllocations.map((item) => {
             if (item.allocationName && item.price && item.amount && item.rate && item.vesting) {
-                item.rate = parseInt(item.rate / 100);
+                item.rate = parseInt(item.rate);
                 item.price = parseInt(item.price);
                 item.amount = parseInt(item.amount);
                 listTokenAllocations.push(item);

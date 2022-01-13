@@ -60,6 +60,7 @@ const Information = (props) => {
         alignItems: "center",
         borderBottom: "1px solid #A6B0C3",
         padding: '15px 0',
+        flexWrap: 'wrap',
 
         '&:last-child': {
             borderBottom: "none",
