@@ -50,7 +50,7 @@ function MainPage(props) {
                             )
                         }
                         
-                        <Information project={projectItem} />
+                        <Information project={projectItem} stateEdit={true} />
                     </>
 
                     :

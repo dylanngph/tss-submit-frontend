@@ -341,7 +341,7 @@ function Application(props) {
                 :
                 <>
                     <Box sx={{padding: "24px 24px 100px"}}>
-                        <Information project={projectItem} />
+                        <Information project={projectItem} stateEdit={false} />
                     </Box>
                     <Box sx={wrapButtonFooter}>
                         {activeStep != 0 ?
