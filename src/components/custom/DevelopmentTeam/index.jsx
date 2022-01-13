@@ -143,11 +143,18 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                                         <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
                                     </IconButton>
                                 </div>
-                                {imageList?.map((image, index) => (
-                                    <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
-                                        <img src={image['data_url']} alt="" width="100" />
-                                    </div>
-                                ))}
+                                {imageList}
+                                {
+                                    typeof imageList == 'string' 
+                                    ?
+                                    <img src={imageList}  />
+                                    :
+                                    imageList?.map((image, index) => (
+                                        <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                            <img src={image['data_url']} alt="" width="100" />
+                                        </div>
+                                    ))
+                                }
                             </BoxImageUpload>
                         )}
                     </ImageUploading>
@@ -203,6 +210,8 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
     const [developmentTeam, setDevelopmentTeam] = useState(defaultValues.developmentTeam);
     const [validator, setValidator] = useState({});
     const [validatorTeam, setValidatorTeam] = useState(false);
+
+    console.log('developmentTeam==>', developmentTeam);
 
     const handleAddMember = () => {
         const nextItem = {

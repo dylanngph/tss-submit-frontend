@@ -9,6 +9,7 @@ import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import { businessAreas } from 'constants/config';
 import styled from '@emotion/styled';
 
+
 const Information = (props) => {
     const [project, setProject] = useState(props.project);
     const [imageLogo, setImageLogo] = useState([]);
@@ -223,16 +224,16 @@ const Information = (props) => {
                     valueItem = project?.legalRepresentative[item.key].id ? project?.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
                     break;
                 case 'logo':
-                    valueItem = `data:image/png;base64,${project[item.key]}`;
+                    valueItem = `${project[item.key]}`;
                     break;
                 case 'whitepaper':
-                    valueItem = `data:application/pdf;base64,${project[item.key]}`;
+                    valueItem = `${project[item.key]}`;
                     break;
                 case 'smartContractAddress':
                     valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
                     break;
                 case 'businessLicense':
-                    valueItem = `data:application/pdf;base64,${project?.[item.key]}`;
+                    valueItem = `${project?.[item.key]}`;
                     break;
                 case 'developmentTeam':
                 case 'developmentPartner':
@@ -516,7 +517,7 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <>
-                                        {/* <DevelopmentTeam defaultValues={project} /> */}
+                                        <DevelopmentTeam defaultValues={project} />
                                     </>
                                 :
                                     valueItem
@@ -536,7 +537,7 @@ const Information = (props) => {
                                             ['acceptDate', 'dob'].includes(item.key) ?
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 {
-                                                    item.key === 'acceptDate' ?
+                                                    item?.key === 'acceptDate' ?
                                                             <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
                                                             value={project?.[item.key]}
