@@ -18,7 +18,7 @@ function MainPage(props) {
 
     const fetchData = async () => {
         setLoading(true);
-        const res = await axios.get('https://dev-api.tss.org.vn/project/user', { headers: { "Authorization": `Bearer ${token}` } });
+        const res = await axios.get(`${process.env.REACT_APP_URL_API}/project/user`, { headers: { "Authorization": `Bearer ${token}` } });
         setProjectItem(res.data.data);
         dispatch(postBreadcrumb([
             {

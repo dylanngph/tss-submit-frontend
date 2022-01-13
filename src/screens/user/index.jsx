@@ -46,7 +46,7 @@ function User(props) {
 
     const getUserInfor = async () => {
         try {
-            const response = await axios.get("https://dev-api.tss.org.vn/user/me", { headers: {"Authorization" : `Bearer ${token}`} });
+            const response = await axios.get(`${process.env.REACT_APP_URL_API}/user/me`, { headers: {"Authorization" : `Bearer ${token}`} });
             if (response.data) {
                 setData(response.data.data);
             }

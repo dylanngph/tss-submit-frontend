@@ -51,7 +51,7 @@ function Profile(props) {
                     phone: formValues.phone,
                 }
             }
-            const response = await axios.post("https://dev-api.tss.org.vn/user/me", dataValue,  { headers: {"Authorization" : `Bearer ${token}`} });
+            const response = await axios.post(`${process.env.REACT_APP_URL_API}/user/me`, dataValue,  { headers: {"Authorization" : `Bearer ${token}`} });
         } catch (error) {
             console.log(error);
         }

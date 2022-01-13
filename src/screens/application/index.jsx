@@ -126,7 +126,7 @@ function Application(props) {
         let projectForm = verifyObjectProject(projectItem);
         setLoadingButton(true);
         try {
-            const response = await axios.post("https://dev-api.tss.org.vn/project/application/bussiness", projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
+            const response = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
             setLoadingButton(false);
             if (response && response.data) {
                 setopenModel(true);

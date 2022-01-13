@@ -33,7 +33,7 @@ function NFTDetailScreen() {
 
     const inintData = async () => {
         try {
-            const response = await axios.get("https://dev-api.tss.org.vn/nft/user", { headers: {"Authorization" : `Bearer ${token}`}});
+            const response = await axios.get(`${process.env.REACT_APP_URL_API}/nft/user`, { headers: {"Authorization" : `Bearer ${token}`}});
             if (response.data) {
                 setData(response.data.data[0]);
             }
