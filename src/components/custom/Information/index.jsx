@@ -478,7 +478,7 @@ const Information = (props) => {
                                             ['acceptDate', 'dob'].includes(item.key) ?
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 {
-                                                    item.key === 'acceptDate' ?
+                                                    item?.key === 'acceptDate' ?
                                                             <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
                                                             value={project && project?.detail[item.key]}
@@ -488,7 +488,7 @@ const Information = (props) => {
                                                     :
                                                         <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
-                                                            value={project?.detail?.legalRepresentative[item.key]}
+                                                            value={project && project?.detail?.legalRepresentative[item.key]}
                                                             onChange={handleDobChange}
                                                             renderInput={(params) => <TextField {...params} />}
                                                         />
