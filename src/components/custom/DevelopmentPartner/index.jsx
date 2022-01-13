@@ -63,7 +63,7 @@ const wrapItem = {
     overflow: "auto",
 }
 
-function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner }) {
+function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner, view }) {
     
     const gridStyle = {
         width: "100%",
@@ -130,11 +130,19 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                                         <img src="/assets/icons/people.svg" alt="people" />
                                     </IconButton>
                                 </div>
-                                {imageList?.map((image, index) => (
+                                {
+                                    typeof imageList === 'string' 
+                                    ?
                                     <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
-                                        <img src={image['data_url']} alt="" width="100" />
+                                            <img src={imageList} alt="" width="100" />
                                     </div>
-                                ))}
+                                    :
+                                    imageList?.map((image, index) => (
+                                        <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                            <img src={image['data_url']} alt="" width="100" />
+                                        </div>
+                                    ))
+                                }
                             </BoxImageUpload>
                         )}
                     </ImageUploading>
@@ -143,6 +151,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tên đối tác</FormLabel>
                         <OutlinedInput
+                            disabled={view}
                             id="name"
                             name="name"
                             type="text"
@@ -156,6 +165,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                     <FormControl className="form-control mb-16">
                         <FormLabel>Website</FormLabel>
                         <OutlinedInput
+                            disabled={view}
                             id="website"
                             name="website"
                             type="text"
@@ -166,7 +176,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                     </FormControl>
                 </Grid>
                 <Grid sx={{position: "relative"}} item xs={1.5}>
-                    <Box sx={deleteButton} onClick={() => handleRemovePartner(item.id)}>
+                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemovePartner(item.id)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -175,7 +185,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
     );
 }
 
-const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
+const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -250,12 +260,12 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject }) => {
                         <TransitionGroup>
                             {partner.map((item, index) => (
                                 <Collapse key={index}>
-                                    {renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner })}
+                                    {renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerChange, handleRemovePartner, view })}
                                 </Collapse>
                             ))}
                         </TransitionGroup>
                     </List>
-                    <Box sx={{padding: "10px 26px"}}>
+                    <Box hidden={view} sx={{padding: "10px 26px"}}>
                         {addPartnerButton}
                     </Box>
                     <Box sx={{padding: "12px 24px", textAlign: "right", background: "#F6F8FA", borderBottomLeftRadius: "12px", borderBottomRightRadius: "12px"}}>

@@ -276,11 +276,11 @@ function Project(props) {
                     </FormControl>
                     <Box className="form-control mb-16">
                         <FormLabel>Đội ngũ phát triển</FormLabel>
-                        <DevelopmentTeam defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                        <DevelopmentTeam view={false} defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </Box>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Đối tác phát triển (Không bắt buộc)</FormLabel>
-                        <DevelopmentPartner defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                        <DevelopmentPartner view={false} defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
                     {formValues.websites.map((item, index) => (
                         <FormControl key={index} className="form-control">

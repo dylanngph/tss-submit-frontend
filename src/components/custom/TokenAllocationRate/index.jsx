@@ -164,7 +164,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate }) {
     );
 }
 
-const TokenAllocationRate = ({ defaultValues, setFormValuesProject }) => {
+const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     const [items, setItems] = useState(defaultValues.tokenAllocations);
 
     const [open, setOpen] = useState(false);
@@ -264,6 +264,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject }) => {
                                         handleInputCateChange,
                                         handleRemoveCate,
                                         index,
+                                        view
                                     })
                                 )}
                                 <TableRow>

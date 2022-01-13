@@ -232,7 +232,7 @@ function Tokenomics(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Phân bổ token</FormLabel>
-                        <TokenAllocationRate defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                        <TokenAllocationRate view={false} defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
                     </FormControl>
                 </form>
             )}

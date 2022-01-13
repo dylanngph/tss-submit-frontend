@@ -6,12 +6,15 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ImageUploading from 'react-images-uploading';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
+import DevelopmentPartner from 'components/custom/DevelopmentPartner';
+import TokenAllocationRate from 'components/custom/TokenAllocationRate';
 import { businessAreas } from 'constants/config';
 import styled from '@emotion/styled';
 
 
 const Information = (props) => {
     const [project, setProject] = useState(props.project);
+    console.log('project==>', project);
     const [imageLogo, setImageLogo] = useState([]);
     const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
         let arrTpm = [];
@@ -23,7 +26,15 @@ const Information = (props) => {
         })
         return arrTpm;
     });
+    const [formValues, setFormValues] = useState(project);
     const [businessLicense, setBusinessLicense] = useState();
+
+    const setFormValuesProject = (name, value) => {
+        setFormValues({
+            ...formValues,
+            [name]: value,
+        });
+    };
 
     const idTypePassport = "3";
     const informations = [
@@ -516,11 +527,58 @@ const Information = (props) => {
                         <Box sx={wrapperBoxValue}>
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        <DevelopmentTeam defaultValues={project} />
-                                    </>
+                                    <Flex>
+                                        <DevelopmentTeam defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </Flex>
                                 :
-                                    valueItem
+                                    <DevelopmentTeam defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
+                            }
+                        </Box>
+                    </>
+                )
+            case 'developmentPartner':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        <DevelopmentPartner defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </Flex>
+                                :
+                                    <DevelopmentPartner defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
+                            }
+                        </Box>
+                    </>
+                )
+            case 'tokenAllocations':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        <TokenAllocationRate view={false} defaultValues={project} setFormValuesProject={setFormValuesProject} />
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </Flex>
+                                :
+                                    <TokenAllocationRate defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
                             }
                         </Box>
                     </>

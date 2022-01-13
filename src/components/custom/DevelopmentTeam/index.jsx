@@ -69,7 +69,7 @@ const wrapItem = {
     overflow: "auto",
 }
 
-function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember }) {
+function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember, view }) {
 
     const gridStyle = {
         width: "100%",
@@ -143,11 +143,12 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                                         <img src="/assets/icons/user-cirlce-add.png" alt="user-cirlce-add" />
                                     </IconButton>
                                 </div>
-                                {imageList}
                                 {
-                                    typeof imageList == 'string' 
+                                    typeof imageList === 'string' 
                                     ?
-                                    <img src={imageList}  />
+                                    <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                            <img src={imageList} alt="" width="100" />
+                                    </div>
                                     :
                                     imageList?.map((image, index) => (
                                         <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
@@ -163,6 +164,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                     <Box className="form-control mb-16">
                         <label>Tên thành viên</label>
                         <OutlinedInput
+                            disabled={view}
                             id="name"
                             name="name"
                             type="text"
@@ -178,6 +180,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                     <Box className="form-control mb-16">
                         <label>Chức danh</label>
                         <OutlinedInput
+                            disabled={view}
                             id="position"
                             name="position"
                             type="text"
@@ -190,7 +193,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                     </Box>
                 </Grid>
                 <Grid sx={{ position: "relative" }} item xs={1.5}>
-                    <Box sx={deleteButton} onClick={() => handleRemoveMember(item.id)}>
+                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveMember(item.id)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -199,7 +202,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
     );
 }
 
-const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
+const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -293,12 +296,12 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject }) => {
                         <TransitionGroup>
                             {developmentTeam.map((item, index) => (
                                 <Collapse key={index}>
-                                    {renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember })}
+                                    {renderItem({ item, index, validator, handleImgTeamUpload, handleInputTeamChange, handleInputTeamBlur, handleRemoveMember, view })}
                                 </Collapse>
                             ))}
                         </TransitionGroup>
                     </List>
-                    <Box sx={{ padding: "10px 26px" }}>
+                    <Box hidden={view} sx={{ padding: "10px 26px" }}>
                         {addMemberButton}
                     </Box>
                     <Box sx={{ padding: "12px 24px", textAlign: "right", background: "#F6F8FA", borderBottomLeftRadius: "12px", borderBottomRightRadius: "12px" }}>
