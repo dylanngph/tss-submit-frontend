@@ -27,7 +27,7 @@ export const listTitle = [
                 key: 'acceptDate',
             },
             {
-                title: 'Tải lên giấy phép đăng ký kinh doanh',
+                title: 'Giấy phép đăng ký kinh doanh',
                 key: 'businessLicense'
             }
         ]

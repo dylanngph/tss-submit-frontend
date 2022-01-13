@@ -1,12 +1,44 @@
 import { useState } from "react";
-import { Box, FormControl, OutlinedInput, Typography, Tooltip } from '@mui/material';
+import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormGroup, Autocomplete } from '@mui/material';
 import { listTitle } from './config';
-import styled from '@emotion/styled'
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import ImageUploading from 'react-images-uploading';
+import DevelopmentTeam from 'components/custom/DevelopmentTeam';
+import { businessAreas } from 'constants/config';
+import styled from '@emotion/styled';
 
 const Information = (props) => {
     const [project, setProject] = useState(props.project);
-    const [fieldUpdate, setFieldUpdate] = useState({});
-    const [stateEditInput, setStateEditInput] = useState({});
+    const [imageLogo, setImageLogo] = useState([]);
+    const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
+        let arrTpm = [];
+        props.project.detail.businessAreas.map((item) => {
+            arrTpm.push({
+                value: item,
+                area: item,
+            })
+        })
+        return arrTpm;
+    });
+    const [businessLicense, setBusinessLicense] = useState();
+
+    const idTypePassport = "3";
+    const informations = [
+        {
+            value: "1",
+            name: "CMND",
+        },
+        {
+            value: "2",
+            name: "CCCD",
+        },
+        {
+            value: "3",
+            name: "Hộ Chiếu",
+        },
+    ]
 
     const inforItem = {
         display: "flex",
@@ -46,12 +78,15 @@ const Information = (props) => {
         borderRadius: "12px",
     }
 
-    const showEditInput = (key) => {
-        setStateEditInput({
-            ...stateEditInput,
-            [key]: true,
-        })
-        console.log('>> stateEditInput: ', stateEditInput);
+    const autocomplete = {
+        border: '1px solid #EFF2F5',
+        background: '#EFF2F5',
+        borderRadius: '8px',
+        marginBottom: '5px',
+        minWidth: '250px',
+        '& .MuiAutocomplete-hasPopupIcon .MuiOutlinedInput-root': {
+            marginRigth: '35px',
+        }
     }
 
     const handleInputChange = (e) => {
@@ -60,13 +95,64 @@ const Information = (props) => {
             ...project,
             [name]: value,
         });
-
         console.log('project edit==>', project);
     };
 
-    console.log('>> project ', project);
+    const handleAcceptDateChange = (newValue) => {
+        let tpm = project;
+        tpm.detail.acceptDate = newValue;
+        setProject({
+            ...project,
+            tpm
+        });
+    };
 
-    // const [onEdit, setOnEdit] = useState(false)
+    const handleDobChange = (newValue) => {
+        let tpm = project;
+        tpm.detail.legalRepresentative.dob = newValue;
+        setProject({
+            ...project,
+            tpm
+        });
+    };
+
+    const onChangeImageUpload = (imageList) => {
+        setImageLogo(imageList);
+        setProject({
+            ...project,
+            ['logo']: imageList[0].data_url,
+        });
+    };
+
+    const handleAutocompleteChange = (event, newValue) => {
+        let tpm = project;
+        tpm.detail.businessAreas = newValue;
+        setBusinessFieldUpdate(newValue);
+        setProject({
+            ...project,
+            tpm,
+        });
+    };
+
+    const handleInputChangeFile = (e) => {
+        let tpm = project;
+        tpm.detail.businessLicense = e.target.files[0];
+        setProject({
+            ...project,
+            tpm,
+        });
+    };
+
+    const handleInputChangeFileWhitepaper = (e) => {
+        setProject({
+            ...project,
+            ['whitepaper']: e.target.files[0],
+        });
+    };
+
+    const formatDate = (date) => {
+        return date.split("-").reverse().join("/");
+    }
 
     const renderItem = ({item}) => {
         let valueItem;
@@ -78,7 +164,10 @@ const Information = (props) => {
                 case 'incorporationAddress':
                 case 'transactionName':
                 case 'companyCode':
+                    valueItem = project?.detail[item.key];
+                    break;
                 case 'acceptDate':
+                    // valueItem = project?.detail[item.key] ? formatDate(project?.detail[item.key]) : '';
                     valueItem = project?.detail[item.key];
                     break;
                 case 'businessAreas':
@@ -90,11 +179,14 @@ const Information = (props) => {
                     valueItem = project[item.key].join(", ");
                     break;
                 case 'name':
-                case 'dob':
                 case 'position':
                 case 'address':
                 case 'phone':
                 case 'email':
+                    valueItem = project?.detail.legalRepresentative[item.key];
+                    break;
+                case 'dob':
+                    // valueItem = project?.detail.legalRepresentative[item.key] ? formatDate(project?.detail.legalRepresentative[item.key]) : '';
                     valueItem = project?.detail.legalRepresentative[item.key];
                     break;
                 case 'identity':
@@ -158,67 +250,271 @@ const Information = (props) => {
             if (item.key === "identity") valueItem = project && project["idAuth"];
         }
 
-        if (['businessLicense', 'whitepaper'].includes(item.key)) {
-            return (
-                <>
-                    <Typography sx={labelInforItem}>{item.title}</Typography>
-                    <Box sx={wrapperBoxValue}>
-                        <a download="Download" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
-                        {
-                            (project && project.note && project.note.flags && project.note.flags[item.key]) &&
-                            <Box sx={boxFlag}>
-                                <Tooltip title={project.note.flags[item.key]}>
-                                    <img src="/assets/icons/flag.svg" />
-                                </Tooltip>
-                            </Box>
-                        }
-                    </Box>
-                </>
-            )
-        } else if (['logo'].includes(item.key)) {
-            return (
-                <>
-                    <Typography sx={labelInforItem}>{item.title}</Typography>
-                    <Box sx={wrapperBoxValue}>
-                        <img src={valueItem} alt="img" width="20px" height="20px" />
-                        {
-                            (project && project.note && project.note.flags && project.note.flags[item.key]) &&
-                            <Box sx={boxFlag}>
-                                <Tooltip title={project.note.flags[item.key]}>
-                                    <img src="/assets/icons/flag.svg" />
-                                </Tooltip>
-                            </Box>
-                        }
-                    </Box>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <Typography sx={labelInforItem}>{item.title}</Typography>
-                    <Box sx={wrapperBoxValue}>
-                        {
-                            (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                <Flex>
-                                    <InputEdit
-                                        id={[item.key]}
-                                        name={[item.key]}
-                                        type="text"
-                                        value={project[item.key] || project?.detail[item.key]}
-                                        onChange={handleInputChange}
+        switch(item.key) {
+            case 'businessAreas':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                        <Autocomplete
+                                            sx={autocomplete}
+                                            multiple
+                                            id="tags-outlined"
+                                            options={businessAreas}
+                                            value={businessFieldUpdate}
+                                            defaultValue={businessFieldUpdate}
+                                            getOptionLabel={(businessAreas) => businessAreas.area}
+                                            isOptionEqualToValue={(option, value) => option.area === value.area}
+                                            onChange={handleAutocompleteChange}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    placeholder="Lĩnh vực kinh doanh"
+                                                />
+                                            )}
+                                        />
+                                        {/* <OutlinedInput
+                                            id="businessAreasABC"
+                                            name="businessAreasABC"
+                                            type="text"
+                                            placeholder="Lĩnh vực kinh doanh khác"
+                                            value={formValues.businessAreasABC}
+                                            onChange={handleInputChangeBusinessAreas}
+                                        /> */}
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </>
+                                :
+                                    valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            case 'businessLicense':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                    <OutlinedInput
+                                        required
+                                        id="businessLicense"
+                                        name="businessLicense"
+                                        type="file"
+                                        placeholder="Tải lên (Tối đa 5mb)"
+                                        inputProps={{ accept: "application/pdf" }}
+                                        onChange={handleInputChangeFile}
                                     />
-                                    <Box sx={boxFlag}>
-                                        <Tooltip title={project.note.flags[item.key]}>
-                                            <img src="/assets/icons/flag.svg" />
-                                        </Tooltip>
-                                    </Box>
-                                </Flex>
-                            :
-                            valueItem
-                        }
-                    </Box>
-                </>
-            )
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </>
+                                :
+                                    <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
+                            }
+                        </Box>
+                    </>
+                )
+            case 'whitepaper':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                    <OutlinedInput
+                                        required
+                                        id="businessLicense"
+                                        name="businessLicense"
+                                        type="file"
+                                        placeholder="Tải lên (Tối đa 5mb)"
+                                        inputProps={{ accept: "application/pdf" }}
+                                        onChange={handleInputChangeFileWhitepaper}
+                                    />
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </>
+                                :
+                                    <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
+                            }
+                        </Box>
+                    </>
+                )
+            case 'logo':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                        <ImageUploading
+                                            value={imageLogo}
+                                            onChange={onChangeImageUpload}
+                                            dataURLKey="data_url"
+                                        >
+                                            {({
+                                                imageList,
+                                                onImageUpload,
+                                                onImageUpdate,
+                                                dragProps
+                                            }) => (
+                                                <>  
+                                                    {!imageList.length &&
+                                                        <div
+                                                            onClick={onImageUpload}
+                                                            {...dragProps}
+                                                        >
+                                                            <BoxImageUpload aria-label="upload picture" component="span">
+                                                                <img src={valueItem} alt="img" width="20px" height="20px" />
+                                                            </BoxImageUpload>
+                                                        </div>
+                                                    }
+                                                    {imageList?.map((image, index) => (
+                                                        <BoxImageUpload key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                                            <img src={image['data_url']} alt="" width="100" />
+                                                        </BoxImageUpload>
+                                                    ))}
+                                                </>
+                                            )}
+                                        </ImageUploading>
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </>
+                                :
+                                    <BoxImageUpload>
+                                        <img src={valueItem} alt="img" width="20px" height="20px" />
+                                    </BoxImageUpload>
+                            }
+                        </Box>
+                    </>
+                )
+            case 'identity':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
+                                        {/* <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
+                                            labelId="idType"
+                                            name="idType"
+                                            id="idType"
+                                            value={formValues.idType}
+                                            onChange={handleInputChangeSelect}
+                                        >
+                                            {informations.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                        <OutlinedInput sx={{ maxWidth: "275px", width: "100%" }}
+                                            required
+                                            id="idAuth"
+                                            name="idAuth"
+                                            type="text"
+                                            placeholder="0678****"
+                                            value={formValues.idAuth}
+                                            onChange={handleInputChange}
+                                            onBlur={handleInputBlur}
+                                            error={validator.idAuth}
+                                        /> */}
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </FormGroup>
+                                :
+                                    valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            case 'developmentTeam':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                        <DevelopmentTeam defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                                    </>
+                                :
+                                    valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            default:
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        {
+                                            ['acceptDate', 'dob'].includes(item.key) ?
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                {
+                                                    item.key === 'acceptDate' ?
+                                                            <DesktopDatePicker
+                                                            inputFormat="dd/MM/yyyy"
+                                                            value={project?.detail[item.key]}
+                                                            onChange={handleAcceptDateChange}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                        />
+                                                    :
+                                                        <DesktopDatePicker
+                                                            inputFormat="dd/MM/yyyy"
+                                                            value={project?.detail.legalRepresentative[item.key]}
+                                                            onChange={handleDobChange}
+                                                            renderInput={(params) => <TextField {...params} />}
+                                                        />
+                                                }
+                                                
+                                            </LocalizationProvider>
+                                            :
+                                                <InputEdit
+                                                    id={item.key}
+                                                    name={item.key}
+                                                    type="text"
+                                                    value={project[item.key] || project?.detail[item.key] || project?.detail.legalRepresentative[item.key]}
+                                                    onChange={handleInputChange}
+                                                />
+                                        }
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </Flex>
+                                :
+                                valueItem
+                            }
+                        </Box>
+                    </>
+                )
         }
     }
 
@@ -257,5 +553,23 @@ const Flex = styled(Box)`
 const InputEdit = styled(OutlinedInput)`
    border: 1px solid #58667E;
 `
+
+const BoxImageUpload = styled(Box)`
+    width: 30px;
+    height: 30px;
+    & img {
+        max-width: 100%;
+        height: auto;
+    }
+`;
+
+const BoxImageUploadPreview = styled(Box)`
+    width: 30px;
+    height: 30px;
+    & img {
+        max-width: 100%;
+        height: auto;
+    }
+`;
 
 export default Information
