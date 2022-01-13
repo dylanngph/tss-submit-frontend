@@ -8,5 +8,5 @@ export const useConvertAudioBase64 = async(props) => {
             reader.onerror = (error) => reject(error);
         })
     const toBase64 = await blobToBase64(props).then((data) => data);
-    return toBase64?.toString().slice(toBase64?.toString().indexOf(",") + 1);
+    return toBase64?.toString();
 }

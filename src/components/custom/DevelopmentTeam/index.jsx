@@ -144,12 +144,17 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                                     </IconButton>
                                 </div>
                                 {imageList}
-                                {imageList?.map((image, index) => (
-                                    {imageList}
-                                    // <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
-                                    //     <img src={image['data_url']} alt="" width="100" />
-                                    // </div>
-                                ))}
+                                {
+                                    typeof imageList == 'string' 
+                                    ?
+                                    <img src={imageList}  />
+                                    :
+                                    imageList?.map((image, index) => (
+                                        <div key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                            <img src={image['data_url']} alt="" width="100" />
+                                        </div>
+                                    ))
+                                }
                             </BoxImageUpload>
                         )}
                     </ImageUploading>
