@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem } from '@mui/material';
+import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize } from '@mui/material';
 import { listTitle } from './config';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import ImageUploading from 'react-images-uploading';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
-import { businessAreas } from 'constants/config';
+import { businessAreas, socialsListConstant } from 'constants/config';
 import styled from '@emotion/styled';
 
 
@@ -23,6 +23,7 @@ const Information = (props) => {
         })
         return arrTpm;
     });
+    // const [businessFieldUpdate, setBusinessFieldUpdate]
     const [businessLicense, setBusinessLicense] = useState();
 
     const idTypePassport = "3";
@@ -91,7 +92,7 @@ const Information = (props) => {
         background: '#EFF2F5',
         borderRadius: '8px',
         marginBottom: '5px',
-        minWidth: '250px',
+        minWidth: '80%',
         '& .MuiAutocomplete-hasPopupIcon .MuiOutlinedInput-root': {
             marginRigth: '35px',
         }
@@ -104,6 +105,18 @@ const Information = (props) => {
             [name]: value,
         });
         console.log('project edit==>', project);
+    };
+
+    const handleInputWebsiteChange = (e) => {
+        const { name, value } = e.target;
+        e.target.value = value;
+        let tpm = project;
+        const pos = name.replace('websites', '');
+        tpm.websites[pos] = value;
+        setProject({
+            ...project,
+            tpm
+        });
     };
 
     const handleAcceptDateChange = (newValue) => {
@@ -144,6 +157,19 @@ const Information = (props) => {
             ["businessLicense"]: e.target.files[0],
         });
     };
+
+    const handleInputChangeBusinessAreas = (e) => {
+        const { value } = e.target;
+        const item = [{
+            value: businessAreas.length + 1,
+            area: value,
+        }];
+        setBusinessFieldUpdate(item);
+        setProject({
+            ...project,
+            ['businessAreas']: item,
+        });
+    }
 
     const handleInputChangeFileWhitepaper = (e) => {
         setProject({
@@ -206,7 +232,6 @@ const Information = (props) => {
                     break;
                 case 'communications':
                 case 'standards':
-                case 'websites':
                     valueItem = project[item.key].join(", ");
                     break;
                 case 'name':
@@ -245,6 +270,7 @@ const Information = (props) => {
                     break;
             }
         } else {
+            // show preview
             if (project && project[item.key] && item.key!== "developmentTeam" && item.key!== "developmentPartner") {
                 if (typeof(project[item.key]) === "string") {
                     valueItem = project[item.key];
@@ -289,38 +315,42 @@ const Information = (props) => {
                         <Box sx={wrapperBoxValue}>
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        <Autocomplete
-                                            sx={autocomplete}
-                                            multiple
-                                            id="tags-outlined"
-                                            options={businessAreas}
-                                            value={businessFieldUpdate}
-                                            defaultValue={businessFieldUpdate}
-                                            getOptionLabel={(businessAreas) => businessAreas.area}
-                                            isOptionEqualToValue={(option, value) => option.area === value.area}
-                                            onChange={handleAutocompleteChange}
-                                            renderInput={(params) => (
-                                                <TextField
-                                                    {...params}
-                                                    placeholder="Lĩnh vực kinh doanh"
+                                    <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', width: '100%' }}>
+                                        <Box sx={{ display: "flex", flexDirection: "row", width: '100%' }}>
+                                            <Box sx={{ width: 'calc(100% - 15px)' }}>
+                                                <Autocomplete
+                                                    sx={autocomplete}
+                                                    multiple
+                                                    id="tags-outlined"
+                                                    options={businessAreas}
+                                                    value={businessFieldUpdate}
+                                                    defaultValue={businessFieldUpdate}
+                                                    getOptionLabel={(businessAreas) => businessAreas.area}
+                                                    isOptionEqualToValue={(option, value) => option.area === value.area}
+                                                    onChange={handleAutocompleteChange}
+                                                    renderInput={(params) => (
+                                                        <TextField
+                                                            {...params}
+                                                            placeholder="Lĩnh vực kinh doanh"
+                                                        />
+                                                    )}
                                                 />
-                                            )}
-                                        />
-                                        {/* <OutlinedInput
+                                            </Box>
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                        </Box>
+                                        <OutlinedInput
                                             id="businessAreasABC"
                                             name="businessAreasABC"
                                             type="text"
                                             placeholder="Lĩnh vực kinh doanh khác"
-                                            value={formValues.businessAreasABC}
                                             onChange={handleInputChangeBusinessAreas}
-                                        /> */}
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </>
+                                        />
+                                        
+                                    </Box>
                                 :
                                     valueItem
                             }
@@ -509,6 +539,37 @@ const Information = (props) => {
                         </Box>
                     </>
                 )
+            case 'description':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        <TextareaAutosize
+                                            required
+                                            minRows={8}
+                                            maxRows={8}
+                                            name="description"
+                                            placeholder="Mô tả dự án ngắn gọn."
+                                            style={{ width: "100%", fontFamily: 'Inter', border: "1px solid #58667E", borderRadius: "8px" }}
+                                            value={project[item.key]}
+                                            onChange={handleInputChange}
+                                            className="textarea-required"
+                                        />
+                                        <Box sx={boxFlag}>
+                                            <Tooltip title={project.note.flags[item.key]}>
+                                                <img src="/assets/icons/flag.svg" />
+                                            </Tooltip>
+                                        </Box>
+                                    </Flex>
+                                :
+                                valueItem
+                            }
+                        </Box>
+                    </>
+                )
             case 'developmentTeam':
                 return (
                     <>
@@ -523,6 +584,90 @@ const Information = (props) => {
                                     valueItem
                             }
                         </Box>
+                    </>
+                )
+            case 'websites':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <>
+                                        {
+                                            project[item.key].map((entry, index) => (
+                                                <Flex key={index}>
+                                                    <InputEdit
+                                                        id={`websites${index}`}
+                                                        name={`websites${index}`}
+                                                        type="text"
+                                                        value={entry}
+                                                        onChange={handleInputWebsiteChange}
+                                                    />
+                                                    {
+                                                        index === 0 && 
+                                                        <Box sx={boxFlag}>
+                                                            <Tooltip title={project.note.flags[item.key]}>
+                                                                <img src="/assets/icons/flag.svg" />
+                                                            </Tooltip>
+                                                        </Box>
+                                                    }
+                                                </Flex>
+                                                )
+                                            )
+                                            
+                                        }
+                                    
+                                    </>
+                                :
+                                valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            case 'socialWebs':
+                return (
+                    <>
+                        {
+                            project[item.key].map((entry, index) => (
+                                <Box key={index} sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+                                    <Typography sx={labelInforItem}>{entry.name}</Typography>
+                                    <Box sx={wrapperBoxValue}>
+                                        {
+                                            (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                                <Box sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
+                                                    <Box sx={{ display: "flex", position: "relative" }} mb={2} className="box-select-social">
+                                                        <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
+                                                            value={entry.name}
+                                                            name={`websocial-${index}`}
+                                                            // onChange={handleChangeSelectSocial}
+                                                            input={<OutlinedInput label="Tag" />}
+                                                            className="social-items"
+                                                        >
+                                                            {socialsListConstant.map((item, index0) => (
+                                                                <MenuItem key={index0} className="social-item" key={item.name} value={item.value}>
+                                                                    <img src={item.icon} alt={item.name} />
+                                                                    {item.name}
+                                                                </MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                        <span className="line-verticle"></span>
+                                                        <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
+                                                            id={`websociallink-${index}`}
+                                                            name={`websociallink-${index}`}
+                                                            type="text"
+                                                            value={entry.link}
+                                                            // onChange={handleInputChangeSocial}
+                                                        />
+                                                    </Box>
+                                                </Box>
+                                            :
+                                                entry.link
+                                        }
+                                    </Box>
+                                </Box>
+                            ))
+                        }
                     </>
                 )
             default:

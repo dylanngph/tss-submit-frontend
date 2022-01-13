@@ -63,6 +63,10 @@ export const listTitle = [
                 title: 'Websites',
                 key: 'websites',
             },
+            {
+                title: 'Social Webs',
+                key: 'socialWebs',
+            },
         ]
     },
     {

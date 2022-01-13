@@ -126,6 +126,7 @@ function Application(props) {
         let projectForm = verifyObjectProject(projectItem);
         setLoadingButton(true);
         try {
+            console.log('>> process.env.REACT_APP_URL_API ', process.env.REACT_APP_URL_API);
             const response = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
             setLoadingButton(false);
             if (response && response.data) {
