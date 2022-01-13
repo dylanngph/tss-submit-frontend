@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormGroup, Autocomplete } from '@mui/material';
+import { Box, FormControl, OutlinedInput, Typography, Tooltip, TextField, FormGroup, Autocomplete, Select, MenuItem } from '@mui/material';
 import { listTitle } from './config';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -14,7 +14,7 @@ const Information = (props) => {
     const [imageLogo, setImageLogo] = useState([]);
     const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
         let arrTpm = [];
-        props.project.detail.businessAreas.map((item) => {
+        props.project.businessAreas.map((item) => {
             arrTpm.push({
                 value: item,
                 area: item,
@@ -78,6 +78,13 @@ const Information = (props) => {
         borderRadius: "12px",
     }
 
+    const styleDatePicker = {
+        '& .MuiOutlinedInput-input': {
+            width: '100px',
+            marginRight: '-30px',
+        }
+    }
+
     const autocomplete = {
         border: '1px solid #EFF2F5',
         background: '#EFF2F5',
@@ -99,17 +106,15 @@ const Information = (props) => {
     };
 
     const handleAcceptDateChange = (newValue) => {
-        let tpm = project;
-        tpm.detail.acceptDate = newValue;
         setProject({
             ...project,
-            tpm
+            ["acceptDate"]: newValue,
         });
     };
 
     const handleDobChange = (newValue) => {
         let tpm = project;
-        tpm.detail.legalRepresentative.dob = newValue;
+        tpm.legalRepresentative.dob = newValue;
         setProject({
             ...project,
             tpm
@@ -125,21 +130,17 @@ const Information = (props) => {
     };
 
     const handleAutocompleteChange = (event, newValue) => {
-        let tpm = project;
-        tpm.detail.businessAreas = newValue;
         setBusinessFieldUpdate(newValue);
         setProject({
             ...project,
-            tpm,
+            ["businessAreas"]: newValue,
         });
     };
 
     const handleInputChangeFile = (e) => {
-        let tpm = project;
-        tpm.detail.businessLicense = e.target.files[0];
         setProject({
             ...project,
-            tpm,
+            ["businessLicense"]: e.target.files[0],
         });
     };
 
@@ -150,105 +151,170 @@ const Information = (props) => {
         });
     };
 
+    const handleInputChangeSelect = (e) => {
+        const { name, value } = e.target;
+        let tpm = project;
+        tpm.legalRepresentative.idType = value;
+        setProject({
+            ...project,
+            tpm,
+        });
+    };
+
     const formatDate = (date) => {
         return date.split("-").reverse().join("/");
     }
 
     const renderItem = ({item}) => {
         let valueItem;
-         
-        if (project?.detail) {
-            // get from api
-            switch (item.key) {
-                case 'incorporationName':
-                case 'incorporationAddress':
-                case 'transactionName':
-                case 'companyCode':
-                    valueItem = project?.detail[item.key];
-                    break;
-                case 'acceptDate':
-                    // valueItem = project?.detail[item.key] ? formatDate(project?.detail[item.key]) : '';
-                    valueItem = project?.detail[item.key];
-                    break;
-                case 'businessAreas':
-                    valueItem = project?.detail[item.key].join("; ");
-                    break;
-                case 'communications':
-                case 'standards':
-                case 'websites':
-                    valueItem = project[item.key].join(", ");
-                    break;
-                case 'name':
-                case 'position':
-                case 'address':
-                case 'phone':
-                case 'email':
-                    valueItem = project?.detail.legalRepresentative[item.key];
-                    break;
-                case 'dob':
-                    // valueItem = project?.detail.legalRepresentative[item.key] ? formatDate(project?.detail.legalRepresentative[item.key]) : '';
-                    valueItem = project?.detail.legalRepresentative[item.key];
-                    break;
-                case 'identity':
-                    valueItem = project?.detail.legalRepresentative[item.key].id ? project?.detail.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
-                    break;
-                case 'logo':
-                    valueItem = `data:image/png;base64,${project[item.key]}`;
-                    break;
-                case 'whitepaper':
-                    valueItem = `data:application/pdf;base64,${project[item.key]}`;
-                    break;
-                case 'smartContractAddress':
-                    valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
-                    break;
-                case 'businessLicense':
-                    valueItem = `data:application/pdf;base64,${project?.detail[item.key]}`;
-                    break;
-                case 'developmentTeam':
-                case 'developmentPartner':
-                case 'tokenAllocations':
-                    valueItem = 'Click to see more';
-                    break;
-                default:
-                    valueItem = project[item.key];
-                    break;
-            }
-        } else {
-            if (project && project[item.key] && item.key!== "developmentTeam" && item.key!== "developmentPartner") {
-                if (typeof(project[item.key]) === "string") {
-                    valueItem = project[item.key];
-                } else {
-                    switch(item.key) {
-                        case "businessAreas":
-                            valueItem = project[item.key].map(e => e.area).join("; ");
-                            break;
-                        case "acceptDate":
-                        case "dob":
-                            valueItem = project[item.key].toLocaleDateString('vi-VI');
-                            break;
-                        case "standards":
-                        case "communications":
-                            valueItem = project[item.key].map(e => e.name).join(", ");
-                            break;
-                        case "businessLicense":
-                        case "logo":
-                        case "whitepaper":
-                            valueItem = project[item.key].name;
-                            break;
-                        case "websites":
-                            valueItem = project[item.key].join(", ");
-                            break;
-                        default:
-                            valueItem = typeof(project[item.key]);
-                            break;
-                    }
-                }
-            }
-            if (item.key === "developmentTeam" || item.key === "developmentPartner" || item.key === "developmentPartner") {
-                valueItem = 'Click to see more'
-            }
-            if (item.key === "identity") valueItem = project && project["idAuth"];
+
+        switch (item.key) {
+            case 'incorporationName':
+            case 'incorporationAddress':
+            case 'transactionName':
+            case 'companyCode':
+                valueItem = project?.[item.key];
+                break;
+            case 'acceptDate':
+                // valueItem = project?.detail[item.key] ? formatDate(project?.detail[item.key]) : '';
+                valueItem = project?.[item.key];
+                break;
+            case 'businessAreas':
+                valueItem = project?.[item.key].join("; ");
+                break;
+            case 'communications':
+            case 'standards':
+            case 'websites':
+                valueItem = project[item.key].join(", ");
+                break;
+            case 'name':
+            case 'position':
+            case 'address':
+            case 'phone':
+            case 'email':
+                valueItem = project?.legalRepresentative[item.key];
+                break;
+            case 'dob':
+                // valueItem = project?.detail.legalRepresentative[item.key] ? formatDate(project?.detail.legalRepresentative[item.key]) : '';
+                valueItem = project?.legalRepresentative[item.key];
+                break;
+            case 'identity':
+                valueItem = project?.legalRepresentative[item.key].id ? project?.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
+                break;
+            case 'logo':
+                valueItem = `data:image/png;base64,${project[item.key]}`;
+                break;
+            case 'whitepaper':
+                valueItem = `data:application/pdf;base64,${project[item.key]}`;
+                break;
+            case 'smartContractAddress':
+                valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
+                break;
+            case 'businessLicense':
+                valueItem = `data:application/pdf;base64,${project?.[item.key]}`;
+                break;
+            case 'developmentTeam':
+            case 'developmentPartner':
+            case 'tokenAllocations':
+                valueItem = 'Click to see more';
+                break;
+            default:
+                valueItem = project[item.key];
+                break;
         }
+         
+        // if (project?.detail) {
+        //     // get from api
+        //     switch (item.key) {
+        //         case 'incorporationName':
+        //         case 'incorporationAddress':
+        //         case 'transactionName':
+        //         case 'companyCode':
+        //             valueItem = project?.detail[item.key];
+        //             break;
+        //         case 'acceptDate':
+        //             // valueItem = project?.detail[item.key] ? formatDate(project?.detail[item.key]) : '';
+        //             valueItem = project?.detail[item.key];
+        //             break;
+        //         case 'businessAreas':
+        //             valueItem = project?.detail[item.key].join("; ");
+        //             break;
+        //         case 'communications':
+        //         case 'standards':
+        //         case 'websites':
+        //             valueItem = project[item.key].join(", ");
+        //             break;
+        //         case 'name':
+        //         case 'position':
+        //         case 'address':
+        //         case 'phone':
+        //         case 'email':
+        //             valueItem = project?.detail.legalRepresentative[item.key];
+        //             break;
+        //         case 'dob':
+        //             // valueItem = project?.detail.legalRepresentative[item.key] ? formatDate(project?.detail.legalRepresentative[item.key]) : '';
+        //             valueItem = project?.detail.legalRepresentative[item.key];
+        //             break;
+        //         case 'identity':
+        //             valueItem = project?.detail.legalRepresentative[item.key].id ? project?.detail.legalRepresentative[item.key].id.substring(0, 3) + '******' : '*********';
+        //             break;
+        //         case 'logo':
+        //             valueItem = `data:image/png;base64,${project[item.key]}`;
+        //             break;
+        //         case 'whitepaper':
+        //             valueItem = `data:application/pdf;base64,${project[item.key]}`;
+        //             break;
+        //         case 'smartContractAddress':
+        //             valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
+        //             break;
+        //         case 'businessLicense':
+        //             valueItem = `data:application/pdf;base64,${project?.detail[item.key]}`;
+        //             break;
+        //         case 'developmentTeam':
+        //         case 'developmentPartner':
+        //         case 'tokenAllocations':
+        //             valueItem = 'Click to see more';
+        //             break;
+        //         default:
+        //             valueItem = project[item.key];
+        //             break;
+        //     }
+        // } else {
+        //     if (project && project[item.key] && item.key!== "developmentTeam" && item.key!== "developmentPartner") {
+        //         if (typeof(project[item.key]) === "string") {
+        //             valueItem = project[item.key];
+        //         } else {
+        //             switch(item.key) {
+        //                 case "businessAreas":
+        //                     valueItem = project[item.key].map(e => e.area).join("; ");
+        //                     break;
+        //                 case "acceptDate":
+        //                 case "dob":
+        //                     valueItem = project[item.key].toLocaleDateString('vi-VI');
+        //                     break;
+        //                 case "standards":
+        //                 case "communications":
+        //                     valueItem = project[item.key].map(e => e.name).join(", ");
+        //                     break;
+        //                 case "businessLicense":
+        //                 case "logo":
+        //                 case "whitepaper":
+        //                     valueItem = project[item.key].name;
+        //                     break;
+        //                 case "websites":
+        //                     valueItem = project[item.key].join(", ");
+        //                     break;
+        //                 default:
+        //                     valueItem = typeof(project[item.key]);
+        //                     break;
+        //             }
+        //         }
+        //     }
+        //     if (item.key === "developmentTeam" || item.key === "developmentPartner" || item.key === "developmentPartner") {
+        //         valueItem = 'Click to see more'
+        //     }
+        //     if (item.key === "identity") valueItem = project && project["idAuth"];
+        // }
 
         switch(item.key) {
             case 'businessAreas':
@@ -304,15 +370,16 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <>
-                                    <OutlinedInput
-                                        required
-                                        id="businessLicense"
-                                        name="businessLicense"
-                                        type="file"
-                                        placeholder="Tải lên (Tối đa 5mb)"
-                                        inputProps={{ accept: "application/pdf" }}
-                                        onChange={handleInputChangeFile}
-                                    />
+                                        <OutlinedInput
+                                            required
+                                            id="businessLicense"
+                                            name="businessLicense"
+                                            type="file"
+                                            placeholder="Tải lên (Tối đa 5mb)"
+                                            inputProps={{ accept: "application/pdf" }}
+                                            onChange={handleInputChangeFile}
+                                        />
+                                        <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
                                         <Box sx={boxFlag}>
                                             <Tooltip title={project.note.flags[item.key]}>
                                                 <img src="/assets/icons/flag.svg" />
@@ -333,15 +400,16 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <>
-                                    <OutlinedInput
-                                        required
-                                        id="businessLicense"
-                                        name="businessLicense"
-                                        type="file"
-                                        placeholder="Tải lên (Tối đa 5mb)"
-                                        inputProps={{ accept: "application/pdf" }}
-                                        onChange={handleInputChangeFileWhitepaper}
-                                    />
+                                        <OutlinedInput
+                                            required
+                                            id="businessLicense"
+                                            name="businessLicense"
+                                            type="file"
+                                            placeholder="Tải lên (Tối đa 5mb)"
+                                            inputProps={{ accept: "application/pdf" }}
+                                            onChange={handleInputChangeFileWhitepaper}
+                                        />
+                                        <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
                                         <Box sx={boxFlag}>
                                             <Tooltip title={project.note.flags[item.key]}>
                                                 <img src="/assets/icons/flag.svg" />
@@ -415,11 +483,11 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <FormGroup sx={{ display: "flex", flexDirection: "row" }}>
-                                        {/* <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
+                                        <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
                                             labelId="idType"
                                             name="idType"
                                             id="idType"
-                                            value={formValues.idType}
+                                            value={project.legalRepresentative.idType}
                                             onChange={handleInputChangeSelect}
                                         >
                                             {informations.map((item, index) => (
@@ -432,11 +500,9 @@ const Information = (props) => {
                                             name="idAuth"
                                             type="text"
                                             placeholder="0678****"
-                                            value={formValues.idAuth}
+                                            value={project.legalRepresentative.id}
                                             onChange={handleInputChange}
-                                            onBlur={handleInputBlur}
-                                            error={validator.idAuth}
-                                        /> */}
+                                        />
                                         <Box sx={boxFlag}>
                                             <Tooltip title={project.note.flags[item.key]}>
                                                 <img src="/assets/icons/flag.svg" />
@@ -457,7 +523,7 @@ const Information = (props) => {
                             {
                                 (project && project.note && project.note.flags && project.note.flags[item.key]) ?
                                     <>
-                                        <DevelopmentTeam defaultValues={projectItem} setFormValuesProject={setFormValuesProject} />
+                                        {/* <DevelopmentTeam defaultValues={project} /> */}
                                     </>
                                 :
                                     valueItem
@@ -480,16 +546,16 @@ const Information = (props) => {
                                                     item.key === 'acceptDate' ?
                                                             <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
-                                                            value={project?.detail[item.key]}
+                                                            value={project?.[item.key]}
                                                             onChange={handleAcceptDateChange}
-                                                            renderInput={(params) => <TextField {...params} />}
+                                                            renderInput={(params) => <TextField sx={styleDatePicker} {...params} />}
                                                         />
                                                     :
                                                         <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
-                                                            value={project?.detail.legalRepresentative[item.key]}
+                                                            value={project?.legalRepresentative[item.key]}
                                                             onChange={handleDobChange}
-                                                            renderInput={(params) => <TextField {...params} />}
+                                                            renderInput={(params) => <TextField sx={styleDatePicker} {...params} />}
                                                         />
                                                 }
                                                 
@@ -499,7 +565,7 @@ const Information = (props) => {
                                                     id={item.key}
                                                     name={item.key}
                                                     type="text"
-                                                    value={project[item.key] || project?.detail[item.key] || project?.detail.legalRepresentative[item.key]}
+                                                    value={project[item.key] || project?.[item.key] || project?.legalRepresentative[item.key]}
                                                     onChange={handleInputChange}
                                                 />
                                         }
