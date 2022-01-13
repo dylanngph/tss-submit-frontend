@@ -19,14 +19,16 @@ function MainPage(props) {
 
     const fetchData = async () => {
         setLoading(true);
-        const res = await axios.get(`${process.env.REACT_APP_URL_API}/project/user`, { headers: { "Authorization": `Bearer ${token}` } });
-        setProjectItem(res.data.data);
-        dispatch(postBreadcrumb([
-            {
-                'label': res.data.data ? res.data.data.projectName : '',
-            },
-        ]))
-        setLoading(false);
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_URL_API}/project/user`, { headers: { "Authorization": `Bearer ${token}` } });
+            setProjectItem(res.data.data);
+            dispatch(postBreadcrumb([
+                {
+                    'label': res.data.data ? res.data.data.projectName : '',
+                },
+            ]))
+            setLoading(false);
+        } catch (e) {}
     };
 
     const handleUpdateData = async () => {
@@ -49,8 +51,8 @@ function MainPage(props) {
                                 <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                             )
                         }
-                        
                         <Information project={projectItem} stateEdit={true} />
+                        
                     </>
 
                     :

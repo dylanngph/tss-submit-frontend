@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, TextareaAutosize, Typography, FormHelperText } from '@mui/material';
 import Select from '@mui/material/Select';
+import { socialsListConstant } from 'constants/config';
 import DevelopmentTeam from 'components/custom/DevelopmentTeam';
 import DevelopmentPartner from 'components/custom/DevelopmentPartner';
 
@@ -17,59 +18,6 @@ function Project(props) {
             ["socialWebs"]: tpm_websitessocial,
         });
     };
-
-    let socials = [
-        {
-            value: "Facebook",
-            name: "Facebook",
-            icon: "/assets/icons/socials/facebook.svg"
-        },
-        {
-            value: "Telegram",
-            name: "Telegram",
-            icon: "/assets/icons/socials/telegram.svg"
-        },
-        {
-            value: "Zalo",
-            name: "Zalo",
-            icon: "/assets/icons/socials/zalo.svg"
-        },
-        {
-            value: "Tiktok",
-            name: "Tiktok",
-            icon: "/assets/icons/socials/tiktok.svg"
-        },
-        {
-            value: "Discord",
-            name: "Discord",
-            icon: "/assets/icons/socials/discord.svg"
-        },
-        {
-            value: "Medium",
-            name: "Medium",
-            icon: "/assets/icons/socials/medium.svg"
-        },
-        {
-            value: "Twitter",
-            name: "Twitter",
-            icon: "/assets/icons/socials/twitter.svg"
-        },
-        {
-            value: "Instagram",
-            name: "Instagram",
-            icon: "/assets/icons/socials/instagram.svg"
-        },
-        {
-            value: "YouTube",
-            name: "YouTube",
-            icon: "/assets/icons/socials/youtube.svg"
-        },
-        {
-            value: "Tùy chọn khác",
-            name: "Tùy chọn khác",
-            icon: "/assets/icons/socials/more.svg"
-        },
-    ]
 
     const [formValues, setFormValues] = useState(projectItem);
     const [validator, setValidator] = useState({});
@@ -328,7 +276,7 @@ function Project(props) {
                                         input={<OutlinedInput label="Tag" />}
                                         className="social-items"
                                     >
-                                        {socials.map((item, index) => (
+                                        {socialsListConstant.map((item, index) => (
                                             <MenuItem key={index} className="social-item" key={item.name} value={item.value}>
                                                 <img src={item.icon} alt={item.name} />
                                                 {item.name}
