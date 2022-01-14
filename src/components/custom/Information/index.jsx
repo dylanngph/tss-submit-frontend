@@ -807,7 +807,7 @@ const Information = (props) => {
         <>
             {
                 (
-                    project && project.note && project.note.flags.length &&
+                    project && project.note && Object.keys(project.note.flags).length &&
                     <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                 )
             }
