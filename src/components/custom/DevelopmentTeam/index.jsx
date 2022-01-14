@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, IconButton, OutlinedInput } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
@@ -214,7 +214,14 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
     const [validator, setValidator] = useState({});
     const [validatorTeam, setValidatorTeam] = useState(false);
 
-    console.log('developmentTeam==>', developmentTeam);
+    useEffect(() => {
+        if (!developmentTeam.length) setValidatorTeam(false);
+        const validatorDevTeam = developmentTeam.filter((member) => {
+            return member.image.length && member.name && member.position;
+        });
+        if (validatorDevTeam.length) setValidatorTeam(true);
+        else setValidatorTeam(false);
+    }, []);
 
     const handleAddMember = () => {
         const nextItem = {

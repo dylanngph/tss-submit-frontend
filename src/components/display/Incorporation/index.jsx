@@ -25,8 +25,13 @@ function Incorporation(props) {
             ...formValues,
             ["businessLicense"]: e.target.files[0],
         });
-        validateForm({ ["businessLicense"]: e.target.files[0] });
+        validateForm({ ["businessLicense"]: e.target.files[0]?true:false });
     };
+
+    const handleInputBlur = (e) => {
+        const { name, value } = e.target;
+        validateForm({ [name]: value });
+    }
 
     const handleInputChangeBusinessAreas = (newValue) => {
         const { name, value } = newValue.target;
@@ -51,7 +56,6 @@ function Incorporation(props) {
     };
 
     const handleAutocompleteChange = (event, newValue) => {
-        console.log('newValue==>', newValue);
         setFormValues({
             ...formValues,
             ['businessAreas']: newValue,
@@ -80,6 +84,17 @@ function Incorporation(props) {
         setErrors({
             ...temp
         })
+        const stateActive = Object.values(temp).every((item) => !item);
+        if (stateActive && checkRequire()) {
+            props.setStateNextButton(true);
+        } else {
+            props.setStateNextButton(false);
+        }
+    };
+
+    const checkRequire = () => {
+        if (formValues.incorporationName && formValues.incorporationAddress && formValues.companyCode && formValues.acceptDate && formValues.businessAreas.length) return true;
+        return false;
     };
 
     useEffect(() => {
@@ -111,6 +126,7 @@ function Incorporation(props) {
                             placeholder="Tên tổ chức"
                             value={formValues.incorporationName}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
                             error={errors.incorporationName}
                         />
                         {
@@ -128,6 +144,7 @@ function Incorporation(props) {
                             placeholder="Địa chỉ"
                             value={formValues.incorporationAddress}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
                             error={errors.incorporationAddress}
                         />
                         {
@@ -199,6 +216,7 @@ function Incorporation(props) {
                             placeholder="Mã số doanh nghiệp"
                             value={formValues.companyCode}
                             onChange={handleInputChange}
+                            onBlur={handleInputBlur}
                             error={errors.companyCode}
                         />
                         {

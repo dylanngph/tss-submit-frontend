@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from '@mui/material/styles';
 import { Box, Button, Modal, List, ListItem, Grid, Collapse, Typography, Divider, IconButton, FormControl, FormLabel, OutlinedInput } from '@mui/material';
 import { TransitionGroup } from 'react-transition-group';
@@ -56,6 +56,9 @@ const chose = {
     padding: "16px",
     background: "#EFF2F5",
     borderRadius: "8px",
+    "&.valid": {
+        border: "2px solid #58667E"
+    }
 }
 
 const wrapItem = {
@@ -188,12 +191,22 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
 const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
 
     const [open, setOpen] = useState(false);
+    const [validatorPartner, setValidatorPartner] = useState(false);
+    const [partner, setPartner] = useState(defaultValues?.developmentPartner);
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false)
     };
 
-    const [partner, setPartner] = useState(defaultValues?.developmentPartner);
+    useEffect(() => {
+        if (!partner.length) setValidatorPartner(false);
+        const validatorDevPartner = partner.filter((member) => {
+            return member.image.length && member.name && member.website;
+        });
+        if (validatorDevPartner.length) setValidatorPartner(true);
+        else setValidatorPartner(false);
+    }, []);
 
     const handleAddPartner = () => {
         const nextItem = {
@@ -230,6 +243,12 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
     const setPartnerForm = (arrData) => {
         setPartner(arrData);
         setFormValuesProject('developmentPartner', arrData);
+        if (!partner.length) setValidatorPartner(false);
+        const validatorDevPartner = partner.filter((member) => {
+            return member.image.length && member.name && member.website;
+        });
+        if (validatorDevPartner.length) setValidatorPartner(true);
+        else setValidatorPartner(false);
     };
 
     const addPartnerButton = (
@@ -245,7 +264,7 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
 
     return (
         <div>
-            <Box sx={chose} onClick={handleOpen}>Đối tác phát triển</Box>
+            <Box sx={chose} onClick={handleOpen} className={validatorPartner ? 'valid': ''}>Đối tác phát triển</Box>
 
             <Modal
                 open={open}
