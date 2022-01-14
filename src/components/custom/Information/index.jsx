@@ -415,6 +415,9 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
+                                    props.stateEdit ?
+                                    <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
+                                    :
                                     valueItem
                             }
                         </Box>
@@ -445,6 +448,9 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
+                                    props.stateEdit ?
+                                        <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
+                                    :
                                     valueItem
                             }
                         </Box>
@@ -495,7 +501,12 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
-                                    valueItem
+                                    props.stateEdit ?
+                                        <BoxImageUpload>
+                                            <img src={valueItem} alt="img" width="20px" height="20px" />
+                                        </BoxImageUpload>
+                                    :
+                                        valueItem
                             }
                         </Box>
                     </>
@@ -698,7 +709,8 @@ const Information = (props) => {
                                     
                                     </>
                                 :
-                                valueItem
+                                    <a target="_blank" href={valueItem}>{valueItem}</a>
+                                
                             }
                         </Box>
                     </>
@@ -740,7 +752,7 @@ const Information = (props) => {
                                                     </Box>
                                                 </Box>
                                             :
-                                                entry.link
+                                                <a target="_blank" href={entry.link}>{entry.link}</a>
                                         }
                                     </Box>
                                 </Box>
