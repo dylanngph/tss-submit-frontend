@@ -202,6 +202,13 @@ const Information = (props) => {
         });
     };
 
+    const handleCheckShowButton = () => {
+        if (Object.keys(project?.note?.flags).length) {
+            return true;
+        }
+        return false;
+    }
+
     const handleInputIdentityChange = (e) => {
         const { name, value } = e.target;
         let tpm = project;
@@ -817,7 +824,7 @@ const Information = (props) => {
         <>
             {
                 (
-                    project && project.note && Object.keys(project.note.flags).length &&
+                    project && project.note && handleCheckShowButton() &&
                     <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                 )
             }

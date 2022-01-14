@@ -220,7 +220,8 @@ function Tokenomics(props) {
                         />
                     </FormControl>
                     <FormControl className="form-control mb-16">
-                        <FormLabel>Địa chỉ Smart Contract (Không bắt buộc)</FormLabel>
+                        {/* <FormLabel>Địa chỉ Smart Contract (Không bắt buộc)</FormLabel> */}
+                        <FormLabel>Địa chỉ Smart Contract</FormLabel>
                         <OutlinedInput
                             id="smartContractAddress"
                             name="smartContractAddress"
