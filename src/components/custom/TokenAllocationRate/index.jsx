@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Button,
@@ -64,6 +64,9 @@ const chose = {
     padding: "16px",
     background: "#EFF2F5",
     borderRadius: "8px",
+    "&.valid": {
+        border: "2px solid #58667E"
+    }
 };
 
 function renderItem({ item, index, handleInputCateChange, handleRemoveCate, view }) {
@@ -171,12 +174,22 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate, view
 
 const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     const [items, setItems] = useState(defaultValues?.tokenAllocations);
+    const [validatorTokenRate, setValidatorTokenRate] = useState(false);
 
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
         setOpen(false);
     };
+
+    useEffect(() => {
+        if (!items.length) setValidatorTokenRate(false);
+        const validator = items.filter((entry) => {
+            return entry.allocationName && entry.rate && entry.price && entry.amount && entry.vesting;
+        });
+        if (validator.length) setValidatorTokenRate(true);
+        else setValidatorTokenRate(false);
+    }, []);
 
     const handleAddCate = () => {
         const nextHiddenItem = {
@@ -205,6 +218,12 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     const setTokenAllocations = (arrData) => {
         setItems(arrData);
         setFormValuesProject("tokenAllocations", arrData);
+        if (!items.length) setValidatorTokenRate(false);
+        const validator = items.filter((entry) => {
+            return entry.allocationName && entry.rate && entry.price && entry.amount && entry.vesting;
+        });
+        if (validator.length) setValidatorTokenRate(true);
+        else setValidatorTokenRate(false);
     };
 
     const addCateButton = (
@@ -234,7 +253,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
 
     return (
         <div>
-            <Box sx={chose} onClick={handleOpen}>
+            <Box sx={chose} onClick={handleOpen} className={validatorTokenRate ? 'valid': ''}>
                 Phân bổ token
             </Box>
             <Modal

@@ -286,7 +286,7 @@ function Application(props) {
                         </Box>
                         <Box sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
                             <TabPanel value={value} index={0}>
-                                <Incorporation projectItem={projectItem} setProjectItemStep={setProjectItemStep}/>
+                                <Incorporation projectItem={projectItem} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
                             </TabPanel>
                             <TabPanel value={value} index={1}>
                                 <Project projectItem={projectItem} setProjectItemStep={setProjectItemStep} stateNextBtn={stateNextBtn} setStateNextButton={setStateNextButton} />
@@ -333,7 +333,7 @@ function Application(props) {
                             :
                             null}
                         <Box sx={{ width: '212px' }}>
-                            <Button onClick={handleNext} variant="contained" className="button" type="submit">
+                            <Button onClick={handleNext} variant="contained" className="button" type="submit" disabled={!stateNextBtn}>
                                 Tiếp tục
                             </Button>
                         </Box>
