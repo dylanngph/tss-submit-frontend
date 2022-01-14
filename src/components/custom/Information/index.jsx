@@ -235,17 +235,34 @@ const Information = (props) => {
 
     const handleUpdateData = async () => {
         try {
-            console.log('project==>', project);
             let res;
+            let temporaryVariable = project;
+
+            if (temporaryVariable && temporaryVariable.developmentTeam) {
+                temporaryVariable?.developmentTeam.map((item, index) =>{
+                    if (typeof item.image === 'object') {
+                        item.image = item.image[0].data_url
+                    }
+                })
+            }
+            
+            if (temporaryVariable && temporaryVariable.developmentPartner) {
+                temporaryVariable?.developmentPartner.map((item, index) =>{
+                    if (typeof item.image === 'object') {
+                        item.image = item.image[0].data_url
+                    }
+                })
+            }
+
             if(project.statusId == '1') {
-                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             else if (project.statusId == '2' || project.statusId == '3') {
-                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             
             if (res.data) {
-                console.log('res===>', res);
+                window.location.reload(false);
             }
         } catch (error) {
             console.log(error)
