@@ -254,6 +254,24 @@ const Information = (props) => {
                 })
             }
 
+            if (temporaryVariable) {
+                if (temporaryVariable.name) {
+                    temporaryVariable.legalRepresentative.name = temporaryVariable.name;
+                }
+                if (temporaryVariable.dob) {
+                    temporaryVariable.legalRepresentative.dob = temporaryVariable.dob;
+                }
+                if (temporaryVariable.position) {
+                    temporaryVariable.legalRepresentative.position = temporaryVariable.position;
+                }
+                if (temporaryVariable.address) {
+                    temporaryVariable.legalRepresentative.address = temporaryVariable.address;
+                }
+                if (temporaryVariable.email) {
+                    temporaryVariable.legalRepresentative.email = temporaryVariable.email;
+                }
+            }
+
             if(project.statusId == '1') {
                 res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
