@@ -69,6 +69,7 @@ function Application(props) {
         frontIdImage: "",
     });
     const [projectItem, setProjectItem] = useState(projectData);
+    // const [projectFormPost, setProjectFormPost] = useState({});
     const [openModel, setopenModel] = useState(false);
 
     const setProjectItemStep = (data) => {
@@ -90,6 +91,11 @@ function Application(props) {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         if (activeStep >= STEPS.length - 1) {
             setShowPreview(true);
+            // let projectForm = verifyObjectProject(projectItem);
+            // setProjectFormPost({
+            //     ...projectFormPost,
+            //     projectForm
+            // });
         } else {
             setValue((prevActiveStep) => prevActiveStep + 1);
             setStateNextButton(false);
@@ -182,10 +188,10 @@ function Application(props) {
         // tokenAllocations
         let listTokenAllocations = [];
         tpmProject.tokenAllocations.map((item) => {
-            if (item.allocationName && item.price && item.amount && item.rate && item.vesting) {
-                item.rate = parseInt(item.rate);
-                item.price = parseInt(item.price);
-                item.amount = parseInt(item.amount);
+            if (item.allocationName && item.amount && item.rate && item.vesting) {
+                item.rate = parseFloat(item?.rate);
+                item.price = parseFloat(item?.price);
+                item.amount = parseFloat(item?.amount);
                 listTokenAllocations.push(item);
             }
         });
@@ -228,7 +234,7 @@ function Application(props) {
     }
     
     const convertDateToString = (date) => {
-        if (!date) return;
+        if (!date || !(date instanceof Date)) return;
         return date.toISOString().slice(0, 10);
     };
 
