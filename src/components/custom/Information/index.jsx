@@ -229,7 +229,14 @@ const Information = (props) => {
     const handleUpdateData = async () => {
         try {
             console.log('project==>', project);
-            const res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+            let res;
+            if(project.statusId == '1') {
+                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+            }
+            else if (project.statusId == '2' || project.statusId == '3') {
+                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+            }
+            
             if (res.data) {
                 console.log('res===>', res);
             }

@@ -61,12 +61,12 @@ function User(props) {
                 <Box>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab className="tab-title" label="Hồ sơ" {...a11yProps(0)} />
-                        {/* <Tab className="tab-title" label="Hoạt động" {...a11yProps(1)} /> */}
+                        <Tab className="tab-title" label="Hoạt động" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <Box className={`simple-tabpanel-${value}`} sx={{ background: "#FFFFFF", borderRadius: '12px 12px 0px 0px', padding: "24px 36px" }}>
                     <Profile token={token} data={data} value={value} index={0} />
-                    {/* <Activity value={value} index={1} /> */}
+                    <Activity value={value} index={1} />
                 </Box>
             </Box>
             <History />
