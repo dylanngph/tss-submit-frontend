@@ -39,9 +39,9 @@ export const projectData = {
     standards: [],
     smartContractAddress: "",
     tokenAllocations: [
-        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
-        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
-        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '5% unlock at TGE, 90-days cliff, 6% monthly' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '5% unlock at TGE, 90-days cliff, 6% monthly' },
+        { id: uuid(), allocationName: '', rate: null, price: null, amount: null, vesting: '5% unlock at TGE, 90-days cliff, 6% monthly' },
     ],
 
     name: "",

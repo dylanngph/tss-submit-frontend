@@ -198,7 +198,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
             rate: null,
             price: null,
             amount: null,
-            vesting: "",
+            vesting: "5% unlock at TGE, 90-days cliff, 6% monthly",
         };
         if (nextHiddenItem) {
             setItems((items) => [...items, nextHiddenItem]);
@@ -218,8 +218,8 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     const setTokenAllocations = (arrData) => {
         setItems(arrData);
         setFormValuesProject("tokenAllocations", arrData);
-        if (!items.length) setValidatorTokenRate(false);
-        const validator = items.filter((entry) => {
+        if (!items?.length) setValidatorTokenRate(false);
+        const validator = items?.filter((entry) => {
             return entry.allocationName && entry.rate && entry.price && entry.amount && entry.vesting;
         });
         if (validator.length) setValidatorTokenRate(true);

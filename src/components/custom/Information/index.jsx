@@ -322,7 +322,7 @@ const Information = (props) => {
                             valueItem = project[item.key].join(", ");
                             break;
                         default:
-                            valueItem = typeof(project[item.key]);
+                            valueItem = valueItem = project[item.key];
                             break;
                     }
                 }
@@ -408,7 +408,7 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
-                                    <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
+                                    valueItem
                             }
                         </Box>
                     </>
@@ -438,7 +438,7 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
-                                    <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
+                                    valueItem
                             }
                         </Box>
                     </>
@@ -488,9 +488,7 @@ const Information = (props) => {
                                         </Box>
                                     </>
                                 :
-                                    <BoxImageUpload>
-                                        <img src={valueItem} alt="img" width="20px" height="20px" />
-                                    </BoxImageUpload>
+                                    valueItem
                             }
                         </Box>
                     </>
