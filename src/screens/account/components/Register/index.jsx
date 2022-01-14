@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, FormHelperText } from '@mui/material';
 import { postAccountRegisterData } from 'redux/account/account.action'
 import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'app/hooks';
@@ -155,6 +155,10 @@ function RegisterAccount(props) {
                         onBlur={handleInputBlurRetypePassword}
                         error={errorsState.retypePassword}
                     />
+                    {
+                        errorsState.retypePassword &&
+                        <FormHelperText error>Xác nhận mật khẩu không đúng</FormHelperText>
+                    }
                 </FormControl>
                 <p className="text-center">
                     {
