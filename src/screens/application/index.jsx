@@ -101,7 +101,7 @@ function Application(props) {
             setStateNextButton(false);
         }
 
-        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper", "backIdImage", "frontIdImage"];
+        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper"];
         // convert all file to base64
         ARR_LIST_KEY_FILE.map((key) => {
             if (!projectItem[key] || listBase64[key]) return;
@@ -151,7 +151,7 @@ function Application(props) {
 
     const verifyObjectProject = (data) => {
         let tpmProject = data;
-        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper", "backIdImage", "frontIdImage"];
+        const ARR_LIST_KEY_FILE = ["businessLicense", "logo", "whitepaper"];
         const KEY_ACCEPT_DATE = "acceptDate";
 
         // convert all file to base64
@@ -224,8 +224,8 @@ function Application(props) {
                 idType: tpmProject.idType,
                 id: tpmProject.idAuth
             },
-            frontIdImage: listBase64.frontIdImage,
-            backIdImage: listBase64.backIdImage,
+            frontIdImage: tpmProject.frontIdImage,
+            backIdImage: tpmProject.backIdImage,
             address: tpmProject.address,
             phone: tpmProject.phone,
             email: tpmProject.email

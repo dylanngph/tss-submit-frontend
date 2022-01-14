@@ -30,10 +30,14 @@ function LegalRepresentative(props) {
         const { name, value } = e.target;
         const typeFile = ["frontIdImage", "backIdImage"];
         if (typeFile.includes(name)) {
-            setFormValues({
-                ...formValues,
-                [name]: e.target.files[0],
-            });
+            convertFile(e.target.files[0])
+            .then(res => {
+                setFormValues({
+                    ...formValues,
+                    [name]: res,
+                });
+            })
+            .catch(error => console.log(error));
         } else {
             setFormValues({
                 ...formValues,
@@ -92,6 +96,18 @@ function LegalRepresentative(props) {
     const handleSubmit = (event) => {
         event.preventDefault();
     };
+
+    const convertFile = async (props) => {
+        const blobToBase64 = (blob) =>
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            })
+        const toBase64 = await blobToBase64(props).then((data) => data);
+        return toBase64?.toString();
+    }
 
     useEffect(() => {
         props.setProjectItemStep(formValues);
