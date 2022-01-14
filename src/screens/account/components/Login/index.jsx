@@ -19,6 +19,7 @@ function LoginAccount({setToken}) {
     })
 
     const [errorsState, setErrorsState] = useState(false);
+    const [stateErrorLogin, setStateErrorLogin] = useState(false);
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -26,6 +27,7 @@ function LoginAccount({setToken}) {
     }
 
     const handleSubmit = async (event) => {
+        setStateErrorLogin(false);
         try {
             event.preventDefault();
             const res = await axios.post(`${process.env.REACT_APP_URL_API}/auth/sign-in`, values);
@@ -33,8 +35,10 @@ function LoginAccount({setToken}) {
                 setToken(res.data.data.accessToken);
                 history.push('/')
             }
+            console.log('res===>', res);
         } catch (error) {
             console.log('error===>', error);
+            setStateErrorLogin(true);
         }
     };
 
@@ -123,6 +127,10 @@ function LoginAccount({setToken}) {
                 <p className="text-center">
                     <Link to="/register" className="call-to-action" underline="none">Tạo tài khoản mới</Link>
                 </p>
+                {
+                    stateErrorLogin &&
+                    <Box sx={{color: '#e74c3c', textAlign: 'center', marginTop: '10px'}}>Đăng nhập không thành công, tên đăng nhập hoặc mật khẩu không đúng</Box>
+                }
             </form>
         </Box>
     )
