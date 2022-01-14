@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Modal, Typography, Divider } from '@mui/material';
 import CountrySelect from '../Button/CountrySelect';
 import { Link } from 'react-router-dom'
-
+import axios from 'axios';
+import useToken from 'components/hook/useToken';
 
 const CreateAplication = (props) => {
     const defaultValues = {
         appType: 1,
         country: ''
+    };
+
+    const { token, setToken } = useToken();
+    const [projectItem, setProjectItem] = useState({});
+
+    useEffect(async () => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const res = await axios.get(`${process.env.REACT_APP_URL_API}/project/user`, { headers: { "Authorization": `Bearer ${token}` } });
+            setProjectItem(res.data.data);
+        } catch (e) {}
     };
 
     let data = [
@@ -135,7 +150,13 @@ const CreateAplication = (props) => {
 
     return (
         <div>
-            <Button className="button" onClick={handleOpen}>Tạo hồ sơ</Button>
+            {
+                (
+                    !projectItem &&
+                    <Button className="button" onClick={handleOpen}>Tạo hồ sơ</Button>
+                )
+            }
+            
 
             <Modal
                 open={open}

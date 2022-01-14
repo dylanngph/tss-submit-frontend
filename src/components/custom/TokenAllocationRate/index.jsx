@@ -183,11 +183,11 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     };
 
     useEffect(() => {
-        if (!items.length) setValidatorTokenRate(false);
-        const validator = items.filter((entry) => {
+        if (!items?.length) setValidatorTokenRate(false);
+        const validator = items?.filter((entry) => {
             return entry.allocationName && entry.rate && entry.price && entry.amount && entry.vesting;
         });
-        if (validator.length) setValidatorTokenRate(true);
+        if (validator?.length) setValidatorTokenRate(true);
         else setValidatorTokenRate(false);
     }, []);
 

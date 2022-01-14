@@ -219,7 +219,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
         const validatorDevTeam = developmentTeam?.filter((member) => {
             return member.image.length && member.name && member.position;
         });
-        if (validatorDevTeam.length) setValidatorTeam(true);
+        if (validatorDevTeam?.length) setValidatorTeam(true);
         else setValidatorTeam(false);
     }, []);
 
