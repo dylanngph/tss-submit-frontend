@@ -798,7 +798,13 @@ const Information = (props) => {
 
     return (
         <>
-            <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
+            {
+                (
+                    project && project.note && project.note.flags.length &&
+                    <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
+                )
+            }
+            
             {
                 listTitle.map(entry => (
                     <Box key={entry.title} sx={{marginBottom: "24px"}}>
