@@ -23,7 +23,6 @@ function MainPage(props) {
         try {
             const res = await axios.get(`${process.env.REACT_APP_URL_API}/project/user`, { headers: { "Authorization": `Bearer ${token}` } });
             setProjectItem(res.data.data);
-            console.log('setProjectItem==>', setProjectItem);
             dispatch(postBreadcrumb([
                 {
                     'label': res.data.data ? res.data.data.projectName : '',
