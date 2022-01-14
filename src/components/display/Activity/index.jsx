@@ -1,14 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, TableRow, TableHead, Table, TableContainer, Paper, TableBody, TableCell, TablePagination } from '@mui/material';
 import axios from 'axios';
 import useToken from 'components/hook/useToken';
+import moment from "moment";
 
 function Activity(props) {
     const { children, value, index, ...other } = props;
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [data, setData] = React.useState();
-    const {token, setToken} = useToken();
+    const [rows, setRow] = React.useState([]);
+    const { token, setToken } = useToken();
 
     const columns = [
         { id: 'name', label: '#', minWidth: 70 },
@@ -26,18 +27,10 @@ function Activity(props) {
         },
     ];
 
-    function createData(name, time, link) {
-        return { name, time, link };
+    function createData(index, name, time, link) {
+        time = moment(time).format('hh:mm DD/MM/YYYY');
+        return { index, name, time, link };
     }
-
-    const rows = [
-        createData('Hồ sơ đã được gửi', '17:14 21/11/2021', '/abc/abc'),
-        createData('Hồ sơ đã được duyệt', '17:14 21/11/2021', '/abc/abc'),
-        createData('Yêu cầu chỉnh sửa đã được duyệt', '17:14 21/11/2021', '/abc/abc'),
-        createData('Yêu cầu chỉnh sửa đã được gửi', '17:14 21/11/2021', '/abc/abc'),
-        createData('Đơn xin con dấu đã được duyệt', '17:14 21/11/2021', '/abc/abc'),
-        createData('Đơn xin con dấu đang được xử lý', '17:14 21/11/2021', '/abc/abc'),
-    ];
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -76,7 +69,11 @@ function Activity(props) {
         try {
             const response = await axios.get(`${process.env.REACT_APP_URL_API}/notification/user`, { headers: { "Authorization": `Bearer ${token}` } });
             if (response.data) {
-                console.log('response===>', response);
+                setRow([]);
+                const data = response.data.data;
+                data?.map((item, index) => {
+                    setRow(data => [...data, createData(index + 1, item?.title, item?.updatedAt, item?.link)])
+                })
             }
         } catch (error) {
             console.log(error);
@@ -110,7 +107,7 @@ function Activity(props) {
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                                             <TableCell sx={tdStyle}>
-                                                {index + 1}
+                                                {rows[index]['index']}
                                             </TableCell>
                                             <TableCell sx={tdStyle}>
                                                 {rows[index]['name']}
