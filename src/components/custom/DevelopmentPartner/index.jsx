@@ -200,11 +200,11 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
     };
 
     useEffect(() => {
-        if (!partner.length) setValidatorPartner(false);
-        const validatorDevPartner = partner.filter((member) => {
+        if (!partner?.length) setValidatorPartner(false);
+        const validatorDevPartner = partner?.filter((member) => {
             return member.image.length && member.name && member.website;
         });
-        if (validatorDevPartner.length) setValidatorPartner(true);
+        if (validatorDevPartner?.length) setValidatorPartner(true);
         else setValidatorPartner(false);
     }, []);
 
