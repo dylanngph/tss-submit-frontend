@@ -193,7 +193,7 @@ function renderItem({ item, index, validator, handleImgTeamUpload, handleInputTe
                     </Box>
                 </Grid>
                 <Grid sx={{ position: "relative" }} item xs={1.5}>
-                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveMember(item.id)}>
+                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveMember(index)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -257,9 +257,9 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
         })
     };
 
-    const handleRemoveMember = (id) => {
+    const handleRemoveMember = (index) => {
         let arrNewTeam = developmentTeam;
-        arrNewTeam = arrNewTeam.filter((item) => item.id !== id);
+        arrNewTeam = arrNewTeam.filter((item) => item.name !== developmentTeam[index].name);
         setDevelopmentTeamForm(arrNewTeam);
         if (!arrNewTeam.length) setValidatorTeam(false);
     };
