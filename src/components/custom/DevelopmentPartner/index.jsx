@@ -179,7 +179,7 @@ function renderItem({ item, index, handleImgPartnerUpload, handleInputPartnerCha
                     </FormControl>
                 </Grid>
                 <Grid sx={{position: "relative"}} item xs={1.5}>
-                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemovePartner(item.id)}>
+                    <Box hidden={view} sx={deleteButton} onClick={() => handleRemovePartner(index)}>
                         <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                     </Box>
                 </Grid>
@@ -222,9 +222,9 @@ const DevelopmentPartner = ({ defaultValues, setFormValuesProject, view }) => {
         }
     };
 
-    const handleRemovePartner = (id) => {
+    const handleRemovePartner = (index) => {
         let arrNewPartner = partner;
-        arrNewPartner = arrNewPartner.filter((item) => item.id !== id);
+        arrNewPartner = arrNewPartner.filter((item) => item.name !== partner[index].name);
         setPartnerForm(arrNewPartner);
     };
 
