@@ -344,7 +344,14 @@ const Information = (props) => {
                 res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             else if (project.statusId == '2' || project.statusId == '3') {
-                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
+                let tpmProject = project;
+                tpmProject.tokenAllocations.map((item) => {
+                    item.rate = parseFloat(item?.rate);
+                    item.price = parseFloat(item?.price);
+                    item.amount = parseFloat(item?.amount);
+                });
+                // console.log('>> tpmProject ', tpmProject);
+                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, tpmProject,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             
             if (res.data) {
