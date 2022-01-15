@@ -164,7 +164,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate, view
                 </FormControl>
             </TableCell>
             <TableCell sx={{ position: "relative" }} align="right">
-                <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveCate(item.id)}>
+                <Box hidden={view} sx={deleteButton} onClick={() => handleRemoveCate(index)}>
                     <img src="/assets/icons/close-circle.svg" alt="close-circle" />
                 </Box>
             </TableCell>
@@ -205,13 +205,17 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
         }
     };
 
-    const handleRemoveCate = (id) => {
-        setItems((items) => items.filter((item) => item.id !== id));
+    const handleRemoveCate = (index) => {
+        const tpm = items.filter((item) => item.allocationName !== items[index].allocationName);
+        setItems(tpm);
+        setFormValuesProject("tokenAllocations", tpm);
     };
 
     const handleInputCateChange = (index, name, data) => {
+        const arrNumber = ['amount', 'price', 'rate'];
         let newItem = items;
-        newItem[index][name] = data;
+        if (arrNumber.includes(name)) newItem[index][name] = parseFloat(data);
+        else newItem[index][name] = data;
         setTokenAllocations(newItem);
     };
 
@@ -220,7 +224,7 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
         setFormValuesProject("tokenAllocations", arrData);
         if (!items?.length) setValidatorTokenRate(false);
         const validator = items?.filter((entry) => {
-            return entry.allocationName && entry.rate && entry.price && entry.amount && entry.vesting;
+            return entry.allocationName && entry.rate && entry.amount && entry.vesting;
         });
         if (validator.length) setValidatorTokenRate(true);
         else setValidatorTokenRate(false);

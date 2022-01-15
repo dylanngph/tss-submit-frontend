@@ -56,8 +56,8 @@ const Information = (props) => {
     const [businessLicense, setBusinessLicense] = useState();
 
     const setFormValuesProject = (name, value) => {
-        setFormValues({
-            ...formValues,
+        setProject({
+            ...project,
             [name]: value,
         });
     };
