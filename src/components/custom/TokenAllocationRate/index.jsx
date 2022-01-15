@@ -212,10 +212,8 @@ const TokenAllocationRate = ({ defaultValues, setFormValuesProject, view }) => {
     };
 
     const handleInputCateChange = (index, name, data) => {
-        const arrNumber = ['amount', 'price', 'rate'];
         let newItem = items;
-        if (arrNumber.includes(name)) newItem[index][name] = parseFloat(data);
-        else newItem[index][name] = data;
+        newItem[index][name] = data;
         setTokenAllocations(newItem);
     };
 
