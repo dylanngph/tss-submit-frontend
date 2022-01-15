@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Box, Button, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize } from '@mui/material';
+import { Box, Button, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize, Checkbox } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { listTitle } from './config';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -14,6 +16,8 @@ import axios from 'axios';
 import useToken from 'components/hook/useToken';
 
 const Information = (props) => {
+    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+    const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [project, setProject] = useState(props.project);
     const { token, setToken } = useToken();
     console.log('project==>', project);
@@ -28,8 +32,27 @@ const Information = (props) => {
         })
         return arrTpm;
     });
+    const [standardsFieldUpdate, setStandardsFieldUpdate] = useState(() => {
+        let arrTpm = [];
+        props?.project?.standards.map((item) => {
+            arrTpm.push({
+                value: item,
+                name: item,
+            })
+        })
+        return arrTpm;
+    });
+    const [communicationsFieldUpdate, setCommunicationsFieldUpdate] = useState(() => {
+        let arrTpm = [];
+        props?.project?.communications.map((item) => {
+            arrTpm.push({
+                value: item,
+                name: item,
+            })
+        })
+        return arrTpm;
+    });
     const [formValues, setFormValues] = useState(project);
-    // const [businessFieldUpdate, setBusinessFieldUpdate]
     const [businessLicense, setBusinessLicense] = useState();
 
     const setFormValuesProject = (name, value) => {
@@ -53,7 +76,36 @@ const Information = (props) => {
             value: "3",
             name: "Hộ Chiếu",
         },
-    ]
+    ];
+    let communications = [
+        {
+            value: "1",
+            name: "Binance Smart Chain",
+        },
+        {
+            value: "2",
+            name: "Ethereum",
+        },
+        {
+            value: "3",
+            name: "Kardian",
+        },
+    ];
+    let standards = [
+        {
+            value: "1",
+            name: "ERC20",
+        },
+        {
+            value: "2",
+            name: "BEP20",
+        },
+        {
+            value: "3",
+            name: "KRC20",
+        },
+    ];
+
 
     const inforItem = {
         display: "flex",
@@ -162,6 +214,22 @@ const Information = (props) => {
         setProject({
             ...project,
             ["businessAreas"]: newValue,
+        });
+    };
+
+    const handleStandardsChange = (event, newValue) => {
+        setStandardsFieldUpdate(newValue);
+        setProject({
+            ...project,
+            ["standards"]: newValue,
+        });
+    };
+
+    const handleCommunicationsChange = (event, newValue) => {
+        setCommunicationsFieldUpdate(newValue);
+        setProject({
+            ...project,
+            ["communications"]: newValue,
         });
     };
 
@@ -507,6 +575,99 @@ const Information = (props) => {
                                         </BoxImageUpload>
                                     :
                                         valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            case 'communications':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        <Autocomplete sx={{
+                                            background: "#EFF2F5",
+                                            borderRadius: "8px",
+                                            width: "300px!important",
+                                            border: "1px solid #58667E",
+                                        }}
+                                            multiple
+                                            id="communication"
+                                            options={communications}
+                                            value={communicationsFieldUpdate}
+                                            defaultValue={communicationsFieldUpdate}
+                                            disableCloseOnSelect
+                                            getOptionLabel={(option) => option.name}
+                                            onChange={handleCommunicationsChange}
+                                            isOptionEqualToValue={(option, value) => option.value === value.value}
+                                            renderOption={(props, option, { selected }) => (
+                                                <li {...props}>
+                                                    <Checkbox
+                                                        icon={icon}
+                                                        checkedIcon={checkedIcon}
+                                                        style={{ marginRight: 8 }}
+                                                        checked={selected}
+                                                    />
+                                                    {option.name}
+                                                </li>
+                                            )}
+                                            style={{ width: 500 }}
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder="Nền tảng" />
+                                            )}
+                                        />
+                                    </Flex>
+                                :
+                                valueItem
+                            }
+                        </Box>
+                    </>
+                )
+            case 'standards':
+                return (
+                    <>
+                        <Typography sx={labelInforItem}>{item.title}</Typography>
+                        <Box sx={wrapperBoxValue}>
+                            {
+                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
+                                    <Flex>
+                                        <Autocomplete sx={{
+                                            background: "#EFF2F5",
+                                            borderRadius: "8px",
+                                            width: "300px!important",
+                                            border: "1px solid #58667E",
+                                        }}
+                                            multiple
+                                            id="standard"
+                                            name="standard"
+                                            options={standards}
+                                            value={standardsFieldUpdate}
+                                            defaultValue={standardsFieldUpdate}
+                                            disableCloseOnSelect
+                                            getOptionLabel={(option) => option.name}
+                                            isOptionEqualToValue={(option, value) => option.value === value.value}
+                                            onChange={handleStandardsChange}
+                                            renderOption={(props, option, { selected }) => (
+                                                <li {...props}>
+                                                    <Checkbox
+                                                        icon={icon}
+                                                        checkedIcon={checkedIcon}
+                                                        style={{ marginRight: 8 }}
+                                                        checked={selected}
+                                                    />
+                                                    {option.name}
+                                                </li>
+                                            )}
+                                            style={{ width: 500 }}
+                                            renderInput={(params) => (
+                                                <TextField {...params} placeholder="Tiêu chuẩn" />
+                                            )}
+                                        />
+                                    </Flex>
+                                :
+                                valueItem
                             }
                         </Box>
                     </>
