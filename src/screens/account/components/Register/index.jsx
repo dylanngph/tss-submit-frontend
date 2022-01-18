@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, FormHelperText } from '@mui/material';
+import MuiPhoneNumber from 'material-ui-phone-number';
 import { postAccountRegisterData } from 'redux/account/account.action';
 import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import styled from 'styled-components';
 
 function RegisterAccount(props) {
     let history = useHistory();
@@ -32,6 +34,18 @@ function RegisterAccount(props) {
         handleStateButtonContinue();
     };
 
+    const handleInputPhoneChange = (phone) => {
+        setErrorsState({
+            ...errorsState,
+            ["phone"]: (phone && phone.length > 3) ? false : true,
+        });
+        setFormValues({
+            ...formValues,
+            ["phone"]: phone,
+        });
+        handleStateButtonContinue();
+    };
+
     const handleInputBlur = (e) => {
         const { name, value } = e.target;
         setErrorsState({
@@ -47,6 +61,14 @@ function RegisterAccount(props) {
         setErrorsState({
             ...errorsState,
             [name]: value.match(validRegex) ? false : true,
+        });
+        handleStateButtonContinue();
+    };
+
+    const handleInputPhoneBlur = () => {
+        setErrorsState({
+            ...errorsState,
+            ["phone"]: (formValues.phone && formValues.phone.length > 3) ? false : true,
         });
         handleStateButtonContinue();
     };
@@ -120,7 +142,7 @@ function RegisterAccount(props) {
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Số điện thoại</FormLabel>
-                    <OutlinedInput
+                    {/* <OutlinedInput
                         id="phone"
                         name="phone"
                         type="number"
@@ -129,7 +151,16 @@ function RegisterAccount(props) {
                         onChange={handleInputChange}
                         onBlur={handleInputBlur}
                         error={errorsState.phone}
-                    />
+                    /> */}
+                    <StyleMuiPhoneNumber className={errorsState.phone ? 'null-phone': ''}>
+                        <MuiPhoneNumber 
+                            defaultCountry={'vn'} 
+                            onlyCountries={['vn']}
+                            value={formValues.phone}
+                            onChange={handleInputPhoneChange}
+                            onBlur={handleInputPhoneBlur}
+                        />
+                    </StyleMuiPhoneNumber>
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Mật khẩu</FormLabel>
@@ -179,5 +210,25 @@ function RegisterAccount(props) {
         </Box>
     );
 }
+
+
+const StyleMuiPhoneNumber = styled(Box)`
+    padding: 11px 15px;
+    background: #EFF2F5;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #58667E;
+    border: 1px solid #EFF2F5;
+    &.null-phone {
+        border: 1px solid #d32f2f;
+    }
+    & .MuiInput-underline:before,
+    & .MuiInput-underline:after {
+        display: none;
+    }
+`;
 
 export default RegisterAccount;

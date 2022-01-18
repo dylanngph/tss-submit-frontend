@@ -162,6 +162,8 @@ function SecurityQuestion(props) {
         try {
             event.preventDefault();
             const registerData = {...registerStore};
+            // format phone
+            registerData.phone = registerData.phone.replace('+84', '0');
 
             registerData.securityQuestions = [
                 {
