@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, FormControl, FormLabel, OutlinedInput, FormHelperText } from '@mui/material';
-import { postAccountRegisterData } from 'redux/account/account.action'
+import { postAccountRegisterData } from 'redux/account/account.action';
 import { Link, useHistory } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 
@@ -83,6 +83,7 @@ function RegisterAccount(props) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            padding: "0 15px",
         }}>
             <form className="login-form">
                 <div className="wrapper-icon-title mb-36">

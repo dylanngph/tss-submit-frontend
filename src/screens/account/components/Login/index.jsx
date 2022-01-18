@@ -66,6 +66,7 @@ function LoginAccount({setToken}) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            padding: "0 15px",
         }}>
             <form className="login-form" onSubmit={handleSubmit}>
                 <h2 className="main-title mb-2 text-center">Đăng nhập</h2>
