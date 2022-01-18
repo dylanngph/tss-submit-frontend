@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import MuiPhoneNumber from 'material-ui-phone-number';
 import { Box, Button, FormControl, FormLabel, OutlinedInput, Divider } from '@mui/material';
 import axios from 'axios';
+import styled from 'styled-components';
 
 function Profile(props) {
     const { token, data, children, value, index, ...other } = props;
@@ -14,6 +16,8 @@ function Profile(props) {
         confirmNewPw: "",
     })
 
+    const [phone, setPhone] = useState();
+
     useEffect(() => {
         initData();
     }, [data])
@@ -26,12 +30,19 @@ function Profile(props) {
         });
     };
 
+    const handleInputPhoneChange = (phone) => {
+        setFormValues({
+            ...formValues,
+            ["phone"]: phone,
+        });
+    };
+
     const initData = () => {
         setFormValues({
             ...formValues,
             ['email']: data?.email,
             ['name']: data?.name,
-            ['phone']: data?.phone,
+            ['phone']: data?.phone.replace('0', ''),
         });
     }
 
@@ -41,14 +52,14 @@ function Profile(props) {
             if (formValues.currentPw && formValues.newPw) {
                 dataValue = {
                     name: formValues.name,
-                    phone: formValues.phone,
+                    phone: formValues.phone.replace('+84', '0'),
                     currentPw: formValues.currentPw,
                     newPw: formValues.newPw,
                 }
             } else {
                 dataValue = {
                     name: formValues.name,
-                    phone: formValues.phone,
+                    phone: formValues.phone.replace('+84', '0'),
                 }
             }
             const response = await axios.post(`${process.env.REACT_APP_URL_API}/user/me`, dataValue,  { headers: {"Authorization" : `Bearer ${token}`} });
@@ -107,14 +118,22 @@ function Profile(props) {
                 </FormControl>
                 <FormControl className="form-control mb-16">
                     <FormLabel>Số điện thoại</FormLabel>
-                    <OutlinedInput
+                    {/* <OutlinedInput
                         id="phone"
                         name="phone"
                         type="tel"
                         placeholder="Số điện thoại"
                         value={formValues.phone}
                         onChange={handleInputChange}
-                    />
+                    /> */}
+                    <StyleMuiPhoneNumber>
+                        <MuiPhoneNumber 
+                            defaultCountry={'vn'} 
+                            onlyCountries={['vn']}
+                            value={formValues.phone}
+                            onChange={handleInputPhoneChange}
+                        />
+                    </StyleMuiPhoneNumber>
                 </FormControl>
                 <Divider sx={{ margin: "14px 0 !important" }} />
                 <FormControl className="form-control mb-16">
@@ -157,5 +176,21 @@ function Profile(props) {
         </Box>
     );
 }
+
+const StyleMuiPhoneNumber = styled(Box)`
+    padding: 11px 15px;
+    background: #EFF2F5;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #58667E;
+    border: 1px solid #EFF2F5;
+    & .MuiInput-underline:before,
+    & .MuiInput-underline:after {
+        display: none;
+    }
+`;
 
 export default Profile;
