@@ -345,9 +345,11 @@ const Information = (props) => {
                 case 'name':
                 case 'position':
                 case 'address':
-                case 'phone':
                 case 'email':
                     valueItem = project?.legalRepresentative[item.key];
+                    break;
+                case 'phone':
+                    valueItem = project?.legalRepresentative[item.key].replace('+84', '0');
                     break;
                 case 'dob':
                     // valueItem = project?.detail.legalRepresentative[item.key] ? formatDate(project?.detail.legalRepresentative[item.key]) : '';
@@ -381,7 +383,11 @@ const Information = (props) => {
             // show preview
             if (project && project[item.key] && item.key!== "developmentTeam" && item.key!== "developmentPartner") {
                 if (typeof(project[item.key]) === "string") {
-                    valueItem = project[item.key];
+                    if (item.key === "phone") {
+                        valueItem = project[item.key].replace('+84', '0');
+                    } else {
+                        valueItem = project[item.key];
+                    }
                 } else {
                     switch(item.key) {
                         case "businessAreas":

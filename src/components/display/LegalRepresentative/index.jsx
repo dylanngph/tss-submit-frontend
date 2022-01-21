@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import MuiPhoneNumber from 'material-ui-phone-number';
 import { Box, FormControl, FormLabel, OutlinedInput, MenuItem, Select, FormGroup, TextField, FormHelperText } from '@mui/material';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import styled from 'styled-components';
 
 function LegalRepresentative(props) {
     const { projectItem, children, value, index, ...other } = props;
@@ -47,6 +49,18 @@ function LegalRepresentative(props) {
         validate(e);
     };
 
+    const handleInputPhoneChange = (phone) => {
+        setFormValues({
+            ...formValues,
+            ["phone"]: phone,
+        });
+        setValidator({
+            ...validator,
+            ["phone"]: (phone && phone.length > 3) ? false : true,
+        });
+        checkDataActiveButton();
+    };
+
     const handleInputChangeSelect = (e) => {
         const { name, value } = e.target;
         setFormValues({
@@ -80,7 +94,7 @@ function LegalRepresentative(props) {
     const checkDataActiveButton = () => {
         if (formValues.name &&
             formValues.position &&
-            formValues.phone &&
+            (formValues.phone && formValues.phone.length > 3) &&
             formValues.email &&
             formValues.idType &&
             formValues.idAuth &&
@@ -238,7 +252,7 @@ function LegalRepresentative(props) {
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Điện thoại</FormLabel>
-                        <OutlinedInput
+                        {/* <OutlinedInput
                             required
                             id="phone"
                             name="phone"
@@ -248,7 +262,16 @@ function LegalRepresentative(props) {
                             onChange={handleInputChange}
                             onBlur={handleInputBlur}
                             error={validator.phone}
-                        />
+                        /> */}
+                        <StyleMuiPhoneNumber>
+                            <MuiPhoneNumber 
+                                defaultCountry={'vn'} 
+                                onlyCountries={['vn']}
+                                value={formValues.phone}
+                                onChange={handleInputPhoneChange}
+                                onBlur={handleInputBlur}
+                            />
+                        </StyleMuiPhoneNumber>
                         {
                             validator.phone &&
                             <FormHelperText error>Điện thoại không được để trống</FormHelperText>
@@ -279,3 +302,19 @@ function LegalRepresentative(props) {
 }
 
 export default LegalRepresentative;
+
+const StyleMuiPhoneNumber = styled(Box)`
+    padding: 11px 15px;
+    background: #EFF2F5;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: #58667E;
+    border: 1px solid #EFF2F5;
+    & .MuiInput-underline:before,
+    & .MuiInput-underline:after {
+        display: none;
+    }
+`;
