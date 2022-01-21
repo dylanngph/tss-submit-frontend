@@ -63,6 +63,9 @@ function Profile(props) {
                 }
             }
             const response = await axios.post(`${process.env.REACT_APP_URL_API}/user/me`, dataValue,  { headers: {"Authorization" : `Bearer ${token}`} });
+            if (response.data) {
+                window.location.reload(false);
+            }
         } catch (error) {
             console.log(error);
         }
