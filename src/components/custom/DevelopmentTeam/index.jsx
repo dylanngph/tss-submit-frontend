@@ -217,7 +217,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
     useEffect(() => {
         if (!developmentTeam?.length) setValidatorTeam(false);
         const validatorDevTeam = developmentTeam?.filter((member) => {
-            return member.image.length && member.name && member.position;
+            return member?.image?.length && member?.name && member?.position;
         });
         if (validatorDevTeam?.length) setValidatorTeam(true);
         else setValidatorTeam(false);
@@ -269,7 +269,7 @@ const DevelopmentTeam = ({ defaultValues, setFormValuesProject, view }) => {
         setFormValuesProject('developmentTeam', arrData);
         if (!developmentTeam.length) setValidatorTeam(false);
         const validatorDevTeam = developmentTeam.filter((member) => {
-            return member.image.length && member.name && member.position;
+            return member?.image?.length && member?.name && member?.position;
         });
         if (validatorDevTeam.length) setValidatorTeam(true);
         else setValidatorTeam(false);

@@ -39,8 +39,9 @@ function HomeScreen(props) {
                     boxSizing: 'border-box',
             }}>
                 <Box>
-                    <Typography mb={3} variant="h2">HỘI ĐỒNG XÁC THỰC TSS</Typography>
-                    <p className="main-cotain">TSS có tất cả các tính năng nổi bật của một hệ thống chuỗi khối điển hình, tính minh bạch và bảo mật. Thông tin do người dùng gửi vào hệ thống TSS sẽ được bảo vệ an toàn, toàn diện trước sự tấn công của tin tặc và có khả năng khôi phục hoàn toàn trong trường hợp xảy ra sự cố phá hủy. Thông tin người dùng sẽ được quản lý một cách chuyên nghiệp và dễ sử dụng. TSS áp dụng công nghệ blockchain vào quản lý kinh doanh bằng cách gửi thông tin dự án đến với TSS để dự án của bạn có thể hoạt động dựa trên nền tảng của chúng tôi.</p>
+                    <Typography mb={3} variant="h2">TRUNG TÂM QUẢN LÝ TÀI SẢN SỐ</Typography>
+                    <p className="main-cotain">Digital Asset Management Center – gọi tắt TSS. TSS là một tổ chức khoa học công nghệ  và là đơn vị tiên phong tại Việt Nam được Nhà nước công nhận tư cách pháp nhân để làm nhiệm vụ thúc đẩy, tổ chức các hoạt động số hóa, quản lý tài sản số trong các hoạt động kinh tế theo định hướng KINH TẾ SỐ của Chính phủ.
+</p>
                 </Box>
             </Box>
         </Box>

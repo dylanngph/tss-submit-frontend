@@ -270,6 +270,13 @@ const Information = (props) => {
         });
     };
 
+    const handleCheckShowButton = () => {
+        if (Object.keys(project?.note?.flags).length) {
+            return true;
+        }
+        return false;
+    }
+
     const handleInputIdentityChange = (e) => {
         const { name, value } = e.target;
         let tpm = project;
@@ -296,10 +303,45 @@ const Information = (props) => {
 
     const handleUpdateData = async () => {
         try {
-            console.log('project==>', project);
             let res;
+            let temporaryVariable = project;
+
+            if (temporaryVariable && temporaryVariable.developmentTeam) {
+                temporaryVariable?.developmentTeam.map((item, index) =>{
+                    if (typeof item.image === 'object') {
+                        item.image = item.image[0].data_url
+                    }
+                })
+            }
+            
+            if (temporaryVariable && temporaryVariable.developmentPartner) {
+                temporaryVariable?.developmentPartner.map((item, index) =>{
+                    if (typeof item.image === 'object') {
+                        item.image = item.image[0].data_url
+                    }
+                })
+            }
+
+            if (temporaryVariable) {
+                if (temporaryVariable.name) {
+                    temporaryVariable.legalRepresentative.name = temporaryVariable.name;
+                }
+                if (temporaryVariable.dob) {
+                    temporaryVariable.legalRepresentative.dob = temporaryVariable.dob;
+                }
+                if (temporaryVariable.position) {
+                    temporaryVariable.legalRepresentative.position = temporaryVariable.position;
+                }
+                if (temporaryVariable.address) {
+                    temporaryVariable.legalRepresentative.address = temporaryVariable.address;
+                }
+                if (temporaryVariable.email) {
+                    temporaryVariable.legalRepresentative.email = temporaryVariable.email;
+                }
+            }
+
             if(project.statusId == '1') {
-                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, project,  { headers: {"Authorization" : `Bearer ${token}`} });
+                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             else if (project.statusId == '2' || project.statusId == '3') {
                 let tpmProject = project;
@@ -313,7 +355,7 @@ const Information = (props) => {
             }
             
             if (res.data) {
-                console.log('res===>', res);
+                window.location.reload(false);
             }
         } catch (error) {
             console.log(error)
@@ -991,7 +1033,7 @@ const Information = (props) => {
         <>
             {
                 (
-                    project && project.note && Object.keys(project.note.flags).length &&
+                    project && project.note && handleCheckShowButton() &&
                     <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
                 )
             }

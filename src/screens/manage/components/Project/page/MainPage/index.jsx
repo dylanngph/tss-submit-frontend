@@ -6,6 +6,7 @@ import { postBreadcrumb } from 'redux/breadcrumb/breadcrumbs.action'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
+import EmptyPage from '../EmptyPage'
 
 function MainPage(props) {
     const { token, setToken } = useToken();
@@ -48,14 +49,12 @@ function MainPage(props) {
             {
                 !loading ?
                     <>
-                        {/* {
-                            (
-                                projectItem && projectItem.note && projectItem.note.flags &&
-                                <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
-                            )
-                        } */}
-                        <Information project={projectItem} stateEdit={true} />
-                        
+                        {
+                            projectItem ?
+                            <Information project={projectItem} stateEdit={true} />
+                            :
+                            <EmptyPage />
+                        }
                     </>
 
                     :
