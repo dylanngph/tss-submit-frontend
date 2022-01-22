@@ -35,16 +35,24 @@ function Incorporation(props) {
 
     const handleInputChangeBusinessAreas = (newValue) => {
         const { name, value } = newValue.target;
-
-        const item = [{
-            value: businessAreas.length + 1,
-            area: value,
-        }];
-        setFormValues({
-            ...formValues,
-            ['businessAreas']: item,
-        });
         console.log('formValues==>', formValues);
+        if (value) {
+            const item = [{
+                value: businessAreas.length + 1,
+                area: value,
+            }];
+            setFormValues({
+                ...formValues,
+                ['businessAreas']: item,
+            });
+            validateForm({ ["businessAreas"]: item });
+        } else {
+            setFormValues({
+                ...formValues,
+                ['businessAreas']: [],
+            });
+            validateForm({ ["businessAreas"]: [] });
+        }
     }
 
     const handleDatePickerChange = (newValue) => {
