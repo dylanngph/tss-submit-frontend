@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, FormHelperText } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, Select, MenuItem, FormHelperText, Alert } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Link, useHistory, withRouter } from 'react-router-dom'
 import RegisterSuccess from './RegisterSuccess';
@@ -46,6 +46,7 @@ function SecurityQuestion(props) {
     const [formValues, setFormValues] = useState(defaultValues);
     const [errorsState, setErrorsState] = useState(false);
     const [stateBtnRegister, setStateBtnRegister] = useState(false);
+    const [error, setError] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -160,6 +161,7 @@ function SecurityQuestion(props) {
 
     const handleSubmit = async (event) => {
         try {
+            setError('');
             event.preventDefault();
             const registerData = {...registerStore};
             // format phone
@@ -181,7 +183,9 @@ function SecurityQuestion(props) {
                 history.push("/register-success");
             }
         } catch (error) {
-            console.log('error===>', error);
+            if (error.response) {
+                setError(error.response.data.message);
+            }
         }
     };
 
@@ -267,6 +271,12 @@ function SecurityQuestion(props) {
                         error={errorsState.answer2}
                     />
                 </FormControl>
+                {
+                    error &&
+                    <Box sx={{ marginBottom: '20px' }}>
+                        <Alert severity="error">{error}</Alert>
+                    </Box>
+                }
                 <Button variant="contained" className="button mb-16 button-my-custom" type="submit" disabled={!stateBtnRegister}>
                     Tạo tài khoản
                 </Button>

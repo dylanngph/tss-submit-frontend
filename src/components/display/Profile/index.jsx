@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MuiPhoneNumber from 'material-ui-phone-number';
-import { Box, Button, FormControl, FormLabel, OutlinedInput, Divider } from '@mui/material';
+import { Box, Button, FormControl, FormLabel, OutlinedInput, Divider, Alert } from '@mui/material';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -16,7 +16,7 @@ function Profile(props) {
         confirmNewPw: "",
     })
 
-    const [phone, setPhone] = useState();
+    const [error, setError] = useState('');
 
     useEffect(() => {
         initData();
@@ -48,7 +48,8 @@ function Profile(props) {
 
     const handleUpdateUserInfor = async () => {
         try {
-            let dataValue = {}
+            setError('');
+            let dataValue = {};
             if (formValues.currentPw && formValues.newPw) {
                 dataValue = {
                     name: formValues.name,
@@ -67,7 +68,9 @@ function Profile(props) {
                 window.location.reload(false);
             }
         } catch (error) {
-            console.log(error);
+            if (error.response) {
+                setError(error.response.data.message);
+            }
         }
     }
 
@@ -172,6 +175,12 @@ function Profile(props) {
                         onChange={handleInputChange}
                     />
                 </FormControl>
+                {
+                    error &&
+                    <Box sx={{ marginBottom: '20px' }}>
+                        <Alert severity="error">{error}</Alert>
+                    </Box>
+                }
                 <Button onClick={handleUpdateUserInfor} sx={buttonStyle} variant="contained" type="submit">
                     Cập nhật
                 </Button>
