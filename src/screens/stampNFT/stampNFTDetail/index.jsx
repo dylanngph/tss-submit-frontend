@@ -83,7 +83,7 @@ function NFTDetailScreen() {
                                     <img src="/assets/images/stampNFT/logo-vcb.png" alt="logo-vcb.png"/>
                                 </BoxImage>
                                 <BoxMoreInfo>
-                                    <span>Ngày cấp</span>
+                                    <span>Ngày phát hành</span>
                                     <span>{formatDateTime(data?.issuedAt)}</span>
                                 </BoxMoreInfo>
                                 <BoxMoreInfo>
@@ -186,7 +186,7 @@ function NFTDetailScreen() {
                                 <img src="/assets/images/stampNFT/logo-vcb.png" alt="logo-vcb.png"/>
                             </BoxImage>
                             <BoxMoreInfo>
-                                <span>Ngày cấp</span>
+                                <span>Ngày phát hành</span>
                                 <span>{formatDateTime(data?.issuedAt)}</span>
                             </BoxMoreInfo>
                             <BoxMoreInfo>

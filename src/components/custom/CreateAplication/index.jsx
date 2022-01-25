@@ -37,7 +37,7 @@ const CreateAplication = (props) => {
             iconActive: "/assets/icons/active/personnal.svg",
         },
         {
-            label: "Quỹ đầu tư",
+            label: "Đơn vị/Tổ chức đầu tư",
             icon: "/assets/icons/people.svg",
             iconActive: "/assets/icons/active/people.svg",
         }
