@@ -498,13 +498,13 @@ const Information = (props) => {
                                                 </Tooltip>
                                             </Box>
                                         </Box>
-                                        <OutlinedInput
+                                        {/* <OutlinedInput
                                             id="businessAreasABC"
                                             name="businessAreasABC"
                                             type="text"
                                             placeholder="Lĩnh vực kinh doanh khác"
                                             onChange={handleInputChangeBusinessAreas}
-                                        />
+                                        /> */}
                                         
                                     </Box>
                                 :

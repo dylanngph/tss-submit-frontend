@@ -201,14 +201,14 @@ function Incorporation(props) {
                                 />
                             )}
                         />
-                        <OutlinedInput
+                        {/* <OutlinedInput
                             id="businessAreasABC"
                             name="businessAreasABC"
                             type="text"
                             placeholder="Lĩnh vực kinh doanh khác"
                             value={formValues.businessAreasABC}
                             onChange={handleInputChangeBusinessAreas}
-                        />
+                        /> */}
                         {
                             errors.businessAreas &&
                             <FormHelperText error>Lĩnh vực kinh doanh không được để trống</FormHelperText>
