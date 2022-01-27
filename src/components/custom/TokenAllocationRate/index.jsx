@@ -117,7 +117,7 @@ function renderItem({ item, index, handleInputCateChange, handleRemoveCate, view
                         name="rate"
                         type="text"
                         placeholder="100%"
-                        inputProps={{ maxLength: 3 }}
+                        inputProps={{ maxLength: 10 }}
                         value={item.rate}
                         onChange={handleInputChange}
                     />
