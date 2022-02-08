@@ -71,12 +71,12 @@ function LoginAccount({setToken}) {
             <form className="login-form" onSubmit={handleSubmit}>
                 <h2 className="main-title mb-2 text-center">Đăng nhập</h2>
                 <FormControl className="form-control mb-16">
-                    <FormLabel>Tên đăng nhập hoặc email</FormLabel>
+                    <FormLabel>Tên đăng nhập</FormLabel>
                     <OutlinedInput
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="Username hoặc email"
+                        placeholder="Tên đăng nhập"
                         value={values.email}
                         onChange={handleChange('email')}
                         error={!values.email && errorsState}

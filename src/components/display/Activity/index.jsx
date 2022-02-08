@@ -12,7 +12,7 @@ function Activity(props) {
     const { token, setToken } = useToken();
 
     const columns = [
-        { id: 'name', label: '#', minWidth: 70 },
+        { id: 'name', label: 'STT', minWidth: 70 },
         { id: 'activity', label: 'Hoạt động', minWidth: 170 },
         {
             id: 'time',
@@ -132,6 +132,7 @@ function Activity(props) {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage="Đang hiển thị"
                 />
             </Paper>
         </Box>

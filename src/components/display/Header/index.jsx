@@ -101,10 +101,10 @@ const Header = ({ auth, handleLogout, props }) => {
                     ?
                     <>
                         <NavLink exact to="/user">
-                            <ListItem button key='User Name'>
+                            <ListItem button key='Quản lý tài khoản'>
                                 <UserIcon />
                                 <ListItemText sx={itemStyle}
-                                    primary='User Name' />
+                                    primary='Quản lý tài khoản' />
                             </ListItem>
                         </NavLink>
                         <Button sx={logoutStyle} onClick={handleLogout}>
