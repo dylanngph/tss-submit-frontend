@@ -75,9 +75,7 @@ function Activity(props) {
                     setRow(data => [...data, createData(index + 1, item?.title, item?.updatedAt, item?.link)])
                 })
             }
-        } catch (error) {
-            console.log(error);
-        }
+        } catch (error) {}
     }
 
     return (

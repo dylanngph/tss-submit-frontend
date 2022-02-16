@@ -18,7 +18,6 @@ const ResetPasswordSuccess = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
 
     return (

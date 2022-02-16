@@ -38,9 +38,7 @@ function MainPage(props) {
             // if (res.data) {
             //     console.log('res===>', res);
             // }
-        } catch (error) {
-            console.log(error)
-        }
+        } catch (error) {}
     }
 
     return (

@@ -50,9 +50,7 @@ function User(props) {
             if (response.data) {
                 setData(response.data.data);
             }
-        } catch (error) {
-            console.log(error)
-        }
+        } catch (error) {}
     }
 
     return (

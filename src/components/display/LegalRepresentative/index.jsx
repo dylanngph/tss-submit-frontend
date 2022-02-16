@@ -39,7 +39,7 @@ function LegalRepresentative(props) {
                     [name]: res,
                 });
             })
-            .catch(error => console.log(error));
+            .catch();
         } else {
             setFormValues({
                 ...formValues,

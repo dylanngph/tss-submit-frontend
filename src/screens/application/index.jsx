@@ -113,7 +113,7 @@ function Application(props) {
                     [key]: res
                 });
             })
-            .catch(error => console.log(error));
+            .catch();
         });
         
     };
