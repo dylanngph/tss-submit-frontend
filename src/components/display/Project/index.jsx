@@ -135,7 +135,6 @@ function Project(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
 
     const validURL = (str) => {

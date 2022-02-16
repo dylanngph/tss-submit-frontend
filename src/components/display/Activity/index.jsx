@@ -105,7 +105,7 @@ function Activity(props) {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={rows[index]['index'].toString()}>
                                             <TableCell sx={tdStyle}>
                                                 {rows[index]['index']}
                                             </TableCell>

@@ -20,7 +20,6 @@ const Information = (props) => {
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const [project, setProject] = useState(props.project);
     const { token, setToken } = useToken();
-    console.log('project==>', project);
     const [imageLogo, setImageLogo] = useState([]);
     const [businessFieldUpdate, setBusinessFieldUpdate] = useState(() => {
         let arrTpm = [];
@@ -170,7 +169,6 @@ const Information = (props) => {
             ...project,
             [name]: value,
         });
-        console.log('project edit==>', project);
     };
 
     const handleInputWebsiteChange = (e) => {
@@ -350,7 +348,6 @@ const Information = (props) => {
                     item.price = parseFloat(item?.price);
                     item.amount = parseFloat(item?.amount);
                 });
-                // console.log('>> tpmProject ', tpmProject);
                 res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, tpmProject,  { headers: {"Authorization" : `Bearer ${token}`} });
             }
             

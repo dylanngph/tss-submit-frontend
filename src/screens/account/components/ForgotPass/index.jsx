@@ -26,7 +26,6 @@ function ForgotPassAccount(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
     };
 
     return (

@@ -35,7 +35,6 @@ function Incorporation(props) {
 
     const handleInputChangeBusinessAreas = (newValue) => {
         const { name, value } = newValue.target;
-        console.log('formValues==>', formValues);
         if (value) {
             const item = [{
                 value: businessAreas.length + 1,

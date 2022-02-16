@@ -20,6 +20,14 @@ import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import useToken from 'components/hook/useToken';
 
+const parseJwt = (token:string) => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    return null;
+  }
+};
+
 function App() {
   let history = useHistory();
   const theme = createTheme();
@@ -63,6 +71,17 @@ function App() {
     setToken(null);
     history.push("/login");
   }
+
+  const requestTimeoutToken = () => {
+    if (token) {
+      const decodedJwt = parseJwt(token);
+      if (decodedJwt.exp * 1000 < Date.now()) {
+        handleLogout();
+      }
+    }
+  }
+
+  requestTimeoutToken();
 
   return (
     <ThemeProvider theme={THEME}>

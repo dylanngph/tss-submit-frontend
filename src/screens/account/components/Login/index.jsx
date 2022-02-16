@@ -35,9 +35,7 @@ function LoginAccount({setToken}) {
                 setToken(res.data.data.accessToken);
                 history.push('/')
             }
-            console.log('res===>', res);
         } catch (error) {
-            console.log('error===>', error);
             setStateErrorLogin(true);
         }
     };

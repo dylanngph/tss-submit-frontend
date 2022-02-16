@@ -34,7 +34,6 @@ function MainPage(props) {
 
     const handleUpdateData = async () => {
         try {
-            console.log('projectItem==>', projectItem);
             // const res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, projectItem,  { headers: {"Authorization" : `Bearer ${token}`} });
             // if (res.data) {
             //     console.log('res===>', res);
