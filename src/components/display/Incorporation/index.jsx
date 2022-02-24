@@ -88,6 +88,8 @@ function Incorporation(props) {
             temp.businessLicense = fieldValues.businessLicense ? false : true;
         if ('businessAreas' in fieldValues)
             temp.businessAreas = fieldValues.businessAreas.length ? false : true;
+        if ('ownerAddress' in fieldValues)
+            temp.ownerAddress = fieldValues.ownerAddress.length ? false : true;
         setErrors({
             ...temp
         })
@@ -268,6 +270,21 @@ function Incorporation(props) {
                         {
                             errors.businessLicense &&
                             <FormHelperText error>Giấy phép đăng ký kinh doanh chưa được chọn</FormHelperText>
+                        }
+                    </FormControl>
+                    <FormControl className="form-control mb-16">
+                        <FormLabel>Địa chỉ ví chủ sở hữu</FormLabel>
+                        <OutlinedInput
+                            id="ownerAddress"
+                            name="ownerAddress"
+                            type="text"
+                            placeholder="0x00000000"
+                            value={formValues.ownerAddress}
+                            onChange={handleInputChange}
+                        />
+                        {
+                            errors.ownerAddress &&
+                            <FormHelperText error>Địa chỉ ví chủ sở hữu chưa được chọn</FormHelperText>
                         }
                     </FormControl>
                 </form>

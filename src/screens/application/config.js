@@ -3,6 +3,7 @@ import uuid from 'uuid';
 export const projectData = {
     incorporationName: "",
     incorporationAddress: "",
+    ownerAddress: "",
     transactionName: "",
     transactionAddress: "",
     businessAreas: [],
@@ -10,6 +11,7 @@ export const projectData = {
     taxCode: "",
     acceptDate: null,
     businessLicense: null,
+    ownerAddress: "",
 
     projectName: "",
     logo: "",

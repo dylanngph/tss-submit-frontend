@@ -29,6 +29,10 @@ export const listTitle = [
             {
                 title: 'Giấy phép đăng ký kinh doanh',
                 key: 'businessLicense'
+            },
+            {
+                title: 'Địa chỉ ví chủ sở hữu',
+                key: 'ownerAddress'
             }
         ]
     },

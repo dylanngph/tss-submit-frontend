@@ -404,6 +404,9 @@ const Information = (props) => {
                 case 'smartContractAddress':
                     valueItem = project.smartContractAddress.substring(0, 8) + "..." + project.smartContractAddress.substring(project.smartContractAddress.length - 4, project.smartContractAddress.length);
                     break;
+                case 'ownerAddress':
+                    valueItem = project.ownerAddress.substring(0, 8) + "..." + project.ownerAddress.substring(project.ownerAddress.length - 4, project.ownerAddress.length);
+                    break;
                 case 'businessLicense':
                     valueItem = `${project?.[item.key]}`;
                     break;
