@@ -57,10 +57,23 @@ function Project(props) {
         } else {
             const typeFile = ["logo", "whitepaper"];
             if (typeFile.includes(name)) {
-                setFormValues({
-                    ...formValues,
-                    [name]: e.target.files[0],
-                });
+                if (e.target.files) {
+                    // setFormValues({
+                    //     ...formValues,
+                    //     [name]: e.target.files[0],
+                    // });
+                    let tpm = formValues;
+                    tpm[name] = e.target.files[0];
+                    setFormValues(tpm);
+                } else {
+                    // setFormValues({
+                    //     ...formValues,
+                    //     [name]: e.target.files[0],
+                    // });
+                    let tpm = formValues;
+                    tpm[name] = null;
+                    setFormValues(tpm);
+                }
             } else {
                 setFormValues({
                     ...formValues,
