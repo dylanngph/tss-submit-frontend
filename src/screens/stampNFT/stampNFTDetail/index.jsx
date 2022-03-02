@@ -7,12 +7,14 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import axios from 'axios';
 import useToken from 'components/hook/useToken';
 import { LegalProp, TechLevelProp, SocialValueProp, CommunRepuProp } from 'components/contants'
+import ClipboardJS from 'clipboard'
 
 function NFTDetailScreen() {
     const dispatch = useAppDispatch();
     const [data, setData] = useState();
     const {token, setToken} = useToken();
     const [loading, setLoading] = useState(false);
+    new ClipboardJS('.block-copy');
 
     useEffect(() => {
         dispatch(postBreadcrumb([
@@ -86,15 +88,21 @@ function NFTDetailScreen() {
                                     <span>{formatDateTime(data?.issuedAt)}</span>
                                 </BoxMoreInfo>
                                 <BoxMoreInfo>
-                                    <span className="block-copy">Token ID</span>
+                                    <span>Token ID</span>
                                     <span>{data?.tokenId}</span>
                                 </BoxMoreInfo>
                                 <BoxMoreInfo>
-                                    <span className="block-copy">Contract ID</span>
-                                    <span>{formatString('0xD0e366Ae42Ba7CE1a27c4Eab7b63524F1fBEA023')}</span>
+                                    <span data-clipboard-text={process.env.REACT_APP_NEXT_PUBLIC_BS_SCAN_CODE}
+                                          className="block-copy">
+                                        Contract ID
+                                    </span>
+                                    <span>{formatString(process.env.REACT_APP_NEXT_PUBLIC_BS_SCAN_CODE)}</span>
                                 </BoxMoreInfo>
                                 <BoxMoreInfo>
-                                    <span className="block-copy">TX Hash</span>
+                                    <span data-clipboard-text={data?.txHash}
+                                          className="block-copy">
+                                        TX Hash
+                                    </span>
                                     <span>{formatString(data?.txHash)}</span>
                                 </BoxMoreInfo>
                             </Grid>
