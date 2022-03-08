@@ -273,7 +273,7 @@ function Incorporation(props) {
                         }
                     </FormControl>
                     <FormControl className="form-control mb-16">
-                        <FormLabel>Địa chỉ ví nhận NFT Passport Blockchain</FormLabel>
+                        <FormLabel>Địa chỉ ví nhận NFT Passport of Blockchain</FormLabel>
                         <OutlinedInput
                             id="ownerAddress"
                             name="ownerAddress"
@@ -284,7 +284,7 @@ function Incorporation(props) {
                         />
                         {
                             errors.ownerAddress &&
-                            <FormHelperText error>Địa chỉ ví nhận NFT Passport Blockchain chưa được chọn</FormHelperText>
+                            <FormHelperText error>Địa chỉ ví nhận NFT Passport of Blockchain chưa được chọn</FormHelperText>
                         }
                     </FormControl>
                 </form>
