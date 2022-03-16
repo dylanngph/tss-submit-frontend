@@ -82,7 +82,9 @@ function Tokenomics(props) {
 
     const checkDataActiveButton = () => {
         if (formValues.tokenName &&
-            formValues.symbol) {
+            formValues.smartContractAddress &&
+            formValues.symbol &&
+            formValues.tokenAllocations.length && formValues.tokenAllocations[0].allocationName) {
                 props.setStateNextButton(true)
             }
         else

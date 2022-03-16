@@ -23,12 +23,14 @@ function Project(props) {
     const [validator, setValidator] = useState({});
 
     const checkDataActiveButton = () => {
-        if (formValues.projectName &&
-            formValues.logo &&
-            formValues.whitepaper &&
-            formValues.description &&
-            formValues.websites.length &&
-            formValues.socialWebs.length
+        if (formValues.projectName && 
+            formValues.logo && 
+            formValues.description && 
+            formValues.whitepaper && 
+            formValues.developmentTeam.length && formValues.developmentTeam[0].image &&
+            formValues.developmentPartner.length && formValues.developmentPartner[0].image &&
+            formValues.websites.length && formValues.websites[0] &&
+            formValues.socialWebs.length && formValues.socialWebs[0].name && formValues.socialWebs[0].link
             ) {
                 props.setStateNextButton(true)
             }
@@ -75,10 +77,10 @@ function Project(props) {
                     setFormValues(tpm);
                 }
             } else {
-                setFormValues({
-                    ...formValues,
+                setFormValues(prevState => { return {
+                    ...prevState,
                     [name]: value,
-                });
+                }});
             }
         }
         validate(e);
