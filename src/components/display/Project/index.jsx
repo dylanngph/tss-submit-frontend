@@ -23,6 +23,7 @@ function Project(props) {
     const [validator, setValidator] = useState({});
 
     const checkDataActiveButton = () => {
+        console.log('formValues.description==>', formValues.description);
         if (formValues.projectName && 
             formValues.logo && 
             formValues.description && 
@@ -164,6 +165,7 @@ function Project(props) {
 
     useEffect(() => {
         props.setProjectItemStep(formValues);
+        checkDataActiveButton();
     }, [formValues])
 
     return (
