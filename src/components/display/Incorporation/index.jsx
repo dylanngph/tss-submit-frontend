@@ -102,7 +102,7 @@ function Incorporation(props) {
     };
 
     const checkRequire = () => {
-        if (formValues.incorporationName && formValues.incorporationAddress && formValues.companyCode && formValues.acceptDate && formValues.businessAreas.length) return true;
+        if (formValues.incorporationName && formValues.incorporationAddress && formValues.companyCode && formValues.acceptDate && formValues.businessAreas.length && formValues.ownerAddress) return true;
         return false;
     };
 
