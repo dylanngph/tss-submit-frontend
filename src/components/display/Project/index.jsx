@@ -23,13 +23,12 @@ function Project(props) {
     const [validator, setValidator] = useState({});
 
     const checkDataActiveButton = () => {
-        console.log('formValues.description==>', formValues.description);
         if (formValues.projectName && 
             formValues.logo && 
             formValues.description && 
             formValues.whitepaper && 
-            formValues.developmentTeam.length && formValues.developmentTeam[0].image &&
-            formValues.developmentPartner.length && formValues.developmentPartner[0].image &&
+            formValues.developmentTeam.length && formValues.developmentTeam[0].image.length && formValues.developmentTeam[0].name && formValues.developmentTeam[0].position &&
+            // formValues.developmentPartner.length && formValues.developmentPartner[0].image &&
             formValues.websites.length && formValues.websites[0] &&
             formValues.socialWebs.length && formValues.socialWebs[0].name && formValues.socialWebs[0].link
             ) {
@@ -293,7 +292,7 @@ function Project(props) {
                                         className="social-items"
                                     >
                                         {socialsListConstant.map((item, index) => (
-                                            <MenuItem key={index} className="social-item" key={item.name} value={item.value}>
+                                            <MenuItem className="social-item" key={item.name} value={item.value}>
                                                 <img src={item.icon} alt={item.name} />
                                                 {item.name}
                                             </MenuItem>

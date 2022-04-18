@@ -165,7 +165,7 @@ function Application(props) {
         tpmProject.businessAreas = tpmBusinessAreas;
 
         // companyCode, taxCode
-        tpmProject.companyCode = parseInt(tpmProject.companyCode);
+        tpmProject.companyCode = tpmProject.companyCode;
         tpmProject.taxCode = parseInt(tpmProject.taxCode);
 
         // date to string

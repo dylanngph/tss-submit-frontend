@@ -84,7 +84,7 @@ function Tokenomics(props) {
         if (formValues.tokenName &&
             formValues.smartContractAddress &&
             formValues.symbol &&
-            formValues.tokenAllocations.length && formValues.tokenAllocations[0].allocationName) {
+            formValues.tokenAllocations.length && formValues.tokenAllocations[0].allocationName && formValues.tokenAllocations[0].rate && formValues.tokenAllocations[0].amount && formValues.tokenAllocations[0].vesting) {
                 props.setStateNextButton(true)
             }
         else

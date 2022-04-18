@@ -19,6 +19,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Grid, Box } from '@mui/material';
 import Toolbar from '@mui/material/Toolbar';
 import useToken from 'components/hook/useToken';
+import axios from 'axios';
 
 const parseJwt = (token:string) => {
   try {
@@ -65,12 +66,25 @@ function App() {
 
   const [user, setUser] = useState({ email: "" })
   const {token, setToken} = useToken();
+  const [notify, setNotify] = useState();
 
   const handleLogout = () => {
     setUser({ email: "" });
     setToken(null);
     history.push("/login");
   }
+
+  useEffect(() => {
+    fetchData();
+  }, [token]);
+
+  const fetchData = async () => {
+      try {
+          const res = await axios.get(`${process.env.REACT_APP_URL_API}/notification/count`, { headers: { "Authorization": `Bearer ${token}` } });
+          if (res && res.data)
+            setNotify(res.data.data)
+      } catch (e) {}
+  };
 
   const requestTimeoutToken = () => {
     if (token) {
@@ -86,7 +100,7 @@ function App() {
   return (
     <ThemeProvider theme={THEME}>
       <Grid container direction="row">
-        <Header auth={token} handleLogout={handleLogout} props="true" />
+        <Header auth={token} handleLogout={handleLogout} props="true" notify={notify} />
         <Box sx={{ flexGrow: 1, background: "#fcfcfd", width: { sm: `calc(100% - 244px)` }, minHeight: "calc(100vh - 64px)", height: "auto" }}>
           <Toolbar />
           <Switch>

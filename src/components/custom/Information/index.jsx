@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem,TextareaAutosize, Checkbox } from '@mui/material';
+import { Box, Button, OutlinedInput, Typography, Tooltip, TextField, FormLabel, Autocomplete, Select, MenuItem, TextareaAutosize, Checkbox } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { listTitle } from './config';
@@ -34,20 +34,14 @@ const Information = (props) => {
     const [standardsFieldUpdate, setStandardsFieldUpdate] = useState(() => {
         let arrTpm = [];
         props?.project?.standards.map((item) => {
-            arrTpm.push({
-                value: item,
-                name: item,
-            })
+            arrTpm.push(item)
         })
         return arrTpm;
     });
     const [communicationsFieldUpdate, setCommunicationsFieldUpdate] = useState(() => {
         let arrTpm = [];
         props?.project?.communications.map((item) => {
-            arrTpm.push({
-                value: item,
-                name: item,
-            })
+            arrTpm.push(item)
         })
         return arrTpm;
     });
@@ -76,35 +70,8 @@ const Information = (props) => {
             name: "Hộ Chiếu",
         },
     ];
-    let communications = [
-        {
-            value: "1",
-            name: "Binance Smart Chain",
-        },
-        {
-            value: "2",
-            name: "Ethereum",
-        },
-        {
-            value: "3",
-            name: "Kardian",
-        },
-    ];
-    let standards = [
-        {
-            value: "1",
-            name: "ERC20",
-        },
-        {
-            value: "2",
-            name: "BEP20",
-        },
-        {
-            value: "3",
-            name: "KRC20",
-        },
-    ];
-
+    let communications = ["Binance Smart Chain", "Ethereum","Kardian"];
+    let standards = ["ERC20", "BEP20", "KRC20"];
 
     const inforItem = {
         display: "flex",
@@ -238,18 +205,18 @@ const Information = (props) => {
         });
     };
 
-    const handleInputChangeBusinessAreas = (e) => {
-        const { value } = e.target;
-        const item = [{
-            value: businessAreas.length + 1,
-            area: value,
-        }];
-        setBusinessFieldUpdate(item);
-        setProject({
-            ...project,
-            ['businessAreas']: item,
-        });
-    }
+    // const handleInputChangeBusinessAreas = (e) => {
+    //     const { value } = e.target;
+    //     const item = [{
+    //         value: businessAreas.length + 1,
+    //         area: value,
+    //     }];
+    //     setBusinessFieldUpdate(item);
+    //     setProject({
+    //         ...project,
+    //         ['businessAreas']: item,
+    //     });
+    // }
 
     const handleInputChangeFileWhitepaper = (e) => {
         setProject({
@@ -305,15 +272,15 @@ const Information = (props) => {
             let temporaryVariable = project;
 
             if (temporaryVariable && temporaryVariable.developmentTeam) {
-                temporaryVariable?.developmentTeam.map((item, index) =>{
+                temporaryVariable?.developmentTeam.map((item, index) => {
                     if (typeof item.image === 'object') {
                         item.image = item.image[0].data_url
                     }
                 })
             }
-            
+
             if (temporaryVariable && temporaryVariable.developmentPartner) {
-                temporaryVariable?.developmentPartner.map((item, index) =>{
+                temporaryVariable?.developmentPartner.map((item, index) => {
                     if (typeof item.image === 'object') {
                         item.image = item.image[0].data_url
                     }
@@ -338,8 +305,8 @@ const Information = (props) => {
                 }
             }
 
-            if(project.statusId == '1') {
-                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable,  { headers: {"Authorization" : `Bearer ${token}`} });
+            if (project.statusId == '1') {
+                res = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness/change`, temporaryVariable, { headers: { "Authorization": `Bearer ${token}` } });
             }
             else if (project.statusId == '2' || project.statusId == '3') {
                 let tpmProject = project;
@@ -348,16 +315,16 @@ const Information = (props) => {
                     item.price = parseFloat(item?.price);
                     item.amount = parseFloat(item?.amount);
                 });
-                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, tpmProject,  { headers: {"Authorization" : `Bearer ${token}`} });
+                res = await axios.put(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, tpmProject, { headers: { "Authorization": `Bearer ${token}` } });
             }
-            
+
             if (res.data) {
                 window.location.reload(false);
             }
-        } catch (error) {}
+        } catch (error) { }
     }
 
-    const renderItem = ({item}) => {
+    const renderItem = ({ item }) => {
         let valueItem;
 
         if (project && props.stateEdit) {
@@ -421,15 +388,15 @@ const Information = (props) => {
             }
         } else {
             // show preview
-            if (project && project[item.key] && item.key!== "developmentTeam" && item.key!== "developmentPartner") {
-                if (typeof(project[item.key]) === "string") {
+            if (project && project[item.key] && item.key !== "developmentTeam" && item.key !== "developmentPartner") {
+                if (typeof (project[item.key]) === "string") {
                     if (item.key === "phone") {
                         valueItem = project[item.key].replace('+84', '0');
                     } else {
                         valueItem = project[item.key];
                     }
                 } else {
-                    switch(item.key) {
+                    switch (item.key) {
                         case "businessAreas":
                             valueItem = project[item.key].map(e => e.area).join("; ");
                             break;
@@ -461,52 +428,59 @@ const Information = (props) => {
             if (item.key === "identity") valueItem = project && project["idAuth"];
         }
 
-        switch(item.key) {
+        switch (item.key) {
             case 'businessAreas':
                 return (
                     <>
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', width: '100%' }}>
-                                        <Box sx={{ display: "flex", flexDirection: "row", width: '100%' }}>
-                                            <Box sx={{ width: 'calc(100% - 15px)' }}>
-                                                <Autocomplete
-                                                    sx={autocomplete}
-                                                    multiple
-                                                    id="tags-outlined"
-                                                    options={businessAreas}
-                                                    value={businessFieldUpdate}
-                                                    defaultValue={businessFieldUpdate}
-                                                    getOptionLabel={(businessAreas) => businessAreas.area}
-                                                    isOptionEqualToValue={(option, value) => option.area === value.area}
-                                                    onChange={handleAutocompleteChange}
-                                                    renderInput={(params) => (
-                                                        <TextField
-                                                            {...params}
-                                                            placeholder="Lĩnh vực kinh doanh"
-                                                        />
-                                                    )}
-                                                />
-                                            </Box>
-                                            <Box sx={boxFlag}>
-                                                <Tooltip title={project.note.flags[item.key]}>
-                                                    <img src="/assets/icons/flag.svg" />
-                                                </Tooltip>
-                                            </Box>
+                                (props.stateEdit)
+                                ?
+                                <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap', width: '100%' }}>
+                                    <Box sx={{ display: "flex", flexDirection: "row", width: '100%' }}>
+                                        <Box sx={{ width: 'calc(100% - 15px)' }}>
+                                            <Autocomplete
+                                                sx={autocomplete}
+                                                multiple
+                                                id="tags-outlined"
+                                                options={businessAreas}
+                                                value={businessFieldUpdate}
+                                                defaultValue={businessFieldUpdate}
+                                                getOptionLabel={(businessAreas) => businessAreas.area}
+                                                isOptionEqualToValue={(option, value) => option.area === value.area}
+                                                onChange={handleAutocompleteChange}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        placeholder="Lĩnh vực kinh doanh"
+                                                    />
+                                                )}
+                                            />
                                         </Box>
-                                        {/* <OutlinedInput
+                                        {
+                                            project?.note?.flags[item.key]
+                                                ?
+                                                <Box sx={boxFlag}>
+                                                    <Tooltip title={project.note.flags[item.key]}>
+                                                        <img src="/assets/icons/flag.svg" />
+                                                    </Tooltip>
+                                                </Box>
+                                                :
+                                                null
+                                        }
+                                    </Box>
+                                    {/* <OutlinedInput
                                             id="businessAreasABC"
                                             name="businessAreasABC"
                                             type="text"
                                             placeholder="Lĩnh vực kinh doanh khác"
                                             onChange={handleInputChangeBusinessAreas}
                                         /> */}
-                                        
-                                    </Box>
+
+                                </Box>
                                 :
-                                    valueItem
+                                valueItem
                             }
                         </Box>
                     </>
@@ -517,29 +491,34 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        <OutlinedInput
-                                            required
-                                            id="businessLicense"
-                                            name="businessLicense"
-                                            type="file"
-                                            placeholder="Tải lên (Tối đa 5mb)"
-                                            inputProps={{ accept: "application/pdf" }}
-                                            onChange={handleInputChangeFile}
-                                        />
-                                        <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </>
-                                :
-                                    props.stateEdit ?
+                                (props.stateEdit)
+                                ?
+                                <>
+                                    <OutlinedInput
+                                        required
+                                        id="businessLicense"
+                                        name="businessLicense"
+                                        type="file"
+                                        placeholder="Tải lên (Tối đa 5mb)"
+                                        inputProps={{ accept: "application/pdf" }}
+                                        onChange={handleInputChangeFile}
+                                    />
                                     <a download="Giấy phép đăng ký kinh doanh" href={valueItem} title='Giấy phép đăng ký kinh doanh'>Chi tiết</a>
-                                    :
-                                    valueItem
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+
+                                </>
+                                :
+                                valueItem
                             }
                         </Box>
                     </>
@@ -550,29 +529,34 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        <OutlinedInput
-                                            required
-                                            id="businessLicense"
-                                            name="businessLicense"
-                                            type="file"
-                                            placeholder="Tải lên (Tối đa 5mb)"
-                                            inputProps={{ accept: "application/pdf" }}
-                                            onChange={handleInputChangeFileWhitepaper}
-                                        />
-                                        <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </>
+                                (props.stateEdit)
+                                ?
+                                <>
+                                    <OutlinedInput
+                                        required
+                                        id="businessLicense"
+                                        name="businessLicense"
+                                        type="file"
+                                        placeholder="Tải lên (Tối đa 5mb)"
+                                        inputProps={{ accept: "application/pdf" }}
+                                        onChange={handleInputChangeFileWhitepaper}
+                                    />
+                                    <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+
+                                </>
                                 :
-                                    props.stateEdit ?
-                                        <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
-                                    :
-                                    valueItem
+                                valueItem
                             }
                         </Box>
                     </>
@@ -583,51 +567,53 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        <ImageUploading
-                                            value={imageLogo}
-                                            onChange={onChangeImageUpload}
-                                            dataURLKey="data_url"
-                                        >
-                                            {({
-                                                imageList,
-                                                onImageUpload,
-                                                onImageUpdate,
-                                                dragProps
-                                            }) => (
-                                                <>  
-                                                    {!imageList.length &&
-                                                        <div
-                                                            onClick={onImageUpload}
-                                                            {...dragProps}
-                                                        >
-                                                            <BoxImageUpload aria-label="upload picture" component="span">
-                                                                <img src={valueItem} alt="img" width="20px" height="20px" />
-                                                            </BoxImageUpload>
-                                                        </div>
-                                                    }
-                                                    {imageList?.map((image, index) => (
-                                                        <BoxImageUpload key={index} className="image-item" onClick={() => onImageUpdate(index)}>
-                                                            <img src={image['data_url']} alt="" width="100" />
+                                (props.stateEdit)
+                                ?
+                                <>
+                                    <ImageUploading
+                                        value={imageLogo}
+                                        onChange={onChangeImageUpload}
+                                        dataURLKey="data_url"
+                                    >
+                                        {({
+                                            imageList,
+                                            onImageUpload,
+                                            onImageUpdate,
+                                            dragProps
+                                        }) => (
+                                            <>
+                                                {!imageList.length &&
+                                                    <div
+                                                        onClick={onImageUpload}
+                                                        {...dragProps}
+                                                    >
+                                                        <BoxImageUpload aria-label="upload picture" component="span">
+                                                            <img src={valueItem} alt="img" width="20px" height="20px" />
                                                         </BoxImageUpload>
-                                                    ))}
-                                                </>
-                                            )}
-                                        </ImageUploading>
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </>
+                                                    </div>
+                                                }
+                                                {imageList?.map((image, index) => (
+                                                    <BoxImageUpload key={index} className="image-item" onClick={() => onImageUpdate(index)}>
+                                                        <img src={image['data_url']} alt="" width="100" />
+                                                    </BoxImageUpload>
+                                                ))}
+                                            </>
+                                        )}
+                                    </ImageUploading>
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+                                </>
                                 :
-                                    props.stateEdit ?
-                                        <BoxImageUpload>
-                                            <img src={valueItem} alt="img" width="20px" height="20px" />
-                                        </BoxImageUpload>
-                                    :
-                                        valueItem
+                                valueItem
                             }
                         </Box>
                     </>
@@ -638,40 +624,41 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <Autocomplete sx={{
-                                            background: "#EFF2F5",
-                                            borderRadius: "8px",
-                                            width: "300px!important",
-                                            border: "1px solid #58667E",
-                                        }}
-                                            multiple
-                                            id="communication"
-                                            options={communications}
-                                            value={communicationsFieldUpdate}
-                                            defaultValue={communicationsFieldUpdate}
-                                            disableCloseOnSelect
-                                            getOptionLabel={(option) => option.name}
-                                            onChange={handleCommunicationsChange}
-                                            isOptionEqualToValue={(option, value) => option.value === value.value}
-                                            renderOption={(props, option, { selected }) => (
-                                                <li {...props}>
-                                                    <Checkbox
-                                                        icon={icon}
-                                                        checkedIcon={checkedIcon}
-                                                        style={{ marginRight: 8 }}
-                                                        checked={selected}
-                                                    />
-                                                    {option.name}
-                                                </li>
-                                            )}
-                                            style={{ width: 500 }}
-                                            renderInput={(params) => (
-                                                <TextField {...params} placeholder="Nền tảng" />
-                                            )}
-                                        />
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <Autocomplete sx={{
+                                        background: "#EFF2F5",
+                                        borderRadius: "8px",
+                                        width: "300px!important",
+                                        border: "1px solid #58667E",
+                                    }}
+                                        multiple
+                                        id="communication"
+                                        options={communications}
+                                        value={communicationsFieldUpdate}
+                                        defaultValue={communicationsFieldUpdate}
+                                        disableCloseOnSelect
+                                        getOptionLabel={(option) => option}
+                                        onChange={handleCommunicationsChange}
+                                        isOptionEqualToValue={(option, value) => option === value}
+                                        renderOption={(props, option, { selected }) => (
+                                            <li {...props}>
+                                                <Checkbox
+                                                    icon={icon}
+                                                    checkedIcon={checkedIcon}
+                                                    style={{ marginRight: 8 }}
+                                                    checked={selected}
+                                                />
+                                                {option}
+                                            </li>
+                                        )}
+                                        style={{ width: 500 }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} placeholder="Nền tảng" />
+                                        )}
+                                    />
+                                </Flex>
                                 :
                                 valueItem
                             }
@@ -684,44 +671,46 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <Autocomplete sx={{
-                                            background: "#EFF2F5",
-                                            borderRadius: "8px",
-                                            width: "300px!important",
-                                            border: "1px solid #58667E",
-                                        }}
-                                            multiple
-                                            id="standard"
-                                            name="standard"
-                                            options={standards}
-                                            value={standardsFieldUpdate}
-                                            defaultValue={standardsFieldUpdate}
-                                            disableCloseOnSelect
-                                            getOptionLabel={(option) => option.name}
-                                            isOptionEqualToValue={(option, value) => option.value === value.value}
-                                            onChange={handleStandardsChange}
-                                            renderOption={(props, option, { selected }) => (
-                                                <li {...props}>
-                                                    <Checkbox
-                                                        icon={icon}
-                                                        checkedIcon={checkedIcon}
-                                                        style={{ marginRight: 8 }}
-                                                        checked={selected}
-                                                    />
-                                                    {option.name}
-                                                </li>
-                                            )}
-                                            style={{ width: 500 }}
-                                            renderInput={(params) => (
-                                                <TextField {...params} placeholder="Tiêu chuẩn" />
-                                            )}
-                                        />
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <Autocomplete sx={{
+                                        background: "#EFF2F5",
+                                        borderRadius: "8px",
+                                        width: "300px!important",
+                                        border: "1px solid #58667E",
+                                    }}
+                                        multiple
+                                        id="standard"
+                                        name="standard"
+                                        options={standards}
+                                        value={standardsFieldUpdate}
+                                        defaultValue={standardsFieldUpdate}
+                                        disableCloseOnSelect
+                                        getOptionLabel={(option) => option}
+                                        isOptionEqualToValue={(option, value) => option === value}
+                                        onChange={handleStandardsChange}
+                                        renderOption={(props, option, { selected }) => (
+                                            <li {...props}>
+                                                <Checkbox
+                                                    icon={icon}
+                                                    checkedIcon={checkedIcon}
+                                                    style={{ marginRight: 8 }}
+                                                    checked={selected}
+                                                />
+                                                {option}
+                                            </li>
+                                        )}
+                                        style={{ width: 500 }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} placeholder="Tiêu chuẩn" />
+                                        )}
+                                    />
+                                </Flex>
                                 :
                                 valueItem
                             }
+                            
                         </Box>
                     </>
                 )
@@ -731,66 +720,74 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap' }}>
-                                        <Box sx={{ display: "flex", flexDirection: "row", '& > .MuiOutlinedInput-root': { border: '1px solid #58667E', borderRadius: '8px' }, '& .MuiSelect-select': { borderRadius: '8px' } }}>
-                                            <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
-                                                labelId="idType"
-                                                name="idType"
-                                                id="idType"
-                                                value={project.legalRepresentative.identity.idType}
-                                                onChange={handleInputChangeSelect}
-                                            >
-                                                {informations.map((item, index) => (
-                                                    <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
-                                                ))}
-                                            </Select>
-                                            <OutlinedInput sx={{ maxWidth: "275px", width: "100%" }}
-                                                required
-                                                id="idAuth"
-                                                name="idAuth"
-                                                type="text"
-                                                placeholder="0678****"
-                                                value={project.legalRepresentative.identity.id}
-                                                onChange={handleInputIdentityChange}
-                                            />
-                                            <Box sx={boxFlag}>
-                                                <Tooltip title={project.note.flags[item.key]}>
-                                                    <img src="/assets/icons/flag.svg" />
-                                                </Tooltip>
-                                            </Box>
-                                        </Box>
-                                        <Box>
-                                            <FormLabel>Tải lên mặt trước</FormLabel>
+                                (props.stateEdit)
+                                ?
+                                <Box sx={{ display: "flex", flexDirection: "row", flexWrap: 'wrap' }}>
+                                    <Box sx={{ display: "flex", flexDirection: "row", '& > .MuiOutlinedInput-root': { border: '1px solid #58667E', borderRadius: '8px' }, '& .MuiSelect-select': { borderRadius: '8px' } }}>
+                                        <Select sx={{ maxWidth: "140px", width: "100%", marginRight: "12px" }}
+                                            labelId="idType"
+                                            name="idType"
+                                            id="idType"
+                                            value={project.legalRepresentative.identity.idType}
+                                            onChange={handleInputChangeSelect}
+                                        >
+                                            {informations.map((item, index) => (
+                                                <MenuItem key={index} value={item.value}>{item.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                        <OutlinedInput sx={{ maxWidth: "275px", width: "100%" }}
+                                            required
+                                            id="idAuth"
+                                            name="idAuth"
+                                            type="text"
+                                            placeholder="0678****"
+                                            value={project.legalRepresentative.identity.id}
+                                            onChange={handleInputIdentityChange}
+                                        />
+                                        {
+                                            project?.note?.flags[item.key]
+                                                ?
+                                                <Box sx={boxFlag}>
+                                                    <Tooltip title={project.note.flags[item.key]}>
+                                                        <img src="/assets/icons/flag.svg" />
+                                                    </Tooltip>
+                                                </Box>
+                                                :
+                                                null
+                                        }
+
+                                    </Box>
+                                    <Box>
+                                        <FormLabel>Tải lên mặt trước</FormLabel>
+                                        <OutlinedInput
+                                            required
+                                            id="frontIdImage"
+                                            name="frontIdImage"
+                                            type="file"
+                                            placeholder="Tải lên (Tối đa 5mb)"
+                                            inputProps={{ accept: ".png,.svg,.jpeg" }}
+                                            onChange={handleInputFileIdentityChange}
+                                        />
+                                    </Box>
+                                    {
+                                        project.legalRepresentative.identity.idType !== idTypePassport &&
+                                        <Box sx={{ display: 'block' }}>
+                                            <FormLabel>Tải lên mặt sau</FormLabel>
                                             <OutlinedInput
                                                 required
-                                                id="frontIdImage"
-                                                name="frontIdImage"
+                                                id="backIdImage"
+                                                name="backIdImage"
                                                 type="file"
                                                 placeholder="Tải lên (Tối đa 5mb)"
-                                                inputProps={{accept:".png,.svg,.jpeg"}}
+                                                inputProps={{ accept: ".png,.svg,.jpeg" }}
                                                 onChange={handleInputFileIdentityChange}
                                             />
                                         </Box>
-                                        {
-                                            project.legalRepresentative.identity.idType !== idTypePassport &&
-                                            <Box sx={{ display: 'block' }}>
-                                                <FormLabel>Tải lên mặt sau</FormLabel>
-                                                <OutlinedInput
-                                                    required
-                                                    id="backIdImage"
-                                                    name="backIdImage"
-                                                    type="file"
-                                                    placeholder="Tải lên (Tối đa 5mb)"
-                                                    inputProps={{accept:".png,.svg,.jpeg"}}
-                                                    onChange={handleInputFileIdentityChange}
-                                                />
-                                            </Box>
-                                        }
-                                        
-                                    </Box>
+                                    }
+
+                                </Box>
                                 :
-                                    valueItem
+                                valueItem
                             }
                         </Box>
                     </>
@@ -801,28 +798,37 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <TextareaAutosize
-                                            required
-                                            minRows={8}
-                                            maxRows={8}
-                                            name="description"
-                                            placeholder="Mô tả dự án ngắn gọn."
-                                            style={{ width: "100%", fontFamily: 'Inter', border: "1px solid #58667E", borderRadius: "8px" }}
-                                            value={project[item.key]}
-                                            onChange={handleInputChange}
-                                            className="textarea-required"
-                                        />
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <TextareaAutosize
+                                        required
+                                        minRows={8}
+                                        maxRows={8}
+                                        name="description"
+                                        placeholder="Mô tả dự án ngắn gọn."
+                                        style={{ width: "100%", fontFamily: 'Inter', border: "1px solid #58667E", borderRadius: "8px" }}
+                                        value={project[item.key]}
+                                        onChange={handleInputChange}
+                                        className="textarea-required"
+                                    />
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+
+                                </Flex>
                                 :
                                 valueItem
                             }
+                            
                         </Box>
                     </>
                 )
@@ -832,18 +838,26 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <DevelopmentTeam defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <DevelopmentTeam defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+                                </Flex>
                                 :
-                                    <DevelopmentTeam defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
+                                <DevelopmentTeam defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
                             }
+                            
                         </Box>
                     </>
                 )
@@ -853,18 +867,26 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <DevelopmentPartner defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <DevelopmentPartner defaultValues={project} view={false} setFormValuesProject={setFormValuesProject} />
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+                                </Flex>
                                 :
-                                    <DevelopmentPartner defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
+                                <DevelopmentPartner defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
                             }
+                            
                         </Box>
                     </>
                 )
@@ -874,18 +896,26 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        <TokenAllocationRate view={false} defaultValues={project} setFormValuesProject={setFormValuesProject} />
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </Flex>
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    <TokenAllocationRate view={false} defaultValues={project} setFormValuesProject={setFormValuesProject} />
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
+                                            :
+                                            null
+                                    }
+                                </Flex>
                                 :
-                                    <TokenAllocationRate defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
+                                <TokenAllocationRate defaultValues={project} view={true} setFormValuesProject={setFormValuesProject} />
                             }
+                            
                         </Box>
                     </>
                 )
@@ -895,36 +925,37 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <>
-                                        {
-                                            project[item.key].map((entry, index) => (
-                                                <Flex key={index}>
-                                                    <InputEdit
-                                                        id={`websites${index}`}
-                                                        name={`websites${index}`}
-                                                        type="text"
-                                                        value={entry}
-                                                        onChange={handleInputWebsiteChange}
-                                                    />
-                                                    {
-                                                        index === 0 && 
+                                (props.stateEdit)
+                                ?
+                                <>
+                                    {
+                                        project[item.key].map((entry, index) => (
+                                            <Flex key={index}>
+                                                <InputEdit
+                                                    id={`websites${index}`}
+                                                    name={`websites${index}`}
+                                                    type="text"
+                                                    value={entry}
+                                                    onChange={handleInputWebsiteChange}
+                                                />
+                                                {
+                                                    project?.note?.flags[item.key]
+                                                        ?
+                                                        index === 0 &&
                                                         <Box sx={boxFlag}>
                                                             <Tooltip title={project.note.flags[item.key]}>
                                                                 <img src="/assets/icons/flag.svg" />
                                                             </Tooltip>
                                                         </Box>
-                                                    }
-                                                </Flex>
-                                                )
-                                            )
-                                            
-                                        }
-                                    
-                                    </>
+                                                        :
+                                                        null
+                                                }
+                                            </Flex>
+                                        ))
+                                    }
+                                </>
                                 :
-                                    <a target="_blank" href={valueItem}>{valueItem}</a>
-                                
+                                <a target="_blank" href={valueItem}>{valueItem}</a>
                             }
                         </Box>
                     </>
@@ -938,35 +969,36 @@ const Information = (props) => {
                                     <Typography sx={labelInforItem}>{entry.name}</Typography>
                                     <Box sx={wrapperBoxValue}>
                                         {
-                                            (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                                <Box sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
-                                                    <Box sx={{ display: "flex", position: "relative" }} mb={2} className="box-select-social">
-                                                        <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none'} }}
-                                                            value={entry.name}
-                                                            name={`websocial-${index}`}
-                                                            // onChange={handleChangeSelectSocial}
-                                                            input={<OutlinedInput label="Tag" />}
-                                                            className="social-items"
-                                                        >
-                                                            {socialsListConstant.map((item, index0) => (
-                                                                <MenuItem key={index0} className="social-item" key={item.name} value={item.value}>
-                                                                    <img src={item.icon} alt={item.name} />
-                                                                    {item.name}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                        <span className="line-verticle"></span>
-                                                        <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
-                                                            id={`websociallink-${index}`}
-                                                            name={`websociallink-${index}`}
-                                                            type="text"
-                                                            value={entry.link}
-                                                            // onChange={handleInputChangeSocial}
-                                                        />
-                                                    </Box>
+                                            (props.stateEdit)
+                                            ?
+                                            <Box sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
+                                                <Box sx={{ display: "flex", position: "relative" }} mb={2} className="box-select-social">
+                                                    <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none' } }}
+                                                        value={entry.name}
+                                                        name={`websocial-${index}`}
+                                                        // onChange={handleChangeSelectSocial}
+                                                        input={<OutlinedInput label="Tag" />}
+                                                        className="social-items"
+                                                    >
+                                                        {socialsListConstant.map((item, index0) => (
+                                                            <MenuItem className="social-item" key={item.name} value={item.value}>
+                                                                <img src={item.icon} alt={item.name} />
+                                                                {item.name}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                    <span className="line-verticle"></span>
+                                                    <OutlinedInput sx={{ width: "269px", borderRadius: "0px 8px 8px 0px", background: "#EFF2F5" }}
+                                                        id={`websociallink-${index}`}
+                                                        name={`websociallink-${index}`}
+                                                        type="text"
+                                                        value={entry.link}
+                                                    // onChange={handleInputChangeSocial}
+                                                    />
                                                 </Box>
+                                            </Box>
                                             :
-                                                <a target="_blank" href={entry.link}>{entry.link}</a>
+                                            <a target="_blank" href={entry.link}>{entry.link}</a>
                                         }
                                     </Box>
                                 </Box>
@@ -980,20 +1012,21 @@ const Information = (props) => {
                         <Typography sx={labelInforItem}>{item.title}</Typography>
                         <Box sx={wrapperBoxValue}>
                             {
-                                (project && project.note && project.note.flags && project.note.flags[item.key]) ?
-                                    <Flex>
-                                        {
-                                            ['acceptDate', 'dob'].includes(item.key) ?
+                                (props.stateEdit)
+                                ?
+                                <Flex>
+                                    {
+                                        ['acceptDate', 'dob'].includes(item.key) ?
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 {
                                                     item?.key === 'acceptDate' ?
-                                                            <DesktopDatePicker
+                                                        <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
                                                             value={project?.[item.key]}
                                                             onChange={handleAcceptDateChange}
                                                             renderInput={(params) => <TextField sx={styleDatePicker} {...params} />}
                                                         />
-                                                    :
+                                                        :
                                                         <DesktopDatePicker
                                                             inputFormat="dd/MM/yyyy"
                                                             value={project?.legalRepresentative[item.key]}
@@ -1001,23 +1034,30 @@ const Information = (props) => {
                                                             renderInput={(params) => <TextField sx={styleDatePicker} {...params} />}
                                                         />
                                                 }
-                                                
+
                                             </LocalizationProvider>
+                                            :   
+                                            <InputEdit
+                                                id={item.key}
+                                                name={item.key}
+                                                type="text"
+                                                value={project[item.key] || project?.[item.key] || project?.legalRepresentative[item.key]}
+                                                onChange={handleInputChange}
+                                            />
+                                    }
+                                    {
+                                        project?.note?.flags[item.key]
+                                            ?
+                                            <Box sx={boxFlag}>
+                                                <Tooltip title={project.note.flags[item.key]}>
+                                                    <img src="/assets/icons/flag.svg" />
+                                                </Tooltip>
+                                            </Box>
                                             :
-                                                <InputEdit
-                                                    id={item.key}
-                                                    name={item.key}
-                                                    type="text"
-                                                    value={project[item.key] || project?.[item.key] || project?.legalRepresentative[item.key]}
-                                                    onChange={handleInputChange}
-                                                />
-                                        }
-                                        <Box sx={boxFlag}>
-                                            <Tooltip title={project.note.flags[item.key]}>
-                                                <img src="/assets/icons/flag.svg" />
-                                            </Tooltip>
-                                        </Box>
-                                    </Flex>
+                                            null
+                                    }
+
+                                </Flex>
                                 :
                                 valueItem
                             }
@@ -1029,35 +1069,30 @@ const Information = (props) => {
 
     return (
         <>
-            {
-                (
-                    project && project.note && handleCheckShowButton() &&
-                    <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
-                )
-            }
-            
+            <ButtonUpdate onClick={handleUpdateData}>Cập nhật</ButtonUpdate>
+
             {
                 listTitle.map(entry => (
-                    <Box key={entry.title} sx={{marginBottom: "24px"}}>
+                    <Box key={entry.title} sx={{ marginBottom: "24px" }}>
                         <Typography sx={{ textAlign: "left !important", marginBottom: "12px" }} className="tab-title">
                             {entry.title}
                         </Typography>
                         <Box>
                             <Box sx={wrapInfo}>
-                            {
-                                entry.listContent.map(item => (
-                                    <Box key={item.title} sx={inforItem} className="form-control">
-                                        {renderItem({item})}
-                                    </Box>
-                                ))
-                            }
+                                {
+                                    entry.listContent.map(item => (
+                                        <Box key={item.title} sx={inforItem} className="form-control">
+                                            {renderItem({ item })}
+                                        </Box>
+                                    ))
+                                }
                             </Box>
                         </Box>
                     </Box>
                 ))
             }
         </>
-        
+
     )
 }
 

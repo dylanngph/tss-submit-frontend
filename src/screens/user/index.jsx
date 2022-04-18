@@ -25,6 +25,10 @@ function User(props) {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+
+        if (newValue === 1) {
+            handleCountNotify();
+        }
     };
 
     const readCookies = () => {
@@ -51,6 +55,14 @@ function User(props) {
                 setData(response.data.data);
             }
         } catch (error) {}
+    }
+
+    const handleCountNotify = async () => {
+        try {
+            const res = await axios.post(`${process.env.REACT_APP_URL_API}/notification/clear`, { headers: {"Authorization" : `Bearer ${token}`} });
+            if (res && res.data)
+              console.log('res==>', res);
+        } catch (e) {}
     }
 
     return (

@@ -221,7 +221,7 @@ function Incorporation(props) {
                             required
                             id="companyCode"
                             name="companyCode"
-                            type="number"
+                            type="text"
                             placeholder="Mã số doanh nghiệp"
                             value={formValues.companyCode}
                             onChange={handleInputChange}

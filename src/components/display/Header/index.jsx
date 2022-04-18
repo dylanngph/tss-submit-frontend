@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
+import styled from '@emotion/styled';
 import { Link, NavLink } from 'react-router-dom'
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
@@ -16,7 +17,7 @@ import {ReactComponent as NftIcon} from 'assets/icons/nft.svg'
 import {ReactComponent as UserIcon} from 'assets/icons/user.svg'
 import {ReactComponent as LoginIcon} from 'assets/icons/login.svg'
 
-const Header = ({ auth, handleLogout, props }) => {
+const Header = ({ auth, handleLogout, notify, props }) => {
     const drawerWidth = 244;
     const { window } = props;
     const container = window !== undefined ? () => window().document.body : undefined;
@@ -54,6 +55,16 @@ const Header = ({ auth, handleLogout, props }) => {
             marginRight: "14px"
         }
     }
+
+    const CountNoty = styled.p`
+        padding: 2px 8px;
+        background: #EA3943;
+        border-radius: 4px;
+        color: #FFFFFF;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+    `
 
     const drawer = (
         <List sx={{
@@ -105,6 +116,13 @@ const Header = ({ auth, handleLogout, props }) => {
                                 <UserIcon />
                                 <ListItemText sx={itemStyle}
                                     primary='Quản lý tài khoản' />
+                                {
+                                    notify
+                                    ?
+                                    <CountNoty>{notify}</CountNoty>
+                                    :
+                                    null
+                                }
                             </ListItem>
                         </NavLink>
                         <Button sx={logoutStyle} onClick={handleLogout}>

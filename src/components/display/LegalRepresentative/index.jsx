@@ -88,12 +88,17 @@ function LegalRepresentative(props) {
             ...formValues,
             ["dob"]: newValue,
         });
+        setValidator({
+            ...validator,
+            ['dob']: newValue ? false : true,
+        });
         checkDataActiveButton();
     };
 
     const checkDataActiveButton = () => {
         if (formValues.name &&
             formValues.position &&
+            formValues.dob &&
             (formValues.phone && formValues.phone.length > 3) &&
             formValues.email &&
             formValues.idType &&
@@ -163,6 +168,10 @@ function LegalRepresentative(props) {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
+                        {
+                            validator.dob &&
+                            <FormHelperText error>Ngày sinh không được để trống</FormHelperText>
+                        }
                     </FormControl>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Chức vụ</FormLabel>
@@ -208,6 +217,10 @@ function LegalRepresentative(props) {
                                 error={validator.idAuth}
                             />
                         </FormGroup>
+                        {
+                            validator.idAuth &&
+                            <FormHelperText error>Giấy tờ tùy thân được để trống</FormHelperText>
+                        }
                     </Box>
                     <FormControl className="form-control mb-16">
                         <FormLabel>Tải lên mặt trước</FormLabel>
