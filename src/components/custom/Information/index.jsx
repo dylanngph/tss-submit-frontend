@@ -175,10 +175,13 @@ const Information = (props) => {
     };
 
     const handleAutocompleteChange = (event, newValue) => {
+        let value = newValue.map((item, index) => {
+            return item.area
+        })
         setBusinessFieldUpdate(newValue);
         setProject({
             ...project,
-            ["businessAreas"]: newValue,
+            ["businessAreas"]: value,
         });
     };
 
