@@ -201,11 +201,29 @@ const Information = (props) => {
         });
     };
 
+    const convertFile = async (props) => {
+        const blobToBase64 = (blob) =>
+            new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            })
+        const toBase64 = await blobToBase64(props).then((data) => data);
+        return toBase64?.toString();
+    }
+
     const handleInputChangeFile = (e) => {
-        setProject({
-            ...project,
-            ["businessLicense"]: e.target.files[0],
-        });
+        const { name, value } = e.target;
+        let file = e.target.files[0];
+        convertFile(file)
+            .then(res => {
+                setProject({
+                    ...project,
+                    [name]: res,
+                });
+            })
+            .catch();
     };
 
     // const handleInputChangeBusinessAreas = (e) => {
@@ -220,13 +238,6 @@ const Information = (props) => {
     //         ['businessAreas']: item,
     //     });
     // }
-
-    const handleInputChangeFileWhitepaper = (e) => {
-        setProject({
-            ...project,
-            ['whitepaper']: e.target.files[0],
-        });
-    };
 
     const handleInputChangeSelect = (e) => {
         const { name, value } = e.target;
@@ -543,7 +554,7 @@ const Information = (props) => {
                                             type="file"
                                             placeholder="Tải lên (Tối đa 5mb)"
                                             inputProps={{ accept: "application/pdf" }}
-                                            onChange={handleInputChangeFileWhitepaper}
+                                            onChange={handleInputChangeFile}
                                         />
                                         <a download="Whitepaper" href={valueItem} title='Whitepaper'>Chi tiết</a>
                                         {
@@ -770,7 +781,7 @@ const Information = (props) => {
                                                 type="file"
                                                 placeholder="Tải lên (Tối đa 5mb)"
                                                 inputProps={{ accept: ".png,.svg,.jpeg" }}
-                                                onChange={handleInputFileIdentityChange}
+                                                onChange={handleInputChangeFile}
                                             />
                                         </Box>
                                         {
@@ -784,7 +795,7 @@ const Information = (props) => {
                                                     type="file"
                                                     placeholder="Tải lên (Tối đa 5mb)"
                                                     inputProps={{ accept: ".png,.svg,.jpeg" }}
-                                                    onChange={handleInputFileIdentityChange}
+                                                    onChange={handleInputChangeFile}
                                                 />
                                             </Box>
                                         }
@@ -976,7 +987,7 @@ const Information = (props) => {
                                             (props.stateEdit)
                                                 ?
                                                 <Box sx={{ display: "flex", flexDirection: "row", position: "relative" }}>
-                                                    <Box sx={{ display: "flex", position: "relative" }} mb={2} className="box-select-social">
+                                                    <Box sx={{ display: "flex", position: "relative", alignItems: "center" }} mb={2} className="box-select-social">
                                                         <Select sx={{ width: "159px", borderRadius: "8px 0px 0px 8px", background: "#EFF2F5", "& .MuiSelect-select > img": { display: 'none' } }}
                                                             value={entry.name}
                                                             name={`websocial-${index}`}
@@ -999,6 +1010,18 @@ const Information = (props) => {
                                                             value={entry.link}
                                                         // onChange={handleInputChangeSocial}
                                                         />
+                                                        {
+                                                            project?.note?.flags[item.key]
+                                                                ?
+                                                                index === 0 &&
+                                                                <Box sx={boxFlag}>
+                                                                    <Tooltip title={project.note.flags[item.key]}>
+                                                                        <img src="/assets/icons/flag.svg" />
+                                                                    </Tooltip>
+                                                                </Box>
+                                                                :
+                                                                null
+                                                        }
                                                     </Box>
                                                 </Box>
                                                 :
