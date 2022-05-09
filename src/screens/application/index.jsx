@@ -129,15 +129,16 @@ function Application(props) {
     }
 
     const handlePostForm = async () => {
-        let projectForm = verifyObjectProject(projectItem);
         setLoadingButton(true);
         try {
+            let projectForm = verifyObjectProject(projectItem);
             const response = await axios.post(`${process.env.REACT_APP_URL_API}/project/application/bussiness`, projectForm,  { headers: {"Authorization" : `Bearer ${token}`} });
             setLoadingButton(false);
             if (response && response.data) {
                 setopenModel(true);
             }
         } catch (error) {
+            console.log("handlePostForm", error)
             setLoadingButton(false);
         }
     }
