@@ -132,10 +132,20 @@ const Information = (props) => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setProject({
-            ...project,
-            [name]: value,
-        });
+
+        if (name === 'companyCode') {
+            setProject({
+                ...project,
+                [name]: String(value),
+            });
+        } else {
+            setProject({
+                ...project,
+                [name]: value,
+            });
+        }
+
+        
     };
 
     const handleInputWebsiteChange = (e) => {
