@@ -48,6 +48,17 @@ const Information = (props) => {
     const [formValues, setFormValues] = useState(project);
     const [businessLicense, setBusinessLicense] = useState();
 
+    const handleInputChangeSocial = (e) => {
+        const { name, value } = e.target;
+        const index = name.split("-").pop();
+        let tpm_websitessocial = formValues.socialWebs;
+        tpm_websitessocial[index].link = value;
+        setFormValues({
+            ...formValues,
+            ["socialWebs"]: tpm_websitessocial,
+        });
+    };
+
     const setFormValuesProject = (name, value) => {
         setProject({
             ...project,
@@ -1018,7 +1029,7 @@ const Information = (props) => {
                                                             name={`websociallink-${index}`}
                                                             type="text"
                                                             value={entry.link}
-                                                        // onChange={handleInputChangeSocial}
+                                                            onChange={handleInputChangeSocial}
                                                         />
                                                         {
                                                             project?.note?.flags[item.key]
