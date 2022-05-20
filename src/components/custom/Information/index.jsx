@@ -340,6 +340,10 @@ const Information = (props) => {
                 }
             }
 
+            if (typeof temporaryVariable != "string") {
+                temporaryVariable.companyCode = String(temporaryVariable.companyCode);
+            }
+
             let tpmProject = project;
             tpmProject.tokenAllocations.map((item) => {
                 item.rate = parseFloat(item?.rate);
